@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+{% block content %}
+
+{% load static %}
+{% for ration in rations %}
+    <p>
+        {% if ration.staff_name %}
+            Staff: {{ration.staff_name}} -
+        {% endif %}
+        Address: {{ ration.address }} - pincode: {{ ration.pincode }}
+        <a href="{% url 'edit_ration' ration.ration_id %}">Edit</a>
+        <a href="{% url 'delete_ration' ration.ration_id %}">Delete</a>
+    </p>
+        
+{% endfor %}
+<br>
+<a href="{% url 'add_ration' %}">Add New Ration</a>
+{% endblock %}

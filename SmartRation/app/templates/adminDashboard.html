@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin{% endblock %}
+{% block content %}
+
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <div class="text-center body">
+        <h1>Admin Dashboard</h1>
+        <a href="{% url 'register' %}">Register Admin/Staff</a>
+        <br>
+        <a href="{% url 'list_ration' %}">List Ration</a>
+        <br>
+        <a href="{% url 'add_ration' %}">Add Ration</a>
+    </div>
+{% endblock %}

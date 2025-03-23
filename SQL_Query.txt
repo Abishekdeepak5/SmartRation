@@ -1,0 +1,83 @@
+CREATE TABLE user_details (
+    user_id SERIAL PRIMARY KEY,
+    user_name varchar(50) NOT NULL,
+    password varchar(200) NOT NULL,
+    role VARCHAR(10)  NOT NULL,
+    phone_number CHAR(10) UNIQUE NOT NULL,
+    gender CHAR(1)  NOT NULL,
+    email varchar(50) UNIQUE NOT NULL,
+    address varchar(100) NOT NULL,
+    pincode CHAR(6) NOT NULL,
+    date_of_birth DATE NOT NULL
+);
+
+CREATE TABLE ration (
+    ration_id SERIAL PRIMARY KEY,
+    staff INTEGER REFERENCES user_details(user_id) ON DELETE CASCADE,
+    address VARCHAR(200) NOT NULL,
+    opening_days TEXT[], 
+    pincode CHAR(6) NOT NULL,
+    unique(ration_id,staff),
+    unique(staff)
+);
+
+CREATE TABLE families (
+    family_id SERIAL PRIMARY KEY,
+    card_number VARCHAR(50) NOT NULL UNIQUE ,  --('PHH', 'NPHH')
+    head_of_family VARCHAR(50) NOT NULL,
+    member_count INTEGER NOT NULL CHECK (member_count > 0),
+    card_type varchar(15) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    phone_number CHAR(10),
+    address VARCHAR(200) NOT NULL,
+    ration_id INTEGER REFERENCES Ration(ration_id) ON DELETE SET NULL
+);
+
+CREATE TABLE ration_items (
+    ration_item_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    unit VARCHAR(20) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    stock_quantity INTEGER NOT NULL ,
+    tolerance NUMERIC NOT NULL,
+    entitled_qty NUMERIC NOT NULL
+);
+
+CREATE TABLE family_entitlements(
+    id SERIAL PRIMARY KEY,
+    family_id INTEGER REFERENCES Families(family_id) ON DELETE CASCADE,
+    date_of_issue DATE NOT NULL
+);
+
+CREATE TABLE families_item (
+    id SERIAL PRIMARY KEY,
+    family_entitlement_id INTEGER REFERENCES family_entitlements(id) ON DELETE CASCADE,
+    item_id INTEGER REFERENCES ration_items(ration_item_id) ON DELETE CASCADE,
+    actual_weight DECIMAL(10,2),
+    status varchar(20) NOT NULL  --('pending', 'completed')
+);
+
+CREATE TABLE inventory (
+    inventory_id SERIAL PRIMARY KEY,
+    ration_id INTEGER REFERENCES ration(ration_id) ON DELETE CASCADE,
+    date_of_load DATE NOT NULL
+);
+
+CREATE TABLE inventory_items (
+    inventory_item_id SERIAL PRIMARY KEY,
+    inventory_id INTEGER REFERENCES inventory(inventory_id) ON DELETE CASCADE,
+    item_id INTEGER REFERENCES ration_items(ration_item_id) ON DELETE CASCADE,
+    allocated_qty NUMERIC NOT NULL,
+    received_qty NUMERIC,
+    status varchar(20) NOT NULL  --('pending', 'received')
+);
+
+
+CREATE TABLE stock_requests (
+    stock_id SERIAL PRIMARY KEY,
+    ration_id INTEGER REFERENCES ration(ration_id) ON DELETE CASCADE,
+    item_id INTEGER REFERENCES ration_items(ration_item_id) ON DELETE CASCADE,
+    quantity NUMERIC NOT NULL,
+    status varchar(20) NOT NULL   --('pending', 'approved', 'rejected')
+);
+
