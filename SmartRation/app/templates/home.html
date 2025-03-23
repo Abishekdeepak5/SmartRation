@@ -1,11 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Home page</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Home - Smart Ration{% endblock %}
+{% block content %}
+
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <div class="text-center body">
+        <h1>Welcome to Smart Ration</h1>
+        <p>This is the home page</p>
+        <h1 id="my">Hello World</h1>
+    </div>
+{% endblock %}

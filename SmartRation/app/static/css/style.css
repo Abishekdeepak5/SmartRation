@@ -1,0 +1,32 @@
+/* Default Light Mode */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --navbar-bg: #f8f9fa;
+    --footer-bg: #f8f9fa;
+}
+
+/* Dark Mode */
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --navbar-bg: #1c1c1c;
+    --footer-bg: #1c1c1c;
+}
+
+/* Apply Variables to Elements */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.navbar {
+    background-color: var(--navbar-bg) !important;
+}
+
+footer {
+    background-color: var(--footer-bg) !important;
+}
+.text-style{
+    color: var(--text-color);
+}
