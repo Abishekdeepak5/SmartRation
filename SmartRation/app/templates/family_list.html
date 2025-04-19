@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Family{% endblock %}
+{% block content %}
+
+{% load static %}
+<style>
+    table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th,td{
+    padding: 0 5px;
+  }
+</style>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<table border="1">
+    <thead>
+        <th>Card Type</th>
+        <th>Card Number</th>
+        <th>Head Of Family</th>
+        <th>Email</th>
+    </thead>
+{% for family in families %}
+
+       
+        {% if family %}
+
+        <tr>
+            <td>{{family.card_type}}</td>
+            <td>{{family.card_number}}</td>
+            <td>{{ family.head_of_family }} </td>
+            <td>{{ family.email }}</td>
+        </tr>
+        {% endif %}
+
+        
+{% endfor %}
+</table>
+{% endblock %}

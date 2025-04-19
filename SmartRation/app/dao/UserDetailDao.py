@@ -19,3 +19,5 @@ def register_user(user):
 def get_user_by_id(user_id):
         data,error=supabase.table("user_details").select("*").eq("user_id", user_id).execute()
         return data[1][0]
+def get_staff():
+        return supabase.table("user_details").select("*").eq("role","staff").execute()        

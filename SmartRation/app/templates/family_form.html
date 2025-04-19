@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Family{% endblock %}
+{% block content %}
+
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <div class="text-center">
+
+        <form method="POST">
+            {% csrf_token %}
+        <table border="1">
+                <tr>
+                    <td><label for="head_of_family">head_of_family</label></td>
+                    <td><input type="text" placeholder="head_of_family"   name="head_of_family" id="head_of_family" required></td>
+                </tr>
+                <tr>
+                    <td><label for="member_count">member_count</label></td>
+                    <td><input type="text" placeholder="member_count"   name="member_count" id="member_count" required></td>
+                </tr>
+                <tr>
+                    <td><label for="card_type">card_type</label></td>
+                    <td><input type="text" placeholder="card_type"   name="card_type" id="card_type" required></td>
+                </tr>
+                <tr>
+                    <td><label for="email">email</label></td>
+                    <td><input type="text" placeholder="email"   name="email" id="email" required></td>
+                </tr>
+                <tr>
+                    <td><label for="phone_number">phone_number</label></td>
+                    <td><input type="text" placeholder="phone_number"   name="phone_number" id="phone_number" required></td>
+                </tr>
+                <tr>
+                    <td><label for="address">address</label></td>
+                    <td><input type="text" placeholder="address"   name="address" id="address" required></td>
+                </tr>
+                <tr>
+                    <td><label for="Ration">Ration</label></td>
+                    <td>
+                        <select name="ration_id" required >
+                            <option value="" disabled selected>Select Ration</option>
+                            {% for ration in rations %}
+                                <option value="{{ ration.ration_id }}">{{ration.address}} - {{ ration.pincode }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+
+            </table>
+            <button type="submit">Add Family</button>
+        </form>
+    </div>
+{% endblock %}

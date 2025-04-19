@@ -14,7 +14,11 @@ def create_ration(staff_id, address, opening_days, pincode):
     return {"success": True, "data": data}
 
 def get_all_rations():
-    return supabase.table("ration").select("*").execute()
+    try:
+        data,error = supabase.table("ration").select("*").execute()
+        return data[1],True
+    except Exception as e:
+        return [],False
 
 def get_ration_by_id(ration_id):
         data, error = supabase.table("ration").select("*").eq("ration_id", ration_id).execute()
@@ -36,4 +40,7 @@ def update_ration(ration_id, address=None, opening_days=None, pincode=None,staff
 def delete_ration(ration_id):
     supabase.table("ration").delete().eq("ration_id", ration_id).execute()
 
+def update_staff(ratoin_id,staff_id):
+    update_data={"staff":staff_id}
+    return supabase.table("ration").update(update_data).eq("ration_id", ration_is).execute()    
 

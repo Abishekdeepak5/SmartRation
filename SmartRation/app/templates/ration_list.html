@@ -4,6 +4,9 @@
 {% block content %}
 
 {% load static %}
+
+<a href="{% url 'add_ration' %}">Add New Ration</a>
+<br>
 {% for ration in rations %}
     <p>
         {% if ration.staff_name %}
@@ -12,9 +15,9 @@
         Address: {{ ration.address }} - pincode: {{ ration.pincode }}
         <a href="{% url 'edit_ration' ration.ration_id %}">Edit</a>
         <a href="{% url 'delete_ration' ration.ration_id %}">Delete</a>
+        <a href="{% url 'listfamily' ration.ration_id %}">View Families</a>
     </p>
         
 {% endfor %}
 <br>
-<a href="{% url 'add_ration' %}">Add New Ration</a>
 {% endblock %}

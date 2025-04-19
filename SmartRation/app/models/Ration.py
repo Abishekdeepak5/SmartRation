@@ -1,14 +1,11 @@
-
-
 class Ration:
     def __init__(self, ration_id, staff, address, opening_days, pincode):
         self.__ration_id = ration_id
-        self.__staff = staff  # UserDetails object
+        self.__staff = staff 
         self.__address = address
         self.__opening_days = opening_days
         self.__pincode = pincode
 
-    # Getters
     def get_ration_id(self):
         return self.__ration_id
 
@@ -24,7 +21,6 @@ class Ration:
     def get_pincode(self):
         return self.__pincode
 
-    # Setters
     def set_staff(self, staff):
         self.__staff = staff
 

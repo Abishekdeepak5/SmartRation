@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Product{% endblock %}
+{% block content %}
+
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <div class="text-center">
+
+        {% if product %}            
+            <form method="POST">
+                {% csrf_token %}
+                <table border="1">
+                    <tr>
+                        <td><label for="product_name">product_name</label></td>
+                        <td><input type="text" placeholder="product_name" name="product_name" id="product_name" value="{{product.product_name}}"  required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="unit">unit</label></td>
+                        <td><input type="text" placeholder="unit" name="unit" id="unit" value="{{product.unit}}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="price">price</label></td>
+                        <td><input type="text" placeholder="price" name="price" id="price" value="{{product.price}}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="stock_quantity">stock_quantity</label></td>
+                        <td><input type="text" placeholder="stock_quantity" name="stock_quantity" id="stock_quantity" value="{{product.stock_quantity}}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tolerance">tolerance</label></td>
+                        <td><input type="text" placeholder="tolerance" name="tolerance" id="tolerance" value="{{product.tolerance}}" required></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><button type="submit">Edit Product</button></td>
+                    </tr>
+                </table>
+            </form>
+        {% else %}
+
+            <form method="POST">
+                {% csrf_token %}
+            <table border="1">
+                <tr>
+                    <td><label for="product_name">product_name</label></td>
+                    <td><input type="text" placeholder="product_name" name="product_name" id="product_name" required></td>
+                </tr>
+                <tr>
+                    <td><label for="unit">unit</label></td>
+                    <td><input type="text" placeholder="unit" name="unit" id="unit" required></td>
+                </tr>
+                <tr>
+                    <td><label for="price">price</label></td>
+                    <td><input type="text" placeholder="price" name="price" id="price" required></td>
+                </tr>
+                <tr>
+                    <td><label for="stock_quantity">stock_quantity</label></td>
+                    <td><input type="text" placeholder="stock_quantity" name="stock_quantity" id="stock_quantity" required></td>
+                </tr>
+                <tr>
+                    <td><label for="tolerance">tolerance</label></td>
+                    <td><input type="text" placeholder="tolerance" name="tolerance" id="tolerance" required></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit">Add Product</button></td>
+                </tr>
+                </table>
+                
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
