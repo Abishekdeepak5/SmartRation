@@ -1,10 +1,13 @@
 class RationProduct:
-    def __init__(self, ration_product_id, ration_id, product_id, stock_quantity, last_update):
-        self.ration_product_id = ration_product_id
-        self.ration_id = ration_id
-        self.product_id = product_id
-        self.stock_quantity = stock_quantity
-        self.last_update = last_update
+    TABLE_NAME="ration_product"
+    # , ration_product_id, ration_id, product_id, stock_quantity, last_update
+    def __init__(self):
+        pass
+        # self.ration_product_id = ration_product_id
+        # self.ration_id = ration_id
+        # self.product_id = product_id
+        # self.stock_quantity = stock_quantity
+        # self.last_update = last_update
 
     def get_ration_product_id(self):
         return self.ration_product_id

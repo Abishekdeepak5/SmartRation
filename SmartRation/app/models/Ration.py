@@ -1,4 +1,5 @@
 class Ration:
+    TABLE_NAME="ration"
     def __init__(self, ration_id, staff, address, opening_days, pincode):
         self.__ration_id = ration_id
         self.__staff = staff 

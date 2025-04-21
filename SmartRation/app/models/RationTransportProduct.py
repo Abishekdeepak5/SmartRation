@@ -1,10 +1,11 @@
 class RationTransportProduct:
-    def __int__(self, ration_transport_product_id, ration_transport_id, product_id, allocated_qty, received_qty):
-        self.ration_transport_product_id = ration_transport_product_id
-        self.ration_transport_id = ration_transport_id
-        self.product_id = product_id
-        self.allocated_qty = allocated_qty
-        self.received_qty = received_qty
+    TABLE_NAME="ration_transport_product"
+    def __init__(self):
+        self.ration_transport_id = None
+        self.product_id =None
+        self.allocated_qty =None
+        self.received_qty = None
+        self.update_date=None
 
     def get_ration_transport_product_id(self):
         return self.ration_transport_product_id
@@ -35,3 +36,9 @@ class RationTransportProduct:
 
     def set_received_qty(self, value):
         self.received_qty = value
+    
+    def set_update_date(self, value):
+        self.update_date = value
+
+    def get_update_date(self):
+        return self.update_date

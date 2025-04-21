@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Ration Load{% endblock %}
+{% block content %}
+{% load static %}
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th,td{
+            padding: 0 5px;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    {% if mode == 'view' %}
+            {% if loads %}
+            <table border="1">
+                <thead>
+                    <th>Product</th>
+                    <th>Price</th> 
+                    <th>Unit</th>
+                    <th>Tolerance</th>
+                    <th>Sent Date</th>
+                    <th>Receive Quantity</th>
+                    <th>Receive</th>
+                </thead>
+                {% for load in loads %}
+                    <tr>
+                        <td>{{load.product.product_name}}</td>
+                        <td>{{load.product.price}}</td>
+                        <td>{{load.product.unit}}</td>
+                        <td>{{load.product.tolerance}}</td>
+                        <td>{{load.ration_transport.load_send_date}}</td>
+                        <td>{{load.received_qty}}</td>
+                        <td><a href="{% url 'receive_ration_load' load.ration_transport_product_id %}">Receive</a></td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+            <form method="POST">
+                {% csrf_token %}
+                <div style="display: flex; align-items:center; justify-content:center; gap:10px;">
+                    <span><button type="submit">Added to ration inventory</button></span>
+                </div>
+            </form>
+            {% else %}
+                <h1>No Load</h1>
+            {% endif %}
+
+            <br>
+        
+    {% elif mode == 'receive' and load %}   
+        <form method="POST">
+            {% csrf_token %}
+            <table border="1">
+
+                <input type="hidden" placeholder="product_id" name="product_id" id="product_id" value="{{load.product.product_id}}"  readonly>
+                <input type="hidden" placeholder="ration_transport_id" name="ration_transport_id" id="ration_transport_id" value="{{load.ration_transport.ration_transport_id}}"  readonly>
+                <input type="hidden" placeholder="allocated_qty" name="allocated_qty" id="allocated_qty" value="{{load.allocated_qty}}"  readonly>
+                <tr>
+                    <td><label for="product_name">product_name</label></td>
+                    <td><input type="text" placeholder="product_name" name="product_name" id="product_name" value="{{load.product.product_name}}"  readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="unit">unit</label></td>
+                    <td><input type="text" placeholder="unit" name="unit" id="unit" value="{{load.product.unit}}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="price">price</label></td>
+                    <td><input type="text" placeholder="price" name="price" id="price" value="{{load.product.price}}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="tolerance">tolerance</label></td>
+                    <td><input type="text" placeholder="tolerance" name="tolerance" id="tolerance" value="{{load.product.tolerance}}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label >allocated_qty</label></td>
+                    <td><input type="text" value="{{load.allocated_qty}}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="received_qty">Receive Quantity</label></td>
+                    <td><input type="text" placeholder="received_qty" name="received_qty" id="received_qty" value="{{load.received_qty}}" required></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit">Submit</button></td>
+                </tr>
+            </table>
+        </form>
+        <br>
+    {% endif %}
+
+{% endblock %}

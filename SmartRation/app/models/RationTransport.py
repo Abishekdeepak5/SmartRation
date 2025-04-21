@@ -1,10 +1,13 @@
+from enum import Enum
+
 class RationTransport:
-    def __init__(self, ration_transport_id, load_send_date, load_received_date, status, ration_id):
-        self.ration_transport_id = ration_transport_id
-        self.load_send_date = load_send_date
-        self.load_received_date = load_received_date
-        self.status = status
-        self.ration_id = ration_id
+    TABLE_NAME="ration_transport"
+    def __init__(self):
+        # self.ration_transport_id = None
+        self.load_send_date = None
+        self.load_received_date = None
+        self.status = None
+        self.ration_id = None
 
     def get_ration_transport_id(self):
         return self.ration_transport_id
@@ -35,4 +38,10 @@ class RationTransport:
 
     def set_ration_id(self, value):
         self.ration_id = value
+    def get_table_name(self):
+        return "ration_transport"
 
+class Status(Enum):
+    LOADING = "loading"
+    SEND = "send"
+    RECEIVED = "received"

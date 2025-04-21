@@ -1,4 +1,5 @@
 class FamilyEntitlement:
+    TABLE_NAME="family_entitlement"
     def __init__(self,id, family_id, date_of_issue):
         self.id=id
         self.family_id=family_id

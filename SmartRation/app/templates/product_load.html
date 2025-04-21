@@ -1,0 +1,145 @@
+
+{% extends 'base.html' %}
+{% block title %}Add Load{% endblock %}
+
+{% block content %}
+{% load static %}
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th,td{
+            padding: 0 5px;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <div class="text-center">
+
+        {% if product and mode == 'add' %}            
+        <form method="POST">
+            {% csrf_token %}
+            <table border="1">
+                <tr>
+                    <td><label for="product_name">product_name</label></td>
+                    <td><input type="text" placeholder="product_name" name="product_name" id="product_name" value="{{product.product_name}}"  readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="unit">unit</label></td>
+                    <td><input type="text" placeholder="unit" name="unit" id="unit" value="{{product.unit}}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="price">price</label></td>
+                    <td><input type="text" placeholder="price" name="price" id="price" value="{{product.price}}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="stock_quantity">stock_quantity</label></td>
+                    <td><input type="text" placeholder="stock_quantity" name="stock_quantity" id="stock_quantity" value="{{product.stock_quantity}}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="tolerance">tolerance</label></td>
+                    <td><input type="text" placeholder="tolerance" name="tolerance" id="tolerance" value="{{product.tolerance}}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="allocated_qty">Load Quantity</label></td>
+                    <td><input type="text" placeholder="allocated_qty" name="allocated_qty" id="allocated_qty"  required></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit">Add to load</button></td>
+                </tr>
+            </table>
+        </form>
+
+
+
+        {% elif mode == 'view' and loads %}
+           
+            <table border="1">
+                <thead>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Stock Quantity</th>
+                    <th>Unit</th>
+                    <th>Tolerance</th>
+                    <th>Last Update</th>
+                    <th>Load Quantity</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </thead>
+                {% for load in loads %}
+                    <tr>
+                        <td>{{load.product.product_name}}</td>
+                        <td>{{load.product.price}}</td>
+                        <td>{{load.product.stock_quantity}}</td>
+                        <td>{{load.product.unit}}</td>
+                        <td>{{load.product.tolerance}}</td>
+                        <td>{{load.product.last_update}}</td>
+                        <td>{{load.allocated_qty}}</td>
+                        <td><a href="{% url 'edit_load' load.ration_transport_product_id %}">Edit</a></td>
+                        <td><a href="{% url 'delete_load' load.ration_transport_product_id %}">Delete</a></td>                       
+                    </tr>
+                {% endfor %}
+
+            </table>
+            <br>
+            {% if rations %}
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div style="display: flex; align-items:center; justify-content:center; gap:10px;">
+                    <h2 style="display: flex;width: fit-content;">Ration</h2>
+                    <span><select name="ration_id" required >
+                        <option value="" disabled selected>Select Ration</option>
+                        {% for ration in rations %}
+                            <option value="{{ ration.ration_id }}">{{ration.address}} - {{ ration.pincode }}</option>
+                        {% endfor %}
+                    </select></span>
+                    <span><button type="submit">send load</button></span>
+                </div>
+            </form>
+            {% endif %}
+
+        {% elif mode == 'edit' and load %}
+            <form method="POST">
+                {% csrf_token %}
+                <table border="1">
+
+                    <input type="hidden" placeholder="product_id" name="product_id" id="product_id" value="{{load.product.product_id}}"  readonly>
+                    <input type="hidden" placeholder="ration_transport_id" name="ration_transport_id" id="ration_transport_id" value="{{load.ration_transport.ration_transport_id}}"  readonly>
+                    <tr>
+                        <td><label for="product_name">product_name</label></td>
+                        <td><input type="text" placeholder="product_name" name="product_name" id="product_name" value="{{load.product.product_name}}"  readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="unit">unit</label></td>
+                        <td><input type="text" placeholder="unit" name="unit" id="unit" value="{{load.product.unit}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="price">price</label></td>
+                        <td><input type="text" placeholder="price" name="price" id="price" value="{{load.product.price}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="stock_quantity">stock_quantity</label></td>
+                        <td><input type="text" placeholder="stock_quantity" name="stock_quantity" id="stock_quantity" value="{{load.product.stock_quantity}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tolerance">tolerance</label></td>
+                        <td><input type="text" placeholder="tolerance" name="tolerance" id="tolerance" value="{{load.product.tolerance}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="allocated_qty">Load Quantity</label></td>
+                        <td><input type="text" placeholder="allocated_qty" name="allocated_qty" id="allocated_qty" value="{{load.allocated_qty}}" required></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><button type="submit">Edit load</button></td>
+                    </tr>
+                </table>
+            </form>
+
+        {% else %}
+            <h1>No products</h1>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -46,7 +46,7 @@ def edit_product(request,productId):
         try:
             data,error = editProduct(product)
             messages.success(request, "Product Edit successfully!")
-            return get_all_product(request)
+            return redirect("list_product")
         except Exception as e:
             print(e)
             try:
@@ -54,13 +54,13 @@ def edit_product(request,productId):
             except:
                 messages.error(request, "Error Edit Product!")
     try:
-        product,error=get_product_by_id(productId)
-        print(product[1][0])
-        return render(request,"product_form.html",{"product":product[1][0]})
+        product=get_product_by_id(productId)
+        print(product)
+        return render(request,"product_form.html",{"product":product})
     except Exception as e:
         print(e)
         messages.error(request,"Error edit product")
-        return get_all_product(request)
+        return redirect("list_product")
 
 def delete_product(request,productId):
     print(productId)
@@ -70,7 +70,7 @@ def delete_product(request,productId):
     except Exception as e:
         print(e)
         messages.error(request,"Product not deleted")
-    return get_all_product(request)
+    return redirect("list_product")
 
 def get_all_product(request):
     try:

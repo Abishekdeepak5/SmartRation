@@ -1,4 +1,5 @@
 class Product:
+    TABLE_NAME="product"
     # def __init__(self,product_id, product_name, unit, price, stock_quantity, tolerance, last_update):
     #     self.product_id=product_id
     #     self.product_name=product_name

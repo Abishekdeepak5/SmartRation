@@ -11,9 +11,10 @@ def deleteRow(tableName,columnName,id):
     return supabase.table(tableName).delete().eq(columnName, id).execute()
 
 def getRows(tableName):
-    return supabase.table(tableName).select("*").execute()
+    return getRowsWithSelect(tableName,"*")
 
 def getRowsWithId(tableName,columnName,id):
     return supabase.table(tableName).select("*").eq(columnName,id).execute()
 
-
+def getRowsWithSelect(tableName,selectQuery):
+    return supabase.table(tableName).select(selectQuery).execute()

@@ -1,5 +1,6 @@
 from app.supabase_config import supabase
-
+from app.dao.DatabaseUtil import *
+from app.models.Ration import Ration
 def create_ration(staff_id, address, opening_days, pincode):
     data, error = supabase.table("ration").insert({
         "staff": staff_id,
@@ -42,5 +43,14 @@ def delete_ration(ration_id):
 
 def update_staff(ratoin_id,staff_id):
     update_data={"staff":staff_id}
-    return supabase.table("ration").update(update_data).eq("ration_id", ration_is).execute()    
+    return supabase.table("ration").update(update_data).eq("ration_id", ration_is).execute()
+
+def get_ration_by_staff_id(staff_id):
+    data,count=getRowsWithId(Ration.TABLE_NAME,'staff',staff_id)
+    return data[1][0]  
+
+def get_staff_ration(request):
+    user=request.session.get("user")    
+    ration=get_ration_by_staff_id(user["user_id"])
+    return ration
 

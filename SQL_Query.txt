@@ -33,15 +33,7 @@ CREATE TABLE families (
     ration_id INTEGER REFERENCES Ration(ration_id) ON DELETE SET NULL
 );
 
-CREATE TABLE ration_items (
-    ration_item_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    unit VARCHAR(20) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    stock_quantity INTEGER NOT NULL ,
-    tolerance NUMERIC NOT NULL,
-    entitled_qty NUMERIC NOT NULL
-);
+
 
 CREATE TABLE family_entitlements(
     id SERIAL PRIMARY KEY,
@@ -57,6 +49,96 @@ CREATE TABLE families_item (
     status varchar(20) NOT NULL  --('pending', 'completed')
 );
 
+
+
+CREATE TABLE stock_requests (
+    stock_id SERIAL PRIMARY KEY,
+    ration_id INTEGER REFERENCES ration(ration_id) ON DELETE CASCADE,
+    item_id INTEGER REFERENCES ration_items(ration_item_id) ON DELETE CASCADE,
+    quantity NUMERIC NOT NULL,
+    status varchar(20) NOT NULL   --('pending', 'approved', 'rejected')
+);
+
+
+CREATE TABLE PRODUCT(
+    product_id serial primary key,
+    product_name varchar(50),
+    unit VARCHAR(20) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    stock_quantity INTEGER NOT NULL ,
+    tolerance NUMERIC NOT NULL,
+    last_update DATE not null
+)
+
+CREATE TABLE RATION_TRANSPORT(
+    ration_transport_id serial primary key,
+    load_send_date Date,
+    load_received_date Date,
+    status varchar(20),
+    ration_id INTEGER REFERENCES ration(ration_id) ON DELETE CASCADE
+)
+
+CREATE TABLE RATION_TRANSPORT_PRODUCT(
+    ration_transport_product_id serial primary key,
+    ration_transport_id INTEGER not null REFERENCES RATION_TRANSPORT(ration_transport_id) ON DELETE CASCADE,
+    product_id INTEGER not null REFERENCES product(product_id) ON DELETE CASCADE,
+    allocated_qty NUMERIC NOT NULL,
+    received_qty NUMERIC,
+    update_date Date not null
+)
+
+CREATE TABLE RATION_FAMILY(
+    ration_family_id serial primary key,
+    ration_id INTEGER not null REFERENCES Ration(ration_id) ON DELETE CASCADE ,
+    family_id INTEGER not null REFERENCES Families(family_id) ON DELETE CASCADE ,
+    product_id INTEGER not null REFERENCES PRODUCT(product_id) ON DELETE CASCADE,
+    issued_quantity NUMERIC not null,
+    issued_date Date not null
+)
+
+CREATE TABLE RATION_PRODUCT(
+    ration_product_id serial primary key,
+    ration_id INTEGER not null REFERENCES Ration(ration_id) ON DELETE CASCADE ,
+    product_id INTEGER not null REFERENCES PRODUCT(product_id) ON DELETE CASCADE,
+    stock_quantity INTEGER NOT NULL,
+    last_update DATE not null
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE ration_items (
+    ration_item_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    unit VARCHAR(20) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    stock_quantity INTEGER NOT NULL ,
+    tolerance NUMERIC NOT NULL,
+    entitled_qty NUMERIC NOT NULL
+);
+
+
+
+
 CREATE TABLE inventory (
     inventory_id SERIAL PRIMARY KEY,
     ration_id INTEGER REFERENCES ration(ration_id) ON DELETE CASCADE,
@@ -71,13 +153,3 @@ CREATE TABLE inventory_items (
     received_qty NUMERIC,
     status varchar(20) NOT NULL  --('pending', 'received')
 );
-
-
-CREATE TABLE stock_requests (
-    stock_id SERIAL PRIMARY KEY,
-    ration_id INTEGER REFERENCES ration(ration_id) ON DELETE CASCADE,
-    item_id INTEGER REFERENCES ration_items(ration_item_id) ON DELETE CASCADE,
-    quantity NUMERIC NOT NULL,
-    status varchar(20) NOT NULL   --('pending', 'approved', 'rejected')
-);
-
