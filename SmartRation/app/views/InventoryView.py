@@ -25,6 +25,7 @@ def add_product(request):
         try:
             data,error = addProduct(product)
             messages.success(request, "Product Added successfully!")
+            return redirect("list_product")
         except Exception as e:
             try:
                 messages.error(request, "Error Adding Product.Message:"+e.message)

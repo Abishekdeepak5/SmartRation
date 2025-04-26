@@ -24,6 +24,40 @@
     <br>
     <br>
     {% if  rationProducts %}
+    {% if family %}
+        <table border="1">
+                <tr>
+                    <td>card_number</td>
+                    <td>{{family.card_number}}</td>
+                </tr>
+                <tr>
+                    <td>head_of_family</td>
+                    <td><h4>{{family.head_of_family}}</h4></td>
+                </tr>
+                <tr>
+                    <td>member_count</td>
+                    <td>{{family.member_count}}</td>
+                </tr>
+                <tr>
+                    <td>card_type</td>
+                    <td>{{family.card_type}}</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>{{family.email}}</td>
+                </tr>
+                <tr>
+                    <td>phone_number</td>
+                    <td>{{family.phone_number}}</td>
+                </tr>
+                <tr>
+                    <td>address</td>
+                    <td>{{family.address}}</td>
+                </tr>
+        </table>
+        <br>
+        <br>
+    {% endif %}
     <table border="1">
         <thead>
             <th>Product</th>
@@ -49,6 +83,12 @@
         {% else %}
         <h1>No Family</h1>
     {% endif %}
-   
     <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" >Weight</button>
+    </form>
+
+    <button>Bill</button>
 {% endblock %}

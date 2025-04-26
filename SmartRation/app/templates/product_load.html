@@ -14,9 +14,14 @@
         }
     </style>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <a href="{% url 'list_product' %}">View Products</a>
+    <br>
     <div class="text-center">
 
-        {% if product and mode == 'add' %}            
+        {% if product and mode == 'add' %}     
+        <p style="text-align: left;"><a href="{% url 'list_load' %}">View Loads</a></p>
+        <br>       
+        <h1 style="text-align: center;">Add Load</h1>        
         <form method="POST">
             {% csrf_token %}
             <table border="1">
@@ -54,7 +59,9 @@
 
 
         {% elif mode == 'view' and loads %}
-           
+        <p style="text-align: left;"><a href="{% url 'list_product' %}">Add Loads</a></p>
+        <br>
+        <h1 style="text-align: center;">Loads</h1>        
             <table border="1">
                 <thead>
                     <th>Product</th>
@@ -101,6 +108,9 @@
             {% endif %}
 
         {% elif mode == 'edit' and load %}
+            <a href="{% url 'list_load' %}">List Load</a>
+            <br>
+            <h1 style="text-align: center;">Edit Load</h1>        
             <form method="POST">
                 {% csrf_token %}
                 <table border="1">

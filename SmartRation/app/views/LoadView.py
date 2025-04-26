@@ -88,7 +88,7 @@ def edit_load(request,ration_transport_product_id):
         try:
             data,error = editRationTransportProduct(rationTransportProduct)
             messages.success(request, "Load Edit successfully!")
-            return list_load(request)
+            return redirect("list_load")
         except Exception as e:
             print(e)
             try:
@@ -96,12 +96,13 @@ def edit_load(request,ration_transport_product_id):
             except:
                 messages.error(request, "Error Edit Load!")
     try:
-        rationTransportProduct=getRationTransportProductById(ration_transport_product_id)
+        rationTransportProduct=getRationTransportProductById(ration_transport_product_id,RationTransport.Status.LOADING.value)
+        print(rationTransportProduct)
         if rationTransportProduct!=None:
             return render(request,"product_load.html",{"load":rationTransportProduct,"mode":"edit"})
     except Exception as e:
         messages.error(request,"Error edit load")
-    return list_load(request)
+    return redirect("list_load")
     
 def delete_load(request,ration_transport_product_id):
     try:
@@ -127,13 +128,14 @@ def list_ration_load(request):
                 addToRationInventory(rationTransportProductList,ration)
                 setRationTransportReceived(rationTransport)
                 print("All product receive entered ",rationTransport)
+                return redirect("ration_products")
         except Exception as e:
             print(e)
             messages.error(request, "Error submit Product")
     loads=[]
     for load in rationTransportProductList:
         try:
-            rationTransportProduct=getRationTransportProductById(load["ration_transport_product_id"])
+            rationTransportProduct=getRationTransportProductById(load["ration_transport_product_id"],RationTransport.Status.SEND.value)
             if rationTransportProduct!=None:
                 loads.append(rationTransportProduct)
         except Exception as e:
@@ -162,7 +164,7 @@ def receive_ration_load(request,ration_transport_product_id):
             except:
                 messages.error(request, "Error Edit Load!")
     try:
-        rationTransportProduct=getRationTransportProductById(ration_transport_product_id)
+        rationTransportProduct=getRationTransportProductById(ration_transport_product_id,RationTransport.Status.SEND.value)
         if rationTransportProduct!=None:
             return render(request,"ration_load.html",{"load":rationTransportProduct,"mode":"receive"})
     except Exception as e:

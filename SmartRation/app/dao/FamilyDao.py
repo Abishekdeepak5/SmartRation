@@ -10,6 +10,13 @@ def addFamily(family):
 def get_ration_family(rationId):
     return getRowsWithId("families","ration_id",rationId)
 
+def getFamilyById(family_id):
+    data,count = getRowsWithId(Family.Family.TABLE_NAME,"family_id",family_id)
+    try:
+        return data[1][0]
+    except Exception as e:
+        print(e)
+    return None
 
 
 

@@ -11,7 +11,7 @@ def addLoad(product:Product,allocated_qty):
     rationTransportObj=None
     if len(rationTransport[1]) == 0:
         rationTransport=RationTransport.RationTransport()
-        rationTransport.set_status("loading")
+        rationTransport.set_status(RationTransport.Status.LOADING.value)
         response,error=insertRow(RationTransport.RationTransport.TABLE_NAME,rationTransport.__dict__)
         rationTransportObj=response[1][0]
     else:
@@ -43,10 +43,13 @@ def deleteProduct(productId):
 #     data,count=supabase.table(RationTransportProduct.RationTransportProduct.TABLE_NAME).select("*,product(*),ration_transport(*)").eq("ration_transport_product_id", ration_transport_product_id).execute()
 #     return  data[1][0]
 
-def getRationTransportProductById(ration_transport_product_id):
-    send_ids = supabase.table(RationTransport.RationTransport.TABLE_NAME).select("ration_transport_id").eq("status", RationTransport.Status.SEND.value).execute()
+def getRationTransportProductById(ration_transport_product_id,status):
+    print("Get ratoin transport ",ration_transport_product_id)
+    send_ids = supabase.table(RationTransport.RationTransport.TABLE_NAME).select("ration_transport_id").eq("status", status).execute()
+    print("Get ratoin transport send ",send_ids)
     ids = [row["ration_transport_id"] for row in send_ids.data]
     data,count = supabase.table(RationTransportProduct.RationTransportProduct.TABLE_NAME).select("*,product(*),ration_transport(*)").eq("ration_transport_product_id", ration_transport_product_id).in_("ration_transport_id", ids).execute()
+    print("Get data ",data)
     # data,count=supabase.table(RationTransportProduct.RationTransportProduct.TABLE_NAME).select("*,product(*),ration_transport(*)").eq("ration_transport_product_id", ration_transport_product_id).execute()
     if len(data[1])==0:
         return None

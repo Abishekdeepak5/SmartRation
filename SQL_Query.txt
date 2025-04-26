@@ -93,7 +93,8 @@ CREATE TABLE RATION_FAMILY(
     family_id INTEGER not null REFERENCES Families(family_id) ON DELETE CASCADE ,
     product_id INTEGER not null REFERENCES PRODUCT(product_id) ON DELETE CASCADE,
     issued_quantity NUMERIC not null,
-    issued_date Date not null
+    issued_date Date not null,
+    actual_quantity decimal(10,2)
 )
 
 CREATE TABLE RATION_PRODUCT(

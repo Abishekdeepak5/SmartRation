@@ -2,7 +2,7 @@ from app.supabase_config import supabase
 from app.dao.DatabaseUtil import *
 from app.models.Ration import Ration
 from app.models.RationProduct import RationProduct
-from app.models import Family
+from app.models import Family,RationFamily
 def create_ration(staff_id, address, opening_days, pincode):
     data, error = supabase.table("ration").insert({
         "staff": staff_id,
@@ -67,3 +67,8 @@ def get_families(ration_id):
     if len(data[1])==0:
         return None
     return data[1]
+def updateRationProduct(rationProduct):
+    return updateRow(RationProduct.TABLE_NAME,rationProduct.__dict__,"ration_product_id",rationProduct.get_ration_product_id())
+
+def addProductsToFamily(rationFamily):
+    return insertRow(RationFamily.RationFamily.TABLE_NAME,rationFamily.__dict__)

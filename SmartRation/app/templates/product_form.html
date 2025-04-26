@@ -5,10 +5,12 @@
 
 {% load static %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-
+    <a href="{% url 'list_product' %}">Back to Products</a>
+    <br>
     <div class="text-center">
 
-        {% if product %}            
+        {% if product %}    
+        <h1 style="text-align: center;">Edit Product</h1>        
             <form method="POST">
                 {% csrf_token %}
                 <table border="1">
@@ -39,7 +41,7 @@
                 </table>
             </form>
         {% else %}
-
+        <h1 style="text-align: center;">Add Product</h1>        
             <form method="POST">
                 {% csrf_token %}
             <table border="1">

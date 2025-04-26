@@ -1,13 +1,15 @@
 
 
 class RationFamily:
-    def __init__(self,ration_family_id, ration_id, family_id, product_id, issued_quantity, issued_date):
-        self.ration_family_id = ration_family_id
-        self.ration_id = ration_id
-        self.family_id = family_id
-        self.product_id = product_id
-        self.issued_quantity = issued_quantity
-        self.issued_date = issued_date
+    TABLE_NAME = "ration_family"
+    # def __init__(self, ration_id, family_id, product_id, issued_quantity, issued_date,actual_quantity):
+        # self.ration_family_id = ration_family_id
+        # self.ration_id = ration_id
+        # self.family_id = family_id
+        # self.product_id = product_id
+        # self.issued_quantity = issued_quantity
+        # self.actual_quantity = actual_quantity
+        # self.issued_date = issued_date
         
     def get_ration_family_id(self):
         return self.ration_family_id
@@ -45,3 +47,8 @@ class RationFamily:
     def set_issued_date(self, value):
         self.issued_date = value
 
+    def set_actual_quantity(self, value):
+        self.actual_quantity = value
+
+    def get_actual_quantity(self):
+        return self.actual_quantity

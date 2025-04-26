@@ -7,8 +7,11 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from app.dao.RationDao import *
+from app.dao.FamilyDao import getFamilyById
 from app.dao.UserDetailDao import get_user_by_id,get_staff
 from app.views.LoadView import get_staff_ration
+from app.common.Util import get_current_date
+from app.models import RationFamily
 
 # View for listing all ration records
 def list_rations(request):
@@ -117,9 +120,10 @@ def distribute_product(request):
         distributeProductDictionary={}
         for i in range(len(rationProducts)):
             product = rationProducts[i]
-            distribute_quantity = int(request.POST.get("quantity_"+str(product["product_id"])))
+            distribute_quantity = float(request.POST.get("quantity_"+str(product["product_id"])))
             distributeProductDictionary[str(product["product_id"])]=distribute_quantity
         request.session["rationDistributeProduct"]=distributeProductDictionary
+        return redirect("list_ration_families")
     distributeProduct=get_distribute_product(request)
     setRationDistribute(request,rationProducts,distributeProduct)
     print(rationProducts)
@@ -148,11 +152,43 @@ def setDistributeProduct(request,distributeProduct):
     request.session["rationDistributeProduct"] = distributeProduct
 
 def distribute_family_product(request,family_id):
-    # request.session["rationDistributeProduct"]=None
     distributeProduct=get_distribute_product(request)
     rationProducts=get_ration_product(request)
+    if request.method == 'POST':
+        for rationProduct in rationProducts:
+            ration_stock_quantity = rationProduct["stock_quantity"]
+            distribute_quantity = distributeProduct[str(rationProduct["product_id"])]
+            new_quantity = float(ration_stock_quantity) - float(distribute_quantity)
+            print(new_quantity)
+            if distribute_quantity != 0 and (new_quantity > 0):
+                rationProductObj = RationProduct()
+                rationProductObj.set_ration_product_id(rationProduct["ration_product_id"])
+                rationProductObj.set_product_id(rationProduct["product_id"])
+                rationProductObj.set_ration_id(rationProduct["ration_id"])
+                rationProductObj.set_last_update(get_current_date())
+                rationProductObj.set_stock_quantity(new_quantity)
+                print()
+                print(rationProductObj.__dict__)
+                print(updateRationProduct(rationProductObj))
+                rationFamily=RationFamily.RationFamily()
+                rationFamily.set_product_id(rationProductObj.get_product_id())
+                rationFamily.set_actual_quantity(distribute_quantity)
+                rationFamily.set_family_id(family_id)
+                rationFamily.set_issued_date(get_current_date())
+                rationFamily.set_issued_quantity(distribute_quantity)
+                rationFamily.set_ration_id(rationProductObj.get_ration_id())
+                print(rationFamily.__dict__)
+                addProductsToFamily(rationFamily)
+        return redirect("list_ration_families")
+    family=getFamilyById(family_id)
+    if family==None:
+        messages.warning(request,"Family not found")
+        return redirect("list_ration_families")
     if distributeProduct == None or len(distributeProduct) != len(rationProducts):
         messages.warning(request,"Please select or click update distribute products")
+        return redirect("distribute_product")
+    elif check_ration_stock(rationProducts,distributeProduct) == False:
+        messages.warning(request,"stock quantity less than distribute quanity please update")
         return redirect("distribute_product")
     else:
         for i in range(len(rationProducts)):
@@ -160,7 +196,21 @@ def distribute_family_product(request,family_id):
             distribute_quantity = distributeProduct[str(product["product_id"])]
             product["distribute_quantity"] = distribute_quantity
         print(rationProducts)
-        return render(request,"ration_family_distribute.html",{"rationProducts":rationProducts})
+        return render(request,"ration_family_distribute.html",{"rationProducts":rationProducts,"family":family})
+    
+def check_ration_stock(rationProducts,distributeProduct):
+    count=0
+    for rationProduct in rationProducts:
+        ration_stock_quantity = rationProduct["stock_quantity"]
+        distribute_quantity = distributeProduct[str(rationProduct["product_id"])]
+        new_quantity = float(ration_stock_quantity) - float(distribute_quantity)
+        if (new_quantity > 0) or (distribute_quantity == 0) :
+            count = count + 1
+    print("count    ",count)
+    print(len(rationProducts))
+    if count == len(rationProducts):
+        return True
+    return False
 
 def get_distribute_product(request):
     return request.session.get("rationDistributeProduct")

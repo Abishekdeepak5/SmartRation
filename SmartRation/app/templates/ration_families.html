@@ -14,9 +14,12 @@
     </style>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <br>
+    <a href="{% url 'staff' %}">Dashboard</a>
+    <br>
     {% if ration %}
     <h1>Families in {{ration.address}} Ration Shop</h1>
     <a href="{% url 'distribute_product' %}">Set Distribute Product</a>
+    <br>
     {% endif %}
     {% if  rationFamilies %}
         <table border="1">

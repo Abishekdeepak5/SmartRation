@@ -13,11 +13,15 @@
         }
     </style>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <a href="{% url 'admin' %}">Back to Dashboard</a>
+    <br>
     <a href="{% url 'add_product' %}">Add Products</a>
+    <br>
     <a href="{% url 'list_load' %}">View Loads</a>
     <br>
 
     {% if products %}
+        <h1 style="text-align: center;">Products</h1>
         <table border="1">
             <thead>
                 <th>Product</th>
