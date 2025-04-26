@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#c68)m=@5kc$3s27gd+6*@*@6yi22r8n%1!x@h32t!5*89z0ut
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'app.middleware.LoginRequiredMiddleware',
 ]
-
+CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'SmartRation.urls'
 
 TEMPLATES = [
@@ -126,3 +126,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/home/'  # Redirect to home after login
 LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login after logout
+
+CSRF_TRUSTED_ORIGINS=['https://*.onrender.com','https://*','http://*']

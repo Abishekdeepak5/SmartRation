@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Ration product{% endblock %}
+{% block content %}
+
+{% load static %}
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th,td{
+        padding: 0 5px;
+    }
+</style>
+{% if rationProducts %}
+<a href="{% url 'list_ration_families' %}">Back to families</a>
+<form method="POST">
+    {% csrf_token %}
+    <table border="1">
+        <thead>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Stock Quantity</th>
+            <th>Unit</th>
+            <th>Tolerance</th>
+            <th>Quantity</th>
+        </thead>
+        {% for rationProduct in rationProducts %}
+            <tr>
+                <td>{{rationProduct.product.product_name}}</td>
+                <td>{{rationProduct.product.price}}</td>
+                <td>{{rationProduct.stock_quantity}}</td>
+                <td>{{rationProduct.product.unit}}</td>
+                <td>{{rationProduct.product.tolerance}}</td>
+                {% if rationProduct.distribute_quantity %}
+                    <td><input type="text" placeholder="quantity"   name="quantity_{{rationProduct.product_id}}" value="{{rationProduct.distribute_quantity}}" required></td>
+                {% else %}
+                    <td><input type="text" placeholder="quantity"   name="quantity_{{rationProduct.product_id}}" value="0" required></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        <td><button type="submit">update</button></td>
+        </tr>
+    </table>
+    
+</form>
+{% else %}
+    <br>
+    <h1>No Products</h1>
+    <br>
+{% endif %}
+
+{% endblock %}

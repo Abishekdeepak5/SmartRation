@@ -8,6 +8,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from app.dao import UserDetailDao
 from app.models import UserDetails 
+from app.dao import RationDao
 
 def home(request):
     response = supabase.table("user_details").select("*").execute()
@@ -18,6 +19,15 @@ def staff_dashboard(request):
 
 def admin_dashboard(request):
     return render(request,"adminDashboard.html")
+def profile(request):
+    user=get_user(request)
+    try:
+        ration=RationDao.get_staff_ration(request)
+        return render(request,"profile.html",{"user":user,"ration":ration})
+    except Exception as e:
+        print(e)
+    return render(request,"profile.html",{"user":user})
+
 # Register User
 def register_user(request):
     if request.method == "POST":
@@ -119,7 +129,12 @@ def delete_user(request, user_id):
     return redirect("user_list")
 
 
-
+def get_user(request):
+    try:
+        return request.session.get("user")
+    except Exception as e:
+        print(e)
+    return None
 
 
 

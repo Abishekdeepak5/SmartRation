@@ -38,7 +38,7 @@ class Ration:
     def __str__(self):
         return f"Ration ID: {self.__ration_id}, Address: {self.__address}, Staff: {self.__staff.get_user_name()}, Pincode: {self.__pincode}"
 
-
+  
 
 
 """

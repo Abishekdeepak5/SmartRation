@@ -1,4 +1,5 @@
 class Family:
+    TABLE_NAME = "families"
     tableName="families"
     def __init__(self):
         pass

@@ -1,0 +1,9 @@
+Build project :
+    docker build -t abishekaranganthan/smartration:1.0 .
+
+Run:
+ docker run -p 8000:8000 abishekaranganthan/smartration:1.0
+
+Push to Docker Hub:
+ docker push abishekaranganthan/smartration:1.0
+

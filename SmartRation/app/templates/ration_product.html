@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Ration product{% endblock %}
+{% block content %}
+
+{% load static %}
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th,td{
+        padding: 0 5px;
+    }
+</style>
+{% if rationProducts %}
+    <table border="1">
+        <thead>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Stock Quantity</th>
+            <th>Unit</th>
+            <th>Tolerance</th>
+            <th>Last Update</th>
+        </thead>
+        {% for rationProduct in rationProducts %}
+            <tr>
+                <td>{{rationProduct.product.product_name}}</td>
+                <td>{{rationProduct.product.price}}</td>
+                <td>{{rationProduct.stock_quantity}}</td>
+                <td>{{rationProduct.product.unit}}</td>
+                <td>{{rationProduct.product.tolerance}}</td>
+                <td>{{rationProduct.product.last_update}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <br>
+    <h1>No Products</h1>
+    <br>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% if distributeproducts %}
+                    {% if  rationProduct.ration_product_id in distributeproducts %}
+                        <td><a href="{% url 'remove_distribute_product' rationProduct.ration_product_id %}">Remove</a></td>
+                    {% else %}
+                        <td><a href="{% url 'add_distribute_product' rationProduct.ration_product_id %}">Add</a></td>
+                    {% endif %}
+                {% else %}
+                    <td><a href="{% url 'add_distribute_product' rationProduct.ration_product_id %}">Add</a></td>
+                {% endif %}

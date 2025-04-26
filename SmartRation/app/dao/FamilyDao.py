@@ -1,11 +1,11 @@
 from app.dao.DatabaseUtil import *
-
+from app.models import Family
 def addFamily(family):
     dict_data=family.__dict__
     # del dict_data['family_id']
     print(family)
     print(dict_data)
-    return insertRow(family.get_table_name(),dict_data)
+    return insertRow(Family.Family.TABLE_NAME,dict_data)
 
 def get_ration_family(rationId):
     return getRowsWithId("families","ration_id",rationId)

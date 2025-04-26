@@ -32,8 +32,14 @@
                         <td>{{load.product.unit}}</td>
                         <td>{{load.product.tolerance}}</td>
                         <td>{{load.ration_transport.load_send_date}}</td>
-                        <td>{{load.received_qty}}</td>
-                        <td><a href="{% url 'receive_ration_load' load.ration_transport_product_id %}">Receive</a></td>
+                        {% if load.received_qty == None %}
+                            <td>Yet to receive</td>
+                            <td><a href="{% url 'receive_ration_load' load.ration_transport_product_id %}">Receive</a></td>
+                        {% else %}
+                            <td>{{load.received_qty}}</td>
+                            <td><a href="{% url 'receive_ration_load' load.ration_transport_product_id %}">Edit</a></td>
+                        {% endif %}
+                       
                     </tr>
                 {% endfor %}
 
@@ -80,7 +86,11 @@
                 </tr>
                 <tr>
                     <td><label for="received_qty">Receive Quantity</label></td>
-                    <td><input type="text" placeholder="received_qty" name="received_qty" id="received_qty" value="{{load.received_qty}}" required></td>
+                    {% if load.received_qty == None %}
+                        <td><input type="text" placeholder="received_qty" name="received_qty" id="received_qty" value="" required></td>
+                    {% else %}
+                        <td><input type="text" placeholder="received_qty" name="received_qty" id="received_qty" value="{{load.received_qty}}" required></td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td></td>

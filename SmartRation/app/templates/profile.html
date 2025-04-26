@@ -1,0 +1,82 @@
+
+{% extends 'base.html' %}
+{% block title %}Add Load{% endblock %}
+
+{% block content %}
+{% load static %}
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th,td{
+            padding: 0 5px;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <div class="text-center">
+        {% if  user %}
+                <table border="1">
+
+                    <input type="hidden" placeholder="user_id" name="user_id" id="user_id" value="{{user.user_id}}"  readonly>
+                    <input type="hidden" placeholder="user_id" name="user_id" id="user_id" value="{{user.user_id}}"  readonly>
+                    <tr>
+                        <td><label for="user_name">user_name</label></td>
+                        <td><input type="text" placeholder="user_name" name="user_name" id="user_name" value="{{user.user_id}}"  readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="user_name">user_name</label></td>
+                        <td><input type="text" placeholder="user_name" name="user_name" id="user_name" value="{{user.user_name}}"  readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="role">role</label></td>
+                        <td><input type="text" placeholder="role" name="role" id="role" value="{{user.role}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="email">email</label></td>
+                        <td><input type="text" placeholder="email" name="email" id="email" value="{{user.email}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="address">address</label></td>
+                        <td><input type="text" placeholder="address" name="address" id="address" value="{{user.address}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="pincode">pincode</label></td>
+                        <td><input type="text" placeholder="pincode" name="pincode" id="pincode" value="{{user.pincode}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="date_of_birth">Date of birth</label></td>
+                        <td><input type="text" placeholder="date_of_birth" name="date_of_birth" id="date_of_birth" value="{{user.date_of_birth}}" readonly></td>
+                    </tr>
+                </table>
+                {% if  ration %}
+                <br>
+                <br>
+                <table border="1">
+
+                    <input type="hidden" placeholder="ration_id" name="ration_id" id="ration_id" value="{{ration.ration_id}}"  readonly>
+                    <tr>
+                        <td><label for="ration_id">ration_id</label></td>
+                        <td><input type="text" placeholder="ration_id" name="ration_id" id="ration_id" value="{{ration.ration_id}}"  readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="address">address</label></td>
+                        <td><input type="text" placeholder="address" name="address" id="address" value="{{ration.address}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="opening_days">opening_days</label></td>
+                        <td><input type="text" placeholder="opening_days" name="opening_days" id="opening_days" value="{{ration.opening_days}}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="pincode">pincode</label></td>
+                        <td><input type="text" placeholder="pincode" name="pincode" id="pincode" value="{{ration.pincode}}" readonly></td>
+                    </tr>
+                </table>
+                <br>
+                <br>
+                {% endif %}
+        {% else %}
+            <h1>No Profile</h1>
+        {% endif %}
+    </div>
+{% endblock %}

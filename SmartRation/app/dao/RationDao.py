@@ -1,6 +1,8 @@
 from app.supabase_config import supabase
 from app.dao.DatabaseUtil import *
 from app.models.Ration import Ration
+from app.models.RationProduct import RationProduct
+from app.models import Family
 def create_ration(staff_id, address, opening_days, pincode):
     data, error = supabase.table("ration").insert({
         "staff": staff_id,
@@ -41,9 +43,9 @@ def update_ration(ration_id, address=None, opening_days=None, pincode=None,staff
 def delete_ration(ration_id):
     supabase.table("ration").delete().eq("ration_id", ration_id).execute()
 
-def update_staff(ratoin_id,staff_id):
+def update_staff(ration_id,staff_id):
     update_data={"staff":staff_id}
-    return supabase.table("ration").update(update_data).eq("ration_id", ration_is).execute()
+    return supabase.table("ration").update(update_data).eq("ration_id", ration_id).execute()
 
 def get_ration_by_staff_id(staff_id):
     data,count=getRowsWithId(Ration.TABLE_NAME,'staff',staff_id)
@@ -54,3 +56,14 @@ def get_staff_ration(request):
     ration=get_ration_by_staff_id(user["user_id"])
     return ration
 
+def get_ration_products(ration_id):
+    data,count = supabase.table(RationProduct.TABLE_NAME).select("*,product(*)").eq("ration_id", ration_id).execute()
+    if len(data[1])==0:
+        return None
+    return data[1]
+
+def get_families(ration_id):
+    data,count = supabase.table(Family.Family.TABLE_NAME).select("*").eq("ration_id", ration_id).execute()
+    if len(data[1])==0:
+        return None
+    return data[1]

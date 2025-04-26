@@ -7,7 +7,7 @@ from app.views.InventoryView import *
 from app.dao.LoadDao import * 
 from app.dao.RationDao import  get_all_rations,get_staff_ration
 from app.dao.ProductDao import get_product_by_id,editProduct
-# from app.views.UserDetailsView import get_user
+
 def add_load(request,productId):
     if request.method == "POST":
         product=Product.Product()
@@ -171,13 +171,20 @@ def receive_ration_load(request,ration_transport_product_id):
 
 def getRationTransportProductList(request):
     rationTransport=getRationTransport(request)
-    if rationTransport!=None:
-        return getRationTransportProduct(rationTransport["ration_transport_id"])
+    try:
+        if rationTransport!=None:
+            return getRationTransportProduct(rationTransport["ration_transport_id"])
+    except Exception as e:
+        print()    
     return []
 
 def getRationTransport(request):
-    ration=getStaffRation(request)
-    return getRationTransportByRation(ration["ration_id"])
+    try:
+        ration=getStaffRation(request)
+        return getRationTransportByRation(ration["ration_id"])
+    except Exception as e:
+        print(e)
+        return redirect("staff")
 
 def getStaffRation(request):
     return get_staff_ration(request)  

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory{% endblock %}
+{% block content %}
+    {% load static %}
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th,td{
+            padding: 0 5px;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <br>
+    {% if ration %}
+    <h1>Families in {{ration.address}} Ration Shop</h1>
+    {% endif %}
+    <a href="{% url 'distribute_product' %}">Set Distribute Product</a>
+    <br>
+    <br>
+    <a href="{% url 'list_ration_families' %}">Back to families</a>
+    <br>
+    <br>
+    {% if  rationProducts %}
+    <table border="1">
+        <thead>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Stock Quantity</th>
+            <th>Unit</th>
+            <th>Tolerance</th>
+            <th>Distribute Quantity</th>
+        </thead>
+        {% for rationProduct in rationProducts %}
+            {% if rationProduct.distribute_quantity != 0 %}
+            <tr>
+                <td>{{rationProduct.product.product_name}}</td>
+                <td>{{rationProduct.product.price}}</td>
+                <td>{{rationProduct.stock_quantity}}</td>
+                <td>{{rationProduct.product.unit}}</td>
+                <td>{{rationProduct.product.tolerance}}</td>
+                <td>{{rationProduct.distribute_quantity}}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+        {% else %}
+        <h1>No Family</h1>
+    {% endif %}
+   
+    <br>
+{% endblock %}

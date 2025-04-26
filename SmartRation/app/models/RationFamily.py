@@ -1,3 +1,5 @@
+
+
 class RationFamily:
     def __init__(self,ration_family_id, ration_id, family_id, product_id, issued_quantity, issued_date):
         self.ration_family_id = ration_family_id
