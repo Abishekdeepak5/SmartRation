@@ -1,60 +1,158 @@
 {% extends 'base.html' %}
 
-{% block title %}Ration product{% endblock %}
+{% block title %}Ration Product{% endblock %}
 {% block content %}
 
 {% load static %}
 <style>
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
     }
-    th,td{
-        padding: 0 5px;
+
+    .container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    td input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #007bff;
+        font-size: 1.2rem;
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        table th, table td {
+            font-size: 0.9rem;
+        }
+
+        button {
+            width: 100%;
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .container {
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        button {
+            font-size: 1rem;
+        }
+
+        .back-link {
+            font-size: 1rem;
+        }
     }
 </style>
-{% if rationProducts %}
-<a href="{% url 'list_ration_families' %}">Back to families</a>
-<form method="POST">
-    {% csrf_token %}
-    <table border="1">
-        <thead>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Stock Quantity</th>
-            <th>Unit</th>
-            <th>Tolerance</th>
-            <th>Quantity</th>
-        </thead>
-        {% for rationProduct in rationProducts %}
-            <tr>
-                <td>{{rationProduct.product.product_name}}</td>
-                <td>{{rationProduct.product.price}}</td>
-                <td>{{rationProduct.stock_quantity}}</td>
-                <td>{{rationProduct.product.unit}}</td>
-                <td>{{rationProduct.product.tolerance}}</td>
-                {% if rationProduct.distribute_quantity %}
-                    <td><input type="text" placeholder="quantity"   name="quantity_{{rationProduct.product_id}}" value="{{rationProduct.distribute_quantity}}" required></td>
-                {% else %}
-                    <td><input type="text" placeholder="quantity"   name="quantity_{{rationProduct.product_id}}" value="0" required></td>
-                {% endif %}
-            </tr>
-        {% endfor %}
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        <td><button type="submit">update</button></td>
-        </tr>
-    </table>
-    
-</form>
-{% else %}
-    <br>
-    <h1>No Products</h1>
-    <br>
-{% endif %}
+
+<div class="container">
+    {% if rationProducts %}
+        <a href="{% url 'list_ration_families' %}" class="back-link">Back to Families</a>
+        <form method="POST">
+            {% csrf_token %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Stock Quantity</th>
+                        <th>Unit</th>
+                        <th>Tolerance</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rationProduct in rationProducts %}
+                        <tr>
+                            <td>{{ rationProduct.product.product_name }}</td>
+                            <td>{{ rationProduct.product.price }}</td>
+                            <td>{{ rationProduct.stock_quantity }}</td>
+                            <td>{{ rationProduct.product.unit }}</td>
+                            <td>{{ rationProduct.product.tolerance }}</td>
+                            <td>
+                                <input type="text" 
+                                       name="quantity_{{ rationProduct.product_id }}" 
+                                       value="{{ rationProduct.distribute_quantity or 0 }}" 
+                                       placeholder="Quantity" 
+                                       required>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="text-align: center;">
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    {% else %}
+        <h1>No Products Available</h1>
+    {% endif %}
+</div>
 
 {% endblock %}

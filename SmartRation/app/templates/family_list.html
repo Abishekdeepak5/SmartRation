@@ -4,37 +4,192 @@
 {% block content %}
 
 {% load static %}
+<!-- Add the CSS to handle the responsive design and scrollable table -->
 <style>
-    table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-  }
-  th,td{
-    padding: 0 5px;
-  }
+    /* Global styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Navbar styling */
+    .navbar {
+        background-color: #007bff;
+        padding: 10px 20px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar .navbar-brand {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .navbar .navbar-nav {
+        display: flex;
+        align-items: center;
+        margin-right: 0;
+    }
+
+    .navbar .navbar-nav .nav-item {
+        margin-left: 20px;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 8px;
+    }
+
+    .navbar a:hover {
+        text-decoration: underline;
+    }
+
+    /* Footer styling */
+    footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+    }
+
+    /* Table styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Scrollable Table Container */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Mobile view: Make table scrollable */
+    @media (max-width: 768px) {
+        .table-container {
+            margin: 0;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .navbar {
+            padding: 8px 15px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .navbar .navbar-nav {
+            margin-top: 10px;
+            flex-direction: column;
+        }
+
+        .navbar .navbar-nav .nav-item {
+            margin-left: 0;
+            margin-top: 10px;
+        }
+    }
+
+    /* Tablet and smaller device layout */
+    @media (max-width: 576px) {
+        th, td {
+            padding: 8px;
+        }
+
+        .navbar .navbar-nav {
+            flex-direction: column;
+        }
+
+        .navbar .navbar-nav .nav-item {
+            margin-top: 10px;
+        }
+    }
 </style>
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
-<table border="1">
-    <thead>
-        <th>Card Type</th>
-        <th>Card Number</th>
-        <th>Head Of Family</th>
-        <th>Email</th>
-    </thead>
-{% for family in families %}
 
-       
-        {% if family %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <!-- Brand Logo -->
+        <a class="navbar-brand" href="/">Smart Ration</a>
 
-        <tr>
-            <td>{{family.card_type}}</td>
-            <td>{{family.card_number}}</td>
-            <td>{{ family.head_of_family }} </td>
-            <td>{{ family.email }}</td>
-        </tr>
-        {% endif %}
+        <!-- Navigation Links -->
+        <div class="navbar-nav ml-auto">
+            <a class="nav-link" href="{% url 'home' %}">Home</a>
+            <a class="nav-link" href="{% url 'about' %}">About</a>
+            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+        </div>
+    </div>
+</nav>
 
-        
-{% endfor %}
-</table>
+<!-- Content Section -->
+<div class="container mt-4">
+    <h1 class="text-center">Family Information</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Card Type</th>
+                    <th>Card Number</th>
+                    <th>Head Of Family</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for family in families %}
+                    {% if family %}
+                        <tr>
+                            <td>{{ family.card_type }}</td>
+                            <td>{{ family.card_number }}</td>
+                            <td>{{ family.head_of_family }}</td>
+                            <td>{{ family.email }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    &copy; {%now "Y"%} Smart Ration. All Rights Reserved.
+</footer>
+
 {% endblock %}

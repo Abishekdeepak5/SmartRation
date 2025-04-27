@@ -6,33 +6,100 @@
 {% load static %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-    <div class="text-center">
-        {% if rationShop %}            
-            <form method="POST">
-                {% csrf_token %}
-                <input type="number" name="staff" placeholder="staff" value="{{rationShop.staff}}"  required>
-                <input type="text" name="address" placeholder="Address" value="{{rationShop.address}}" required>
-                <input type="text" name="pincode" placeholder="Pincode" value="{{rationShop.pincode}}" required>
-                <button type="submit">Edit Ration</button>
-            </form>
-        {% else %}
-        <form method="POST">
-            {% csrf_token %}
-            <input type="text" name="address" placeholder="Address" required>
-            <br>
-            <input type="text" name="pincode" placeholder="Pincode" required>
-            <br>
+    <style>
+        /* Global Styles */
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
 
-            <label><input type="checkbox" name="open_days" value="monday"> Monday</label><br>
-            <label><input type="checkbox" name="open_days" value="tuesday"> Tuesday</label><br>
-            <label><input type="checkbox" name="open_days" value="wednesday"> Wednesday</label><br>
-            <label><input type="checkbox" name="open_days" value="thursday"> Thursday</label><br>
-            <label><input type="checkbox" name="open_days" value="friday"> Friday</label><br>
-            <label><input type="checkbox" name="open_days" value="saturday"> Saturday</label><br>
-            <label><input type="checkbox" name="open_days" value="sunday"> Sunday</label><br>
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-            <button type="submit">Add Ration</button>
-        </form>
-        {% endif%}
+        .form-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        form input[type="text"], form input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .form-title {
+                font-size: 1.5rem;
+            }
+            form input[type="text"], form input[type="number"] {
+                font-size: 0.9rem;
+            }
+            form button {
+                font-size: 1rem;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <div class="text-center">
+            <h2 class="form-title">
+                {% if rationShop %}
+                    Edit Ration
+                {% else %}
+                    Add Ration
+                {% endif %}
+            </h2>
+            
+            {% if rationShop %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="number" name="staff" placeholder="Staff" value="{{ rationShop.staff }}" required>
+                    <input type="text" name="address" placeholder="Address" value="{{ rationShop.address }}" required>
+                    <input type="text" name="pincode" placeholder="Pincode" value="{{ rationShop.pincode }}" required>
+                    <button type="submit">Edit Ration</button>
+                </form>
+            {% else %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="number" name="staff" placeholder="Staff" required>
+                    <input type="text" name="address" placeholder="Address" required>
+                    <input type="text" name="pincode" placeholder="Pincode" required>
+                    <button type="submit">Add Ration</button>
+                </form>
+            {% endif %}
+        </div>
     </div>
+
 {% endblock %}

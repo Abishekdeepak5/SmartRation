@@ -3,38 +3,91 @@
 {% block title %}Assign Staff{% endblock %}
 {% block content %}
 {% load static %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
-    <div class="text-center">
-        <form method="POST">
-            {% csrf_token %}
-            <p>Ration Address:{{rationShop.address}} </p>
-            <p>Ration Pincode: {{rationShop.pincode}}</p>
-          
-            {% for staff in staffList %}
-                {% if staff.ration and staff.ration.ration_id == rationShop.ration_id %}
-                    <p>Current staff :{{ staff.user_name }}
-                    </p>
-                    <p>Phone.No : {{staff.phone_number}}
-                    </p>
-                {% endif %}
-            {% endfor %}
+        /* Container Styling */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-                    
+        /* Form Styling */
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+        }
 
-            <select name="staff" class="form-select">
-                <option value="None">Set No Staff</option>
-                {% for staff in staffList %}
-                    <option value="{{ staff.user_id }}">{{ staff.user_name }} {{staff.phone_number}} - Ration:
-                        {% if staff.ration %}
-                         {{staff.ration.address}}-{{staff.ration.pincode}}
-                        {% else %}
-                        Not Assign
-                        {% endif %}
-                    </option>
-                {% endfor %}
-            </select>
-            <button type="submit">Assign</button>
-        </form>
+        .form-container h2 {
+            text-align: center;
+            color: #2a7f4f;
+            margin-bottom: 20px;
+        }
+
+        .form-container p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .form-select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #2a7f4f;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1f5e3d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Assign Staff to Ration Shop</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <p><strong>Ration ID:</strong> {{ rationShop.ration_id }}</p>
+                <p><strong>Ration Address:</strong> {{ rationShop.address }}</p>
+                <p><strong>Ration Pincode:</strong> {{ rationShop.pincode }}</p>
+                <select name="staff" class="form-select">
+                    <option value="" disabled selected>Select Staff</option>
+                    {% for staff in staffList %}
+                        <option value="{{ staff.user_id }}">{{ staff.user_name }} - {{ staff.phone_number }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Assign</button>
+            </form>
+        </div>
     </div>
 {% endblock %}
