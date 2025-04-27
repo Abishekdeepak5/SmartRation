@@ -8,13 +8,30 @@
     <div class="text-center">
         <form method="POST">
             {% csrf_token %}
-            <p>Ration ID: {{rationShop.ration_id}}</p>
             <p>Ration Address:{{rationShop.address}} </p>
             <p>Ration Pincode: {{rationShop.pincode}}</p>
+          
+            {% for staff in staffList %}
+                {% if staff.ration and staff.ration.ration_id == rationShop.ration_id %}
+                    <p>Current staff :{{ staff.user_name }}
+                    </p>
+                    <p>Phone.No : {{staff.phone_number}}
+                    </p>
+                {% endif %}
+            {% endfor %}
+
+                    
+
             <select name="staff" class="form-select">
-                <option value="" disabled selected>Select Staff</option>
+                <option value="None">Set No Staff</option>
                 {% for staff in staffList %}
-                    <option value="{{ staff.user_id }}">{{ staff.user_name }} {{staff.phone_number}}</option>
+                    <option value="{{ staff.user_id }}">{{ staff.user_name }} {{staff.phone_number}} - Ration:
+                        {% if staff.ration %}
+                         {{staff.ration.address}}-{{staff.ration.pincode}}
+                        {% else %}
+                        Not Assign
+                        {% endif %}
+                    </option>
                 {% endfor %}
             </select>
             <button type="submit">Assign</button>

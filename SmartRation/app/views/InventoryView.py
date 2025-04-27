@@ -1,13 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
 from django.contrib import messages
-from app.supabase_config import supabase
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.hashers import make_password, check_password
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
-from app.dao.RationDao import create_ration, get_all_rations, get_ration_by_id, update_ration, delete_ration,update_staff
-from app.dao.UserDetailDao import get_user_by_id,get_staff
 from app.models import Product
 from app.dao.ProductDao import *
 from app.common.Util import get_current_date

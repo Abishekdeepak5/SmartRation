@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from app.dao.RationDao import *
 from app.dao.FamilyDao import getFamilyById
-from app.dao.UserDetailDao import get_user_by_id,get_staff
+from app.dao.UserDetailDao import get_user_by_id,get_all_staff
 from app.views.LoadView import get_staff_ration
 from app.common.Util import get_current_date
 from app.models import RationFamily
@@ -26,6 +26,7 @@ def list_rations(request):
                 staffDetail=get_user_by_id(staff_id)
                 curr_list["staff_name"]=staffDetail["user_name"]
             except Exception as e:
+                curr_list["staff_name"] = "Not Assign"
                 print("Ration error ",e)
         print(ration_dict)
         return render(request, "ration_list.html", {"rations": ration_dict})
@@ -84,19 +85,23 @@ def assign_staff(request,ration_id):
     try:
         if request.method=="POST":
             staff_id=request.POST["staff"]
+            if staff_id == "None":
+                staff_id = None
+            print("select staff ",staff_id)
             update_staff(ration_id,staff_id)
             messages.success(request, "Staff Assigned successfully!")
             return redirect("list_ration")
         rationShop=get_ration_by_id(ration_id)
         rationStaff={}
         rationStaff["rationShop"]=rationShop
-        data,error=get_staff()
+        data,error=get_all_staff()
+        print("------------------------",data)
         rationStaff["staffList"]=data[1]
         return render(request, "assign_ration.html", rationStaff)
     except Exception as e:
         print(e)
-        messages.error(request, "Staff not Assign")
-        return redirect("rations")
+        messages.warning(request, "Staff not Assign")
+        return redirect("list_ration")
     
 def list_ration_product(request):
     rationProducts=get_ration_product(request)
