@@ -80,10 +80,22 @@
                 <p><strong>Ration ID:</strong> {{ rationShop.ration_id }}</p>
                 <p><strong>Ration Address:</strong> {{ rationShop.address }}</p>
                 <p><strong>Ration Pincode:</strong> {{ rationShop.pincode }}</p>
+                {% for staff in staffList %}
+                    {% if staff.ration and staff.ration.ration_id == rationShop.ration_id %}
+                        <p><strong>Current staff :</strong> {{ staff.user_name }}</p>
+                        <p><strong>Phone.No:</strong> {{staff.phone_number}}</p>
+                    {% endif %}
+                {% endfor %}
                 <select name="staff" class="form-select">
-                    <option value="" disabled selected>Select Staff</option>
+                    <option value="None">Set No Staff</option>
                     {% for staff in staffList %}
-                        <option value="{{ staff.user_id }}">{{ staff.user_name }} - {{ staff.phone_number }}</option>
+                        <option value="{{ staff.user_id }}">{{ staff.user_name }} {{staff.phone_number}} - Ration:
+                            {% if staff.ration %}
+                             {{staff.ration.address}}-{{staff.ration.pincode}}
+                            {% else %}
+                            Not Assign
+                            {% endif %}
+                        </option>
                     {% endfor %}
                 </select>
                 <button type="submit">Assign</button>

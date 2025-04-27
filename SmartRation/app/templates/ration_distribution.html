@@ -134,13 +134,12 @@
                             <td>{{ rationProduct.stock_quantity }}</td>
                             <td>{{ rationProduct.product.unit }}</td>
                             <td>{{ rationProduct.product.tolerance }}</td>
-                            <td>
-                                <input type="text" 
-                                       name="quantity_{{ rationProduct.product_id }}" 
-                                       value="{{ rationProduct.distribute_quantity or 0 }}" 
-                                       placeholder="Quantity" 
-                                       required>
-                            </td>
+                            {% if rationProduct.distribute_quantity %}
+                                <td><input type="text" placeholder="Quantity"   name="quantity_{{rationProduct.product_id}}" value="{{rationProduct.distribute_quantity}}" required></td>
+                            {% else %}
+                                <td><input type="text" placeholder="Quantity"   name="quantity_{{rationProduct.product_id}}" value="0" required></td>
+                            {% endif %}
+
                         </tr>
                     {% endfor %}
                 </tbody>

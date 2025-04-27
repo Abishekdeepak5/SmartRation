@@ -105,53 +105,24 @@
 <a href="{% url 'admin' %}" class="back-link">← Back to Dashboard</a>
 
 <div class="body">
-    <h1>Add Family</h1>
-
+    <h1>Log In</h1>
+    
+    
     <div class="card">
         <form method="POST">
             {% csrf_token %}
             <div class="table-container">
                 <div class="form-group">
-                    <label for="head_of_family">Head of Family</label>
-                    <input type="text" name="head_of_family" id="head_of_family" class="form-control" placeholder="Head of Family" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="member_count">Member Count</label>
-                    <input type="text" name="member_count" id="member_count" class="form-control" placeholder="Member Count" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="card_type">Card Type</label>
-                    <input type="text" name="card_type" id="card_type" class="form-control" placeholder="Card Type" required>
-                </div>
-
-                <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" name="email" id="email" class="form-control" placeholder="Email" required>
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="phone_number">Phone Number</label>
-                    <input type="text" name="phone_number" id="phone_number" class="form-control" placeholder="Phone Number" required>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" placeholder="Password" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" name="address" id="address" class="form-control" placeholder="Address" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="ration_id">Ration</label>
-                    <select name="ration_id" id="ration_id" class="form-control" required>
-                        <option value="" disabled selected>Select Ration</option>
-                        {% for ration in rations %}
-                            <option value="{{ ration.ration_id }}">{{ ration.address }} - {{ ration.pincode }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <button type="submit" class="submit-btn">Add Family</button>
+                <button type="submit" class="submit-btn">Log in</button>
             </div>
         </form>
     </div>

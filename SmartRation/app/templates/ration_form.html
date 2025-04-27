@@ -85,17 +85,68 @@
             {% if rationShop %}
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="number" name="staff" placeholder="Staff" value="{{ rationShop.staff }}" required>
+                    <input type="hidden" name="staff" placeholder="Staff" value="{{ rationShop.staff }}" required>
                     <input type="text" name="address" placeholder="Address" value="{{ rationShop.address }}" required>
                     <input type="text" name="pincode" placeholder="Pincode" value="{{ rationShop.pincode }}" required>
+
+                    <h4>Opening days</h4>
+                    <label>
+                        <input type="checkbox" name="open_days" value="monday"
+                        {% if 1 in  rationShop.dayList %}
+                        checked
+                        {% endif %}
+                        > Monday</label>
+                    <label><input type="checkbox" name="open_days" value="tuesday"  
+                        {% if 2 in rationShop.dayList %}
+                            checked
+                        {% endif %}
+                        > Tuesday</label>
+                    <label><input type="checkbox" name="open_days" value="wednesday"  
+                        {% if 3 in rationShop.dayList %}
+                            checked
+                        {% endif %}
+                        > Wednesday</label>
+                    <label><input type="checkbox" name="open_days" value="thursday"  
+                        {% if 4 in rationShop.dayList %}
+                            checked
+                        {% endif %}
+                        > Thursday</label>
+                    <label><input type="checkbox" name="open_days" value="friday"  
+                        {% if 5 in rationShop.dayList %}
+                            checked
+                        {% endif %}
+                        > Friday</label>
+                    <label><input type="checkbox" name="open_days" value="saturday"  
+                        {% if 6 in rationShop.dayList %}
+                            checked
+                        {% endif %}
+                        > Saturday</label>
+                    <label><input type="checkbox" name="open_days" value="sunday"  
+                        {% if 7 in rationShop.dayList %}
+                            checked
+                        {% endif %}
+                        > Sunday</label>
+                    <br>
+                    <br>
+
                     <button type="submit">Edit Ration</button>
                 </form>
             {% else %}
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="number" name="staff" placeholder="Staff" required>
                     <input type="text" name="address" placeholder="Address" required>
                     <input type="text" name="pincode" placeholder="Pincode" required>
+                    <h4>Opening days</h4>
+                    <label><input type="checkbox" name="open_days" value="monday"> Monday</label>
+                    <label><input type="checkbox" name="open_days" value="tuesday"> Tuesday</label>
+                    <label><input type="checkbox" name="open_days" value="wednesday"> Wednesday</label>
+                    <label><input type="checkbox" name="open_days" value="thursday"> Thursday</label>
+                    <label><input type="checkbox" name="open_days" value="friday"> Friday</label>
+                    <label><input type="checkbox" name="open_days" value="saturday"> Saturday</label>
+                    <label><input type="checkbox" name="open_days" value="sunday"> Sunday</label>
+                    <br>
+                    <br>
+
                     <button type="submit">Add Ration</button>
                 </form>
             {% endif %}

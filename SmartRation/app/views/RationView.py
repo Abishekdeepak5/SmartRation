@@ -61,8 +61,9 @@ def edit_ration(request, ration_id):
     if request.method == "POST":
         staff = request.POST.get("staff")
         address = request.POST.get("address")
-        # opening_days = request.POST.getlist("opening_days")
-        opening_days=["monday","wednesday","friday"]
+        opening_days = request.POST.getlist("open_days")
+        print(opening_days)
+        # opening_days=["monday","wednesday","friday"]
         pincode = request.POST.get("pincode")
         try:
             update_ration(ration_id, address, opening_days, pincode,staff)
@@ -70,6 +71,17 @@ def edit_ration(request, ration_id):
             return redirect("list_ration")
         except Exception as e:
             messages.error(request, "Error updating ration!")
+    all_days = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
+    dayList=[0,0,0,0,0,0,0]
+    i=1
+    opening_days = rationShop['opening_days']
+    for day in all_days:
+        if day in opening_days:
+            dayList[i-1]=i
+        i=i+1
+    print(dayList)
+    print(rationShop)
+    rationShop["dayList"]=dayList
     return render(request, "ration_form.html", {"rationShop": rationShop})
 
 # View for deleting a ration record
@@ -95,7 +107,6 @@ def assign_staff(request,ration_id):
         rationStaff={}
         rationStaff["rationShop"]=rationShop
         data,error=get_all_staff()
-        print("------------------------",data)
         rationStaff["staffList"]=data[1]
         return render(request, "assign_ration.html", rationStaff)
     except Exception as e:
@@ -129,6 +140,9 @@ def distribute_product(request):
         request.session["rationDistributeProduct"]=distributeProductDictionary
         return redirect("list_ration_families")
     distributeProduct=get_distribute_product(request)
+    if rationProducts == None:
+        messages.warning(request,"Please add ration product")
+        return redirect("ration_products")
     setRationDistribute(request,rationProducts,distributeProduct)
     print(rationProducts)
     return render(request,"ration_distribution.html",{"rationProducts":rationProducts,"distributeproducts":distributeProduct})

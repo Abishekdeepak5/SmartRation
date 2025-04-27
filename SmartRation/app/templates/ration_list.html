@@ -6,6 +6,8 @@
 {% load static %}
 
 <!-- Add New Ration Link -->
+<a href="{% url 'admin' %}" class="btn btn-primary btn-add">Dashboard</a>
+<br><br>
 <a href="{% url 'add_ration' %}" class="btn btn-primary btn-add">Add New Ration</a>
 <br><br>
 
@@ -24,6 +26,7 @@
                 <a href="{% url 'edit_ration' ration.ration_id %}" class="btn btn-secondary btn-edit">Edit</a>
                 <a href="{% url 'delete_ration' ration.ration_id %}" class="btn btn-danger btn-delete">Delete</a>
                 <a href="{% url 'listfamily' ration.ration_id %}" class="btn btn-info btn-view">View Families</a>
+                <a href="{% url 'staff_assign' ration.ration_id %}" class="btn btn-info btn-view">Change Staff</a>
             </div>
         </div>
     {% endfor %}
