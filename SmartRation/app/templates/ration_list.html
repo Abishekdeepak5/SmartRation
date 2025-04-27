@@ -4,18 +4,36 @@
 {% block content %}
 
 {% load static %}
-
-<a href="{% url 'add_ration' %}">Add New Ration</a>
+<style>
+    .links{
+        padding: 10px;
+        background-color:#54B4D3;
+        /* margin: 3px; */
+        border-radius: 5px;
+        color: black;
+        text-decoration: none;
+    }
+    .staff-row{
+        padding-bottom: 15px;
+    }
+</style>
+<a class="links" href="{% url 'admin' %}">Dashboard</a>
 <br>
+<br>
+<a class="links" href="{% url 'add_ration' %}">Add New Ration</a>
+<br>
+<br>
+
 {% for ration in rations %}
-    <p>
+    <p class="staff-row">
         {% if ration.staff_name %}
             Staff: {{ration.staff_name}} -
         {% endif %}
         Address: {{ ration.address }} - pincode: {{ ration.pincode }}
-        <a href="{% url 'edit_ration' ration.ration_id %}">Edit</a>
-        <a href="{% url 'delete_ration' ration.ration_id %}">Delete</a>
-        <a href="{% url 'listfamily' ration.ration_id %}">View Families</a>
+        <a class="links" href="{% url 'edit_ration' ration.ration_id %}">Edit</a>
+        <a class="links" href="{% url 'delete_ration' ration.ration_id %}">Delete</a>
+        <a class="links" href="{% url 'listfamily' ration.ration_id %}">View Families</a>
+        <a class="links" href="{% url 'staff_assign' ration.ration_id %}">Change Staff</a>
     </p>
 {% endfor %}
 <br>

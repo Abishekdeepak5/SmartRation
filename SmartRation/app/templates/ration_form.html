@@ -18,9 +18,19 @@
         {% else %}
         <form method="POST">
             {% csrf_token %}
-            <input type="number" name="staff" placeholder="staff" required>
             <input type="text" name="address" placeholder="Address" required>
+            <br>
             <input type="text" name="pincode" placeholder="Pincode" required>
+            <br>
+
+            <label><input type="checkbox" name="open_days" value="monday"> Monday</label><br>
+            <label><input type="checkbox" name="open_days" value="tuesday"> Tuesday</label><br>
+            <label><input type="checkbox" name="open_days" value="wednesday"> Wednesday</label><br>
+            <label><input type="checkbox" name="open_days" value="thursday"> Thursday</label><br>
+            <label><input type="checkbox" name="open_days" value="friday"> Friday</label><br>
+            <label><input type="checkbox" name="open_days" value="saturday"> Saturday</label><br>
+            <label><input type="checkbox" name="open_days" value="sunday"> Sunday</label><br>
+
             <button type="submit">Add Ration</button>
         </form>
         {% endif%}

@@ -37,16 +37,15 @@ def list_rations(request):
 # View for creating a new ration entry
 def add_ration(request):
     if request.method == "POST":
-        staff_id = request.POST.get("staff")
         address = request.POST.get("address")
-        # opening_days = request.POST.getlist("opening_days")  # Get multiple selected values
-        opening_days=["monday","wednesday","friday"]
+        opening_days = request.POST.getlist('open_days')
         pincode = request.POST.get("pincode")
         try:
-            data,error = create_ration(staff_id, address, opening_days, pincode)
+            data,error = create_ration(address, opening_days, pincode)
             messages.success(request, "Ration created successfully!")
             return redirect("list_ration")
         except Exception as e:
+            print(e)
             messages.error(request, "Error creating ration!")
             return redirect("list_ration")
     return render(request, "ration_form.html")
@@ -85,14 +84,14 @@ def assign_staff(request,ration_id):
     try:
         if request.method=="POST":
             staff_id=request.POST["staff"]
-            print(update_staff(ration_id,staff_id))
-            # return redirect("admin")
+            update_staff(ration_id,staff_id)
+            messages.success(request, "Staff Assigned successfully!")
+            return redirect("list_ration")
         rationShop=get_ration_by_id(ration_id)
         rationStaff={}
         rationStaff["rationShop"]=rationShop
         data,error=get_staff()
         rationStaff["staffList"]=data[1]
-        messages.success(request, "Staff Assigned successfully!")
         return render(request, "assign_ration.html", rationStaff)
     except Exception as e:
         print(e)

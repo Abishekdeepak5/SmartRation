@@ -3,9 +3,8 @@ from app.dao.DatabaseUtil import *
 from app.models.Ration import Ration
 from app.models.RationProduct import RationProduct
 from app.models import Family,RationFamily
-def create_ration(staff_id, address, opening_days, pincode):
+def create_ration(address, opening_days, pincode):
     data, error = supabase.table("ration").insert({
-        "staff": staff_id,
         "address": address,
         "opening_days": opening_days,  # Example: ['monday', 'tuesday']
         "pincode": pincode

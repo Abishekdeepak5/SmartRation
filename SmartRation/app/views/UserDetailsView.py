@@ -48,6 +48,8 @@ def register_user(request):
             return redirect("login")
         except Exception as e:
             messages.error(request, e.details)
+            print(e)
+            print(e.details)
             return redirect("register")
     return render(request, "register.html")
 

@@ -5,19 +5,76 @@
 
 {% load static %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <style>
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+    </style>
+
 
     <div class="text-center">
         <form method="POST">
             {% csrf_token %}
-            <input type="text" name="user_name" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="text" name="phone_number" placeholder="Phone" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="text" name="address" placeholder="Address" required>
-            <input type="text" name="pincode" placeholder="Pincode" required>
-            <input type="date" name="date_of_birth" required>
-            <input type="text" name="role" required>
-            <input type="text" name="gender" required>
+         
+            
+            <table>
+                <tr>
+                    <td><label for="user_name">user_name</label></td>
+                    <td><input type="text" id="user_name" name="user_name" required></td>
+                </tr>
+                <tr>
+                    <td><label for="password">password</label></td>
+                    <td><input type="text" id="password" name="password" required></td>
+                </tr>
+                <tr>
+                    <td><label for="phone_number">phone_number</label></td>
+                    <td><input type="number" id="phone_number" name="phone_number" max="9999999999" min="1000000000" required></td>
+                </tr>
+                <tr>
+                    <td><label for="email">email</label></td>
+                    <td><input type="text" id="email" name="email" required></td>
+                </tr>
+                <tr>
+                    <td><label for="address">address</label></td>
+                    <td><input type="text" id="address" name="address" required></td>
+                </tr>
+                <tr>
+                    <td><label for="pincode">pincode</label></td>
+                    <td><input type="text" id="pincode" name="pincode" required></td>
+                </tr>
+                <tr>
+                    <td><label for="date_of_birth">date_of_birth</label></td>
+                    <td><input type="date" id="date_of_birth" name="date_of_birth" required></td>
+                </tr>
+                <tr>
+                    <td><label for="role">role</label></td>
+                    <!-- <td><input type="text" id="role" name="role" required></td> -->
+                    <td>
+                        <select name="role" class="form-select">
+                            <option value="" disabled selected>Select Role</option>
+                            <option value="admin">Admin</option>
+                            <option value="staff">Staff</option>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td><label for="gender">gender</label></td>
+                    <td>
+                        <select name="gender" class="form-select">
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="m">Male</option>
+                            <option value="f">Female</option>
+                        </select>
+                    </td>
+                </tr>
+                
+            </table>
             <button type="submit">Register</button>
         </form>
         <a href="{% url 'login' %}"><button  class="btn btn-outline-dark text-style">Log in</button></a>
