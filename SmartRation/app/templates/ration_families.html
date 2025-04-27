@@ -3,52 +3,157 @@
 {% block title %}Inventory{% endblock %}
 {% block content %}
     {% load static %}
+    
+    <!-- Styling for table, layout, and overall page -->
     <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
+        body {
+            background: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
         }
-        th,td{
-            padding: 0 5px;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        td {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 6px 8px;
+            }
         }
     </style>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <br>
-    <a href="{% url 'staff' %}">Dashboard</a>
-    <br>
-    {% if ration %}
-    <h1>Families in {{ration.address}} Ration Shop</h1>
-    <a href="{% url 'distribute_product' %}">Set Distribute Product</a>
-    <br>
-    {% endif %}
-    {% if  rationFamilies %}
-        <table border="1">
-            <thead>
-                <th>card_number</th>
-                <th>head_of_family</th>
-                <th>member_count</th>
-                <th>card_type</th>
-                <th>email</th>
-                <th>phone_number</th>
-                <th>address</th>
-                <th>Action</th>
-            </thead>
-            {% for rationFamily in rationFamilies %}
-                <tr>
-                    <td>{{rationFamily.card_number}}</td>
-                    <td>{{rationFamily.head_of_family}}</td>
-                    <td>{{rationFamily.member_count}}</td>
-                    <td>{{rationFamily.card_type}}</td>
-                    <td>{{rationFamily.email}}</td>
-                    <td>{{rationFamily.phone_number}}</td>
-                    <td>{{rationFamily.address}}</td>
-                    <td><a href="{% url 'distribute_family_product' rationFamily.family_id %}">Distribute</a></td>
-                </tr>
-            {% endfor %}
-        </table>
+
+    <!-- Content of the page -->
+    <div class="container">
+        <a href="{% url 'staff' %}" class="btn">Dashboard</a>
+        <br>
+
+        {% if ration %}
+            <h1>Families in {{ ration.address }} Ration Shop</h1>
+            <a href="{% url 'distribute_product' %}" class="btn">Set Distribute Product</a>
+            <br>
+        {% endif %}
+
+        {% if rationFamilies %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Card Number</th>
+                        <th>Head of Family</th>
+                        <th>Member Count</th>
+                        <th>Card Type</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rationFamily in rationFamilies %}
+                        <tr>
+                            <td>{{ rationFamily.card_number }}</td>
+                            <td>{{ rationFamily.head_of_family }}</td>
+                            <td>{{ rationFamily.member_count }}</td>
+                            <td>{{ rationFamily.card_type }}</td>
+                            <td>{{ rationFamily.email }}</td>
+                            <td>{{ rationFamily.phone_number }}</td>
+                            <td>{{ rationFamily.address }}</td>
+                            <td>
+                                <a href="{% url 'distribute_family_product' rationFamily.family_id %}" class="btn">Distribute</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else %}
-        <h1>No Family</h1>
-    {% endif %}
-   
-    <br>
+            <h1>No Families Available</h1>
+        {% endif %}
+    </div>
+
 {% endblock %}

@@ -5,18 +5,137 @@
 
 {% load static %}
 
-<a href="{% url 'add_ration' %}">Add New Ration</a>
-<br>
-{% for ration in rations %}
-    <p>
-        {% if ration.staff_name %}
-            Staff: {{ration.staff_name}} -
-        {% endif %}
-        Address: {{ ration.address }} - pincode: {{ ration.pincode }}
-        <a href="{% url 'edit_ration' ration.ration_id %}">Edit</a>
-        <a href="{% url 'delete_ration' ration.ration_id %}">Delete</a>
-        <a href="{% url 'listfamily' ration.ration_id %}">View Families</a>
-    </p>
-{% endfor %}
-<br>
+<!-- Add New Ration Link -->
+<a href="{% url 'add_ration' %}" class="btn btn-primary btn-add">Add New Ration</a>
+<br><br>
+
+<!-- Loop through Rations and display them -->
+<div class="ration-list">
+    {% for ration in rations %}
+        <div class="ration-card">
+            <div class="ration-info">
+                {% if ration.staff_name %}
+                    <strong>Staff: </strong>{{ ration.staff_name }} -
+                {% endif %}
+                <strong>Address:</strong> {{ ration.address }} -
+                <strong>Pincode:</strong> {{ ration.pincode }}
+            </div>
+            <div class="ration-actions">
+                <a href="{% url 'edit_ration' ration.ration_id %}" class="btn btn-secondary btn-edit">Edit</a>
+                <a href="{% url 'delete_ration' ration.ration_id %}" class="btn btn-danger btn-delete">Delete</a>
+                <a href="{% url 'listfamily' ration.ration_id %}" class="btn btn-info btn-view">View Families</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
 {% endblock %}
+
+<style>
+    /* General styling */
+    body {
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        margin: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .btn-info:hover {
+        background-color: #138496;
+    }
+
+    .ration-list {
+        display: flex;
+        flex-direction: column;
+        margin: 20px;
+    }
+
+    .ration-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .ration-info {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .ration-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .ration-actions .btn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .btn-add {
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+    }
+
+    .btn-add:hover {
+        background-color: #218838;
+    }
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+        .ration-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .ration-actions {
+            margin-top: 10px;
+        }
+    }
+</style>
