@@ -1,12 +1,12 @@
-/* Default Light Mode */
-:root {
+
+/* :root {
     --bg-color: #ffffff;
     --text-color: #000000;
     --navbar-bg: #f8f9fa;
     --footer-bg: #f8f9fa;
 }
 
-/* Dark Mode */
+
 .dark-mode {
     --bg-color: #121212;
     --text-color: #ffffff;
@@ -14,7 +14,7 @@
     --footer-bg: #1c1c1c;
 }
 
-/* Apply Variables to Elements */
+
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -29,4 +29,253 @@ footer {
 }
 .text-style{
     color: var(--text-color);
+} */
+
+
+
+/*tamilarasan styles added*/
+
+
+
+
+/* === dashboard-styles.css === */
+.dashboard-container {
+    margin-top: 10vh;
+    padding: 20px;
 }
+
+.dashboard-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-items: center;
+}
+
+.card-1 {
+    background-color: #f0f4f8;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    min-width: 200px;
+    max-width: 400px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.card-1:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    background-color: #e3f2fd;
+}
+
+.dashboard-option {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-option i {
+    font-size: 2.5rem;
+    color: #1976d2; /* Material Blue */
+    transition: color 0.3s ease;
+}
+
+.card-1:hover .dashboard-option i {
+    color: #0d47a1; /* Darker on hover */
+}
+
+
+
+/*from login*/
+
+/* .body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+    padding: 0 15px;
+} */
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.submit-btn {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.back-link {
+    margin-bottom: 20px;
+    display: inline-block;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* @media (max-width: 768px) {
+    .card {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .submit-btn {
+        font-size: 1rem;
+        padding: 8px;
+    }
+
+    input[type="text"], select {
+        padding: 6px;
+    }
+} */
+
+
+
+/*add ration_list page style*/
+
+.ration-list {
+    width: 60vw;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.ration-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #f9fbfc;
+    border: 1px solid #ddd;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease;
+    flex-wrap: wrap;
+    width: 50vw;
+    /* min-width: 600px; */
+}
+
+.ration-card:hover {
+    background-color: #eef6fc;
+}
+
+.ration-info {
+    font-size: 1rem;
+    flex: 1 1 60%;
+    margin-right: 20px;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.ration-info span {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+/* Optional: Tooltip style */
+.ration-info[data-tooltip] {
+    position: relative;
+    cursor: pointer;
+}
+
+.ration-info[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: #333;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    display: none;
+    z-index: 10;
+    max-width: 300px;
+}
+
+.ration-info[data-tooltip]:hover::after {
+    display: block;
+}
+
+.ration-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex: 1 1 35%;
+    justify-content: flex-end;
+}
+
+.ration-actions .btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+

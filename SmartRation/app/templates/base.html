@@ -5,178 +5,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Smart Ration{% endblock %}</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--Bootstrap icon-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/button.css' %}">
+    
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .navbar {
-            background-color: #007bff;
-        }
-
-        .navbar-brand {
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #fff;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #ddd;
-        }
-
-        .text-style {
-            font-family: 'Arial', sans-serif;
-        }
-
-        .dark-mode {
-            background-color: #121212;
-            color: #e0e0e0;
-        }
-
-        /* Navbar adjustments in dark mode */
-        .dark-mode .navbar {
-            background-color: #333;
-        }
-
-        .dark-mode .navbar-brand, .dark-mode .navbar-nav .nav-link {
-            color: #e0e0e0;
-        }
-
-        /* Footer adjustments in dark mode */
-        .dark-mode footer {
-            background-color: #2c2f38;
-            color: #e0e0e0;
-        }
-
-        .dark-mode footer a {
-            color: #e0e0e0;
-        }
-
-        /* Message styling */
-        .alert {
-            font-size: 1rem;
-            padding: 15px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 1.2rem;
-            }
-
-            .navbar-nav .nav-link {
-                font-size: 1rem;
-            }
-
-            footer {
-                font-size: 0.8rem;
-            }
-        }
-    </style>
 </head>
+
 <body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container">
-            <a class="navbar-brand text-style" href="/">Smart Ration</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-                </ul>
-            </div>
-
-            <!-- Theme Toggle Button with Icon -->
-            <button id="theme-toggle" class="btn btn-outline-light text-style">
-                <i class="fas fa-moon"></i>
-            </button>
-
-            <!-- Profile and Logout Buttons with Icons -->
-            <a href="{% url 'profile' %}">
-                <button class="btn btn-outline-light text-style">
-                    <i class="fas fa-user-circle"></i>
-                </button>
-            </a>
-            <a href="{% url 'logout' %}">
-                <button class="btn btn-outline-light text-style">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </a>
-        </div>
-    </nav>
-
-    <!-- Message Alerts -->
-    {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-    {% endif %}
+    
 
     <!-- Page Content -->
-    <div class="container-fluid mt-4">
-        {% block content %}{% endblock %}
+    <div class="d-flex">
+        {% include 'sidebar.html' %}
+        <div class="container-fluid mt-4" style="margin-left: 250px; margin-top: 10vh;">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center py-3">
-        &copy; {%now "Y"%} Smart Ration. All Rights Reserved.
-    </footer>
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    <!-- Theme Toggle Script -->
-    <script>
-        const themeToggle = document.getElementById("theme-toggle");
-        const body = document.body;
+   
+    
 
-        // Check saved theme
-        if (localStorage.getItem("theme") === "dark") {
-            body.classList.add("dark-mode");
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-
-        themeToggle.addEventListener("click", () => {
-            body.classList.toggle("dark-mode");
-
-            if (body.classList.contains("dark-mode")) {
-                localStorage.setItem("theme", "dark");
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            } else {
-                localStorage.setItem("theme", "light");
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            }
-        });
-    </script>
-
-    <script>
-        // Auto-dismiss alerts after 5 seconds (5000ms)
-        setTimeout(function() {
-            let alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                alert.classList.remove('show'); // Hide the alert
-                alert.classList.add('fade'); // Fade out effect
-            });
-        }, 5000);
-    </script>
 </body>
 </html>
