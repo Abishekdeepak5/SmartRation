@@ -10,7 +10,7 @@ body {
     position: fixed;
     top: 0;
     bottom: 0;
-    width: 20vw;
+    width: 240px;
     background-color: #343a40;
     overflow-x: hidden;
     transition: width 0.3s;
@@ -23,6 +23,7 @@ body {
     width: 70px;
 }
 
+/* Sidebar Link Styles */
 .sidebar .nav-link {
     color: #cfd8dc;
     padding: 15px 20px;
@@ -47,11 +48,21 @@ body {
     text-align: center;
 }
 
+/* Keep the title visible */
+.sidebar .system-name {
+    margin-top: 10px;
+    color: white;
+    padding: 0 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Collapsed state for links text */
 .sidebar.collapsed .nav-link span {
     display: none;
 }
 
-/* Toggle Icon at bottom */
+/* Toggle Icon at the bottom */
 .sidebar-toggle {
     margin-top: auto;
     padding: 10px;
@@ -84,6 +95,19 @@ body {
     font-weight: bold;
     font-size: 18px;
     color: #333;
+    flex-grow: 1;
+}
+
+.header .logout-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.header .logout-button:hover {
+    text-decoration: underline;
 }
 
 /* Main Content */
@@ -98,3 +122,12 @@ body {
 .main-content.collapsed {
     margin-left: 70px;
 }
+
+/* Adjusting toggle icon when collapsed */
+/* #toggleIcon {
+    font-size: 24px;
+}
+
+.sidebar.collapsed #toggleIcon {
+    transform: rotate(180deg); 
+} */

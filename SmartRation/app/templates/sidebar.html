@@ -22,11 +22,15 @@
     <a href="#" class="nav-link text-white text-center">
         <i class="fas fa-store"></i> <span class="fw-bold">Smart Ration</span>
     </a>
+    <!-- <a href="{% url 'admin' %}" class="nav-link {% if request.path == '/adminDashboard/' %}active{% endif %}">
+        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+    </a> -->
 
     {% block sidebar_menu %}
-    <a href="{% url 'admin' %}" class="nav-link {% if request.path == '/adminDashboard/' %}active{% endif %}">
-        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
-    </a>
+        <!-- Default sidebar items can go here if needed -->
+        <a href="{% url 'admin' %}" class="nav-link {% if request.path == '/adminDashboard/' %}active{% endif %}">
+            <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+        </a>
     {% endblock %}
 
     <a href="{% url 'logout' %}" class="nav-link">
@@ -40,8 +44,17 @@
 </div>
 
 <!-- Header -->
-<div id="header" class="header">
+<div id="header" class="header d-flex justify-content-between align-items-center">
+    <!-- Title on the left -->
     <div class="system-name">Smart Ration System</div>
+
+    <!-- Logout button on the right -->
+    <form action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </form>
 </div>
 
 <!-- Main Content -->

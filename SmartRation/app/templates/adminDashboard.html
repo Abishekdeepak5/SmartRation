@@ -1,8 +1,23 @@
 {% extends 'base.html' %}
+{% block sidebar_menu %}
+    <a href="{% url 'register' %}" class="nav-link">
+        <i class="fas fa-user-plus"></i> Register Admin/Staff
+    </a>
+    <a href="{% url 'list_ration' %}" class="nav-link">
+        <i class="fas fa-boxes"></i> Manage Ration
+    </a>
+    <a href="{% url 'addfamily' %}" class="nav-link">
+        <i class="fas fa-users"></i> Add Family
+    </a>
+    <a href="{% url 'list_product' %}" class="nav-link">
+        <i class="fas fa-cubes"></i> Manage Product
+    </a>
+{% endblock %}
 
 
 {% block content %}
 {% load static %}
+
 <div class="dashboard-container">
     <div class="dashboard-grid">
         <div class="card-1">
@@ -31,4 +46,58 @@
         </div>
     </div>
 </div>
+<div class="insight-cards">
+    <div class="insight-card">
+        <div class="insight-title">Total Families</div>
+        <div class="insight-value">1,245</div>
+        <div class="under-development-badge">Under Development</div>
+    </div>
+    <div class="insight-card">
+        <div class="insight-title">Products Distributed</div>
+        <div class="insight-value">8,950 kg</div>
+    </div>
+    <div class="insight-card">
+        <div class="insight-title">Pending Stock Requests</div>
+        <div class="insight-value">32</div>
+    </div>
+    <div class="insight-card">
+        <div class="insight-title">New Registrations</div>
+        <div class="insight-value">14 this week</div>
+    </div>
+</div>
+
+<div class="chart-container">
+    <canvas id="distributionChart" height="100"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('distributionChart').getContext('2d');
+    const distributionChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Rice', 'Wheat', 'Sugar', 'Oil', 'Dhal'],
+            datasets: [{
+                label: 'Quantity Distributed (kg)',
+                data: [1200, 950, 730, 540, 300],
+                backgroundColor: '#007bff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Product Distribution Overview'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

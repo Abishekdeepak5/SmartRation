@@ -5,24 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Smart Ration{% endblock %}</title>
-    <!--Bootstrap icon-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <!-- Font Awesome Icons -->
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="stylesheet" href="{% static 'css/button.css' %}">
-    
-
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mockdata.css' %}">
 </head>
-
 <body>
-    
 
-    <!-- Page Content -->
+    <!-- Message Area -->
+    <div class="position-fixed top-0 start-50 translate-middle-x w-100" style="z-index: 1050; padding: 1rem; max-width: 700px;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow" role="alert" style="background-color: #f8f9fa;">
+                    <span>{{ message }}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="color: black;"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
     <div class="d-flex">
         {% include 'sidebar.html' %}
         <div class="container-fluid mt-4" style="margin-left: 250px; margin-top: 10vh;">
@@ -30,14 +43,21 @@
         </div>
     </div>
 
-    <!-- Bootstrap Bundle JS -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-   
-    
+    <!-- Auto-close messages after 10 seconds -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                document.querySelectorAll('.alert').forEach(function(alert) {
+                    alert.classList.remove('show');
+                    alert.classList.add('hide');
+                    setTimeout(() => alert.remove(), 500); // Wait for transition
+                });
+            }, 5000); // 10 seconds
+        });
+    </script>
 
 </body>
 </html>

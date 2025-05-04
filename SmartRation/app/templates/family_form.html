@@ -6,141 +6,44 @@
 
 {% load static %}
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
+<div class="container mt-5" style="min-width: 50vw;">
+    <a href="{% url 'admin' %}" class="btn btn-secondary mb-4">Back to Dashboard</a>
 
-    a {
-        color: #007bff;
-        font-weight: bold;
-        text-decoration: none;
-        display: inline-block;
-        margin: 20px;
-    }
+    <div class="form-wrapper card-1" style="width: 50vw;">
+        <h1 class="text-center mb-4">Add Family</h1>
 
-    a:hover {
-        text-decoration: underline;
-    }
-
-    .body {
-        text-align: center;
-        margin-top: 30px;
-        font-size: 1.2rem;
-    }
-
-    h1 {
-        font-size: 2rem;
-        margin-bottom: 20px;
-    }
-
-    /* Centering the table within a fixed width */
-    .form-wrapper {
-        max-width: 700px;
-        margin: 0 auto;
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-    }
-
-    /* Make table scrollable inside form-wrapper */
-    .table-container {
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-        min-width: 600px; /* Table minimum width to enable scroll on small devices */
-        border-collapse: collapse;
-    }
-
-    table, th, td {
-        border: 1px solid #ddd;
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f0f0f0;
-    }
-
-    input[type="text"], select {
-        width: 100%;
-        padding: 8px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-    }
-
-    button {
-        margin-top: 20px;
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #0056b3;
-    }
-
-    @media (max-width: 768px) {
-        .body {
-            font-size: 1rem;
-        }
-        h1 {
-            font-size: 1.5rem;
-        }
-    }
-</style>
-
-<a href="{% url 'admin' %}">Back to Dashboard</a>
-
-<div class="body">
-    <h1>Add Family</h1>
-
-    <div class="form-wrapper">
         <form method="POST">
             {% csrf_token %}
-            <div class="table-container">
-                <table>
+            <div class="table-responsive">
+                <table class="table table-bordered">
                     <tr>
-                        <td><label for="head_of_family">Head of Family</label></td>
-                        <td><input type="text" name="head_of_family" id="head_of_family" placeholder="Head of Family" required></td>
+                        <td><label for="head_of_family" class="form-label">Head of Family</label></td>
+                        <td><input type="text" name="head_of_family" id="head_of_family" class="form-control" placeholder="Head of Family" required></td>
                     </tr>
                     <tr>
-                        <td><label for="member_count">Member Count</label></td>
-                        <td><input type="text" name="member_count" id="member_count" placeholder="Member Count" required></td>
+                        <td><label for="member_count" class="form-label">Member Count</label></td>
+                        <td><input type="text" name="member_count" id="member_count" class="form-control" placeholder="Member Count" required></td>
                     </tr>
                     <tr>
-                        <td><label for="card_type">Card Type</label></td>
-                        <td><input type="text" name="card_type" id="card_type" placeholder="Card Type" required></td>
+                        <td><label for="card_type" class="form-label">Card Type</label></td>
+                        <td><input type="text" name="card_type" id="card_type" class="form-control" placeholder="Card Type" required></td>
                     </tr>
                     <tr>
-                        <td><label for="email">Email</label></td>
-                        <td><input type="text" name="email" id="email" placeholder="Email" required></td>
+                        <td><label for="email" class="form-label">Email</label></td>
+                        <td><input type="text" name="email" id="email" class="form-control" placeholder="Email" required></td>
                     </tr>
                     <tr>
-                        <td><label for="phone_number">Phone Number</label></td>
-                        <td><input type="text" name="phone_number" id="phone_number" placeholder="Phone Number" required></td>
+                        <td><label for="phone_number" class="form-label">Phone Number</label></td>
+                        <td><input type="text" name="phone_number" id="phone_number" class="form-control" placeholder="Phone Number" required></td>
                     </tr>
                     <tr>
-                        <td><label for="address">Address</label></td>
-                        <td><input type="text" name="address" id="address" placeholder="Address" required></td>
+                        <td><label for="address" class="form-label">Address</label></td>
+                        <td><input type="text" name="address" id="address" class="form-control" placeholder="Address" required></td>
                     </tr>
                     <tr>
-                        <td><label for="ration_id">Ration</label></td>
+                        <td><label for="ration_id" class="form-label">Ration</label></td>
                         <td>
-                            <select name="ration_id" required>
+                            <select name="ration_id" class="form-select" required>
                                 <option value="" disabled selected>Select Ration</option>
                                 {% for ration in rations %}
                                     <option value="{{ ration.ration_id }}">{{ ration.address }} - {{ ration.pincode }}</option>
@@ -151,7 +54,9 @@
                 </table>
             </div>
 
-            <button type="submit">Add Family</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Add Family</button>
+            </div>
         </form>
     </div>
 </div>
