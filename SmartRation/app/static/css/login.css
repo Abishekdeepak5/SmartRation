@@ -1,0 +1,109 @@
+.login-container {
+    display: flex;
+    min-height: 70vh;
+    width: 50vw;
+    justify-content: center;
+    align-items: center;
+    background: #2c3e50;
+    padding: 40px;
+    margin-top: 10vh;
+    border-radius: 25px;
+}
+
+.login-left, .login-right {
+    width: 50%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.login-left {
+    background: #2c3e50;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.login-left h2 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.login-left p {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+/* If image is added, uncomment this
+.login-left img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+*/
+
+.login-right {
+    /* background: #ffffff; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+.login-title {
+    margin-bottom: 25px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.login-form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.login-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.login-form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+}
+
+.toggle-password:hover {
+    color: #000;
+}

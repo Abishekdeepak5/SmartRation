@@ -5,15 +5,28 @@
 
 {% load static %}
 
-<!-- Add New Ration Link -->
-<a href="{% url 'admin' %}" class="btn btn-primary btn-add">Dashboard</a>
-<br><br>
-<a href="{% url 'add_ration' %}" class="btn btn-primary btn-add">Add New Ration</a>
-<br><br>
+<div class="dashboard-grid" style="margin-top: 10vh;">
+    <div class="card-1">
+        <a href="{% url 'admin' %}" class="dashboard-option">
+            <i class="fas fa-tachometer-alt"></i> 
+            <span>Dashboard</span>
+        </a>
+    </div>
+    <!-- Add New Ration Link -->
+    <div class="card-1">
+        <a href="{% url 'add_ration' %}" class="dashboard-option">
+            <i class="fa fa-plus""></i> 
+            <span>Add New Ration</span>
+        </a>
+    </div>
+</div>
+
+
 
 <!-- Loop through Rations and display them -->
 <div class="ration-list">
     {% for ration in rations %}
+
         <div class="ration-card">
             <div class="ration-info">
                 {% if ration.staff_name %}
@@ -36,7 +49,7 @@
 
 <style>
     /* General styling */
-    body {
+    /* body {
         background-color: #f9f9f9;
         font-family: Arial, sans-serif;
         margin: 0;
@@ -92,6 +105,7 @@
         display: flex;
         flex-direction: column;
         margin: 20px;
+        margin-top: 20vh;
     }
 
     .ration-card {
@@ -130,7 +144,7 @@
         background-color: #218838;
     }
 
-    /* Responsive Styling */
+  
     @media (max-width: 768px) {
         .ration-card {
             flex-direction: column;
@@ -140,5 +154,5 @@
         .ration-actions {
             margin-top: 10px;
         }
-    }
+    } */
 </style>

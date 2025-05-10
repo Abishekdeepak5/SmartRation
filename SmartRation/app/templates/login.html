@@ -1,130 +1,62 @@
 {% extends 'base.html' %}
 
-{% block title %}Add Family{% endblock %}
+{% block title %}Log-In{% endblock %}
 {% block content %}
 {% load static %}
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-<style>
-    .body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 50px;
-        font-family: Arial, sans-serif;
-        padding: 0 15px;
-    }
-
-    h1 {
-        margin-bottom: 20px;
-        font-size: 2.5rem;
-        text-align: center;
-    }
-
-    .card {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 600px;
-    }
-
-    .table-container {
-        width: 100%;
-        overflow-x: auto;
-    }
-
-    label {
-        font-weight: bold;
-    }
-
-    input[type="text"], select {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-    }
-
-    .submit-btn {
-        margin-top: 20px;
-        width: 100%;
-        background-color: #007bff;
-        border: none;
-        padding: 10px;
-        border-radius: 4px;
-        color: white;
-        font-size: 1.2rem;
-        cursor: pointer;
-    }
-
-    .submit-btn:hover {
-        background-color: #0056b3;
-    }
-
-    .back-link {
-        margin-bottom: 20px;
-        display: inline-block;
-        font-weight: bold;
-        color: #007bff;
-        text-decoration: none;
-    }
-
-    .back-link:hover {
-        text-decoration: underline;
-    }
-
-    @media (max-width: 768px) {
-        .card {
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 2rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        h1 {
-            font-size: 1.8rem;
-        }
-
-        .submit-btn {
-            font-size: 1rem;
-            padding: 8px;
-        }
-
-        input[type="text"], select {
-            padding: 6px;
-        }
-    }
-</style>
 
 <a href="{% url 'admin' %}" class="back-link">← Back to Dashboard</a>
 
-<div class="body">
-    <h1>Log In</h1>
-    
-    
-    <div class="card">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="table-container">
-                <div class="form-group">
+<div class="login-container">
+    <div class="login-left">
+        <!-- Add image here if needed -->
+        <!-- <img src="{% static 'images/login-image.png' %}" alt="Login Visual"> -->
+        <h2>Welcome Back!</h2>
+        <p>Please log in to continue.</p>
+    </div>
+
+    <div class="login-right">
+        <div class="login-card">
+            <h1 class="login-title">Log In</h1>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="login-form-group">
                     <label for="email">Email</label>
-                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="email" name="email" id="email" placeholder="Enter email" required>
                 </div>
 
-                <div class="form-group">
+                <div class="login-form-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" placeholder="Password" required>
+                    <div class="password-wrapper">
+                        <input type="password" name="password" id="password" placeholder="Enter password" required>
+                        <span class="toggle-password" onclick="togglePassword()">
+                            <i id="eye-icon" class="fas fa-eye"></i>
+                        </span>
+                    </div>
                 </div>
 
                 <button type="submit" class="submit-btn">Log in</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
+
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const icon = document.getElementById("eye-icon");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>
+
 {% endblock %}

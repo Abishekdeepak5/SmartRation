@@ -1,0 +1,113 @@
+.btn-style {
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+/* Blue Theme */
+.btn-blue {
+    border: 2px solid #007bff;
+    background-color: white;
+    color: #007bff;
+}
+.btn-blue:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Green Theme */
+.btn-green {
+    border: 2px solid #28a745;
+    background-color: white;
+    color: #28a745;
+}
+.btn-green:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Red Theme */
+.btn-red {
+    border: 2px solid #dc3545;
+    background-color: white;
+    color: #dc3545;
+}
+.btn-red:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Yellow Theme */
+.btn-yellow {
+    border: 2px solid #ffc107;
+    background-color: white;
+    color: #ffc107;
+}
+.btn-yellow:hover {
+    background-color: #ffc107;
+    color: white;
+}
+
+/* Gray Theme */
+.btn-gray {
+    border: 2px solid #6c757d;
+    background-color: white;
+    color: #6c757d;
+}
+.btn-gray:hover {
+    background-color: #6c757d;
+    color: white;
+} 
+
+
+
+/*ration_list button styles */
+.btn-edit {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #ec971f;
+}
+
+.btn-delete {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c9302c;
+}
+
+.btn-view {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #31b0d5;
+}
+
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}

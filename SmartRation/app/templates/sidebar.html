@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Smart Ration{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap & Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        
+    </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <a href="#" class="nav-link text-white text-center">
+        <i class="fas fa-store"></i> <span class="fw-bold">Smart Ration</span>
+    </a>
+    <!-- <a href="{% url 'admin' %}" class="nav-link {% if request.path == '/adminDashboard/' %}active{% endif %}">
+        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+    </a> -->
+
+    {% block sidebar_menu %}
+        <!-- Default sidebar items can go here if needed -->
+        <a href="{% url 'admin' %}" class="nav-link {% if request.path == '/adminDashboard/' %}active{% endif %}">
+            <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+        </a>
+    {% endblock %}
+
+    <a href="{% url 'logout' %}" class="nav-link">
+        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+    </a>
+
+    <!-- Toggle Icon at bottom -->
+    <div id="sidebarToggle" class="sidebar-toggle">
+        <i id="toggleIcon" class="fas fa-arrow-left"></i>
+    </div>
+</div>
+
+<!-- Header -->
+<div id="header" class="header d-flex justify-content-between align-items-center">
+    <!-- Title on the left -->
+    <div class="system-name">Smart Ration System</div>
+
+    <!-- Logout button on the right -->
+    <form action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </form>
+</div>
+
+<!-- Main Content -->
+<div id="mainContent" class="main-content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const header = document.getElementById('header');
+    const mainContent = document.getElementById('mainContent');
+    const toggle = document.getElementById('sidebarToggle');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    toggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        header.classList.toggle('collapsed');
+        mainContent.classList.toggle('collapsed');
+
+        // Change icon direction
+        if (sidebar.classList.contains('collapsed')) {
+            toggleIcon.classList.replace('fa-arrow-left', 'fa-arrow-right');
+        } else {
+            toggleIcon.classList.replace('fa-arrow-right', 'fa-arrow-left');
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -8,17 +8,20 @@
 
 
 <!-- Main Content Section -->
-<div class="container mt-4">
-    <div class="body" style="text-align: center;">
-        <h1>Welcome to Smart Ration</h1>
-        <h2>Select Log in</h2>
-        <div>
-            <a href="{% url 'admin' %}">Admin</a>
-        </div>
-        <br>
-        <div>
-            <a href="{% url 'staff' %}">Staff</a>
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="mb-3">Welcome to <span class="text-primary">Smart Ration</span></h1>
+        <h4 class="mb-4 text-muted">Select Login</h4>
+
+        <div class="d-grid gap-3 col-6 mx-auto">
+            <a href="{% url 'admin' %}" class="btn btn-outline-primary btn-lg d-flex align-items-center justify-content-center">
+                <i class="bi bi-person-gear me-2"></i> Admin
+            </a>
+            <a href="{% url 'staff' %}" class="btn btn-outline-success btn-lg d-flex align-items-center justify-content-center">
+                <i class="bi bi-person-badge me-2"></i> Staff
+            </a>
         </div>
     </div>
 </div>
+
 {% endblock %}

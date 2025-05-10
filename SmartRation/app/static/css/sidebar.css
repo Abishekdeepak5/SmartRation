@@ -1,0 +1,133 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 240px;
+    background-color: #343a40;
+    overflow-x: hidden;
+    transition: width 0.3s;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+/* Sidebar Link Styles */
+.sidebar .nav-link {
+    color: #cfd8dc;
+    padding: 15px 20px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #495057;
+    color: #fff;
+}
+
+.sidebar .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Keep the title visible */
+.sidebar .system-name {
+    margin-top: 10px;
+    color: white;
+    padding: 0 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Collapsed state for links text */
+.sidebar.collapsed .nav-link span {
+    display: none;
+}
+
+/* Toggle Icon at the bottom */
+.sidebar-toggle {
+    margin-top: auto;
+    padding: 10px;
+    color: #ccc;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    left: 240px;
+    right: 0;
+    height: 60px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 1030;
+    transition: left 0.3s;
+}
+
+.header.collapsed {
+    left: 70px;
+}
+
+.header .system-name {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    flex-grow: 1;
+}
+
+.header .logout-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.header .logout-button:hover {
+    text-decoration: underline;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 240px;
+    margin-top: 60px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    width: 100%;
+}
+
+.main-content.collapsed {
+    margin-left: 70px;
+}
+
+/* Adjusting toggle icon when collapsed */
+/* #toggleIcon {
+    font-size: 24px;
+}
+
+.sidebar.collapsed #toggleIcon {
+    transform: rotate(180deg); 
+} */
