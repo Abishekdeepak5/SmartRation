@@ -4,6 +4,8 @@
     --text-color: #000000;
     --navbar-bg: #f8f9fa;
     --footer-bg: #f8f9fa;
+    --my-theme:red;
+    --button-color:white;
 }
 
 /* Dark Mode */
@@ -13,13 +15,25 @@
     --navbar-bg: #1c1c1c;
     --footer-bg: #1c1c1c;
 }
-
+.blue-theme{
+    --my-theme:blue;
+}
+.yellow-theme{
+    --my-theme:yellow;
+    --button-color:black;
+}
+.orange-theme{
+    --my-theme:orange;
+}
 /* Apply Variables to Elements */
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
 }
-
+button{
+    background-color: var(--my-theme);
+    color: var(--button-color);
+}
 .navbar {
     background-color: var(--navbar-bg) !important;
 }
