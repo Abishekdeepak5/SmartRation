@@ -37,7 +37,9 @@
 
     <!-- Main Content -->
     <div class="d-flex">
-        {% include 'sidebar.html' %}
+        {% block sidebar %}
+            {% include 'sidebar.html' %}
+        {% endblock %}
         <div class="container-fluid mt-4" style="margin-left: 250px; margin-top: 10vh;">
             {% block content %}{% endblock %}
         </div>
