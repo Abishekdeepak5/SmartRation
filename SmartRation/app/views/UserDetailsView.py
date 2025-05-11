@@ -12,6 +12,7 @@ from app.dao import RationDao
 from app.common.email_util import send_custom_email
 from django.utils.translation import gettext as _
 from django.utils.translation import activate
+from datetime import datetime, timedelta
 
 def home(request):
     message = _("Welcome")
@@ -21,8 +22,86 @@ def home(request):
 def staff_dashboard(request):
     return render(request,"staffDashboard.html")
 
+from datetime import datetime
+
 def admin_dashboard(request):
-    return render(request,"adminDashboard.html")
+    # Fetching families data
+    families_data = supabase.table("families").select("*").execute().data
+    total_families = len(families_data) if families_data else 0
+
+    # Fetching ration product data and calculating distribution data
+    ration_product_data = supabase.table("ration_product").select("product_id", "stock_quantity").execute().data
+    distribution_data = {}
+    total_stock_per_product = {}
+    out_of_stock_count = 0
+
+    for item in ration_product_data:
+        product = f"Product {item['product_id']}"
+        distribution_data[product] = distribution_data.get(product, 0) + item["stock_quantity"]
+        total_stock_per_product[product] = item["stock_quantity"]
+        if item["stock_quantity"] == 0:
+            out_of_stock_count += 1
+
+    distribution_sum = sum(distribution_data.values())
+
+    # Pending stock requests
+    pending_stock_requests = len(
+        supabase.table("stock_requests").select("status").eq("status", "pending").execute().data
+    )
+
+    # New registrations in the last week
+    new_regs = 0
+    today = datetime.now().date()
+    users_data = supabase.table("user_details").select("date_of_birth").execute().data
+    for user in users_data:
+        try:
+            reg_date = datetime.strptime(user["date_of_birth"], "%Y-%m-%d").date()
+            if (today - reg_date).days <= 7:
+                new_regs += 1
+        except:
+            pass
+
+    # New KPIs
+    total_products = len(ration_product_data)
+    total_stock_quantity = sum(item["stock_quantity"] for item in ration_product_data)
+    average_distribution_per_product = round(distribution_sum / total_products, 2) if total_products else 0
+
+    # New registrations over time (last 7 days)
+    new_regs_dates = {}
+    for user in users_data:
+        try:
+            reg_date = datetime.strptime(user["date_of_birth"], "%Y-%m-%d").date()
+            if (today - reg_date).days <= 7:
+                new_regs_dates[reg_date] = new_regs_dates.get(reg_date, 0) + 1
+        except:
+            pass
+
+    # Dates for the last 7 days
+    date_labels = [(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
+    new_reg_counts = [new_regs_dates.get(date, 0) for date in date_labels]
+
+    return render(request, "adminDashboard.html", {
+        "total_families": total_families,
+        "distribution_labels": list(distribution_data.keys()),
+        "distribution_values": list(distribution_data.values()),
+        "distribution_sum": distribution_sum,
+        "pending_stock_requests": pending_stock_requests,
+        "new_registrations": new_regs,
+        
+        # New KPIs
+        "total_products": total_products,
+        "total_stock_quantity": total_stock_quantity,
+        "out_of_stock_products": out_of_stock_count,
+        "average_distribution_per_product": average_distribution_per_product,
+        
+        # New data for additional charts
+        "total_stock_per_product": total_stock_per_product,
+        "out_of_stock_count": out_of_stock_count,
+        "new_reg_dates": date_labels,
+        "new_reg_counts": new_reg_counts,
+    })
+
+
 def profile(request):
     user=get_user(request)
     try:
