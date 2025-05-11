@@ -9,7 +9,7 @@ urlpatterns = [
      path('profile/',UserDetailsView.profile,name='profile'),
      path('logout/',UserDetailsView.logout_user,name='logout'),
      path('adminDashboard',UserDetailsView.admin_dashboard,name='admin'),
-     
+
      path('ration/<rationId>/family',Family.list_family,name='listfamily'),
      
      path('rations',RationView.list_rations,name='list_ration'),
@@ -23,6 +23,7 @@ urlpatterns = [
      path('ration/families',RationView.list_ration_families,name='list_ration_families'),
      path('ration/distribute',RationView.distribute_product,name='distribute_product'),
      path('ration/distribute/family/<family_id>',RationView.distribute_family_product,name='distribute_family_product'),
+     path('ration/distribute/histroy',RationView.get_ration_distribute_history,name='ration_distribute_histroy'),
 
      path('family/add',Family.add_family,name='addfamily'),
 

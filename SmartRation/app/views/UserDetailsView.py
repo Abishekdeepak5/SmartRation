@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from app.supabase_config import supabase
 from django.contrib.auth import login, logout, authenticate
@@ -9,10 +9,14 @@ from django.contrib.auth.decorators import login_required
 from app.dao import UserDetailDao
 from app.models import UserDetails 
 from app.dao import RationDao
+from app.common.email_util import send_custom_email
+from django.utils.translation import gettext as _
+from django.utils.translation import activate
 
 def home(request):
+    message = _("Welcome")
     response = supabase.table("user_details").select("*").execute()
-    return render(request,'home.html')
+    return render(request,'home.html',{"message": message})
 
 def staff_dashboard(request):
     return render(request,"staffDashboard.html")
@@ -51,10 +55,12 @@ def register_user(request):
             print(e)
             print(e.details)
             return redirect("register")
-    return render(request, "register.html")
+    return render(request, "register.html") 
 
 # User Login
 def login_user(request):
+    # send_custom_email(subject="Smart Ration",body="Hello from Django with Gmail App Password!",to_emails=["abishekdeepakff@gmail.com"])
+
     if request.method == "POST":
         email = request.POST["email"]
         password = request.POST["password"]

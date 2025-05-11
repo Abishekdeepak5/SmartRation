@@ -71,3 +71,7 @@ def updateRationProduct(rationProduct):
 
 def addProductsToFamily(rationFamily):
     return insertRow(RationFamily.RationFamily.TABLE_NAME,rationFamily.__dict__)
+
+def getRationFamilies(ration_id):
+    data,count = supabase.table(RationFamily.RationFamily.TABLE_NAME).select("*,product(*),families(*)").order("ration_family_id",desc=True ).eq("ration_id", ration_id).execute()
+    return data[1]

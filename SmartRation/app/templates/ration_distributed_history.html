@@ -121,29 +121,28 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Card Number</th>
-                        <th>Head of Family</th>
-                        <th>Member Count</th>
+                        <th>Issued Date</th>
+                        <th>Product</th>
+                        <th>Price</th>
                         <th>Card Type</th>
-                        <th>Email</th>
-                        <th>Phone Number</th>
-                        <th>Address</th>
-                        <th>Action</th>
+                        <th>Card No.</th>
+                        <th>Head Of Family</th>
+                        <th>Distribued quantity</th>
+                        <th>Unit</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for rationFamily in rationFamilies %}
                         <tr>
-                            <td>{{ rationFamily.card_number }}</td>
-                            <td>{{ rationFamily.head_of_family }}</td>
-                            <td>{{ rationFamily.member_count }}</td>
-                            <td>{{ rationFamily.card_type }}</td>
-                            <td>{{ rationFamily.email }}</td>
-                            <td>{{ rationFamily.phone_number }}</td>
-                            <td>{{ rationFamily.address }}</td>
-                            <td>
-                                <a href="{% url 'distribute_family_product' rationFamily.family_id %}" class="btn">Distribute</a>
-                            </td>
+                            <td>{{ rationFamily.issued_date }}</td>
+                            <td>{{ rationFamily.product.product_name }}</td>
+                            <td>{{ rationFamily.product.price }}</td>
+                            <td>{{ rationFamily.families.card_type }}</td>
+                            <td>{{ rationFamily.families.card_number }}</td>
+                            <td>{{ rationFamily.families.head_of_family }}</td>
+                            <td>{{ rationFamily.issued_quantity }}</td>
+                            <td>{{ rationFamily.product.unit }}</td>
+                            
                         </tr>
                     {% endfor %}
                 </tbody>
