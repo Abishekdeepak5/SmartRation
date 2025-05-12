@@ -52,8 +52,6 @@
     border-color: #007bff;
 }
 
-
-
 .login-link {
     text-align: center;
     margin-top: 20px;
@@ -62,4 +60,72 @@
 .login-link a button {
     padding: 8px 16px;
     font-size: 14px;
+}
+
+/* ======================= Responsive Media Queries ======================= */
+
+/* Tablets and below */
+@media (max-width: 991px) {
+    .container-reg {
+        width: 90vw;
+        padding: 30px 15px;
+    }
+
+    .register-container {
+        max-width: 90vw;
+        padding: 25px 30px;
+    }
+
+    .register-container h1 {
+        font-size: 24px;
+    }
+
+    .register-form input,
+    .register-form select {
+        font-size: 14px;
+    }
+}
+
+/* Small devices */
+@media (max-width: 767px) {
+    .container-reg {
+        width: 95vw;
+        padding: 25px 10px;
+    }
+
+    .register-container {
+        padding: 20px;
+    }
+
+    .register-container h1 {
+        font-size: 22px;
+    }
+
+    .register-form input,
+    .register-form select {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 575px) {
+    .container-reg {
+        width: 100vw;
+        padding: 20px 10px;
+    }
+
+    .register-container {
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .register-container h1 {
+        font-size: 20px;
+    }
+
+    .login-link a button {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
 }

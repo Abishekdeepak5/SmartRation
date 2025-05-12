@@ -123,11 +123,126 @@ body {
     margin-left: 70px;
 }
 
-/* Adjusting toggle icon when collapsed */
-/* #toggleIcon {
-    font-size: 24px;
+/* ====================== Responsive Media Queries ====================== */
+
+/* Medium devices (tablets) */
+@media (max-width: 991px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .sidebar.collapsed {
+        width: 60px;
+    }
+
+    .header {
+        left: 200px;
+    }
+
+    .header.collapsed {
+        left: 60px;
+    }
+
+    .main-content {
+        margin-left: 200px;
+    }
+
+    .main-content.collapsed {
+        margin-left: 60px;
+    }
 }
 
-.sidebar.collapsed #toggleIcon {
-    transform: rotate(180deg); 
-} */
+/* Small devices (landscape phones) */
+@media (max-width: 767px) {
+    .sidebar {
+        width: 180px;
+    }
+
+    .sidebar.collapsed {
+        width: 50px;
+    }
+
+    .header {
+        left: 180px;
+    }
+
+    .header.collapsed {
+        left: 50px;
+    }
+
+    .main-content {
+        margin-left: 180px;
+    }
+
+    .main-content.collapsed {
+        margin-left: 50px;
+    }
+
+    .header .system-name {
+        font-size: 16px;
+    }
+}
+
+/* Extra small devices (portrait phones) */
+@media (max-width: 575px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        height: auto;
+        padding: 0;
+    }
+
+    .sidebar.collapsed {
+        width: 100%;
+    }
+
+    .sidebar .nav-link {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .sidebar .nav-link i {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+
+    .sidebar.collapsed .nav-link span {
+        display: block;
+    }
+
+    .header {
+        position: relative;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .header.collapsed {
+        left: 0;
+    }
+
+    .main-content {
+        margin: 0;
+        padding: 15px;
+    }
+
+    .main-content.collapsed {
+        margin: 0;
+    }
+
+    .header .system-name {
+        font-size: 16px;
+    }
+
+    .header .logout-button {
+        font-size: 14px;
+    }
+}

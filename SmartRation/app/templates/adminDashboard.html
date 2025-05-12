@@ -210,10 +210,10 @@
         new Chart(document.getElementById("stockPerProductChart"), {
             type: 'bar',
             data: {
-                labels: {{ distribution_labels|safe }},
+                labels: JSON.parse("{{ distribution_labels|escapejs }}"),
                 datasets: [{
                     label: 'Stock Quantity',
-                    data: {{ distribution_values|safe }},
+                    data: JSON.parse("{{ distribution_values|escapejs }}"),
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
@@ -235,7 +235,7 @@
             data: {
                 labels: ['In Stock', 'Out of Stock'],
                 datasets: [{
-                    data: [{{ total_stock_quantity|safe }}, {{ out_of_stock_count|safe }}],
+                    data: [JSON.parse("{{ total_stock_quantity|escapejs }}"), JSON.parse("{{ out_of_stock_count|escapejs }}")],
                     backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
                     borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
                     borderWidth: 1
@@ -250,7 +250,7 @@
                 labels: ['Distributed', 'Pending Requests'],
                 datasets: [{
                     label: 'Stock (kg)',
-                    data: [{{ distribution_sum|safe }}, {{ pending_stock_requests|safe }}],
+                    data: [JSON.parse("{{ distribution_sum|escapejs }}"), JSON.parse("{{ pending_stock_requests|escapejs }}")],
                     backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 159, 64, 0.2)'],
                     borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 159, 64, 1)'],
                     borderWidth: 1
@@ -262,10 +262,10 @@
         new Chart(document.getElementById("newRegistrationsChart"), {
             type: 'line',
             data: {
-                labels: {{ new_reg_dates|safe }},
+                labels: JSON.parse("{{ new_reg_dates|escapejs }}"),
                 datasets: [{
                     label: 'New Registrations',
-                    data: {{ new_reg_counts|safe }},
+                    data: JSON.parse("{{ new_reg_counts|escapejs }}"),
                     fill: false,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     tension: 0.1
