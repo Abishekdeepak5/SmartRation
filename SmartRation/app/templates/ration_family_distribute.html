@@ -138,7 +138,7 @@
         <a href="{% url 'distribute_product' %}" class="btn-custom">Set Distribute Product</a>
         <br><br>
         <a href="{% url 'list_ration_families' %}" class="back-link">Back to Families</a>
-        
+        <input type="hidden" name="family_id" id="family_id" value="{{family.family_id}}">
         {% if rationProducts %}
         {% if family %}
             <div class="card">
@@ -213,10 +213,120 @@
         <br>
         <form method="POST">
             {% csrf_token %}
-            <button type="submit" class="form-button">Weight</button>
+            <button type="submit" class="form-button">Bill</button>
         </form>
         <br><br>
-        <button class="form-button">Bill</button>
-    </div>
+        <div style="margin-bottom: 100px;">
 
+            <h1>Product Weighing</h1>
+            <button class="form-button" onclick="initSetup()">Start Weighing</button>
+            <div id="product-info"></div>
+            <div id="weight-display">Weight: --</div>
+            <div id="progress-container" style="width: 100%; background: #eee; height: 25px; border-radius: 10px; margin-top: 10px;">
+                <div id="progress-bar" style="height: 100%; width: 0%; background: green; border-radius: 10px; transition: width 0.3s;"></div>
+            </div>
+            
+            <button id="next-btn"  onclick="nextProduct()" style="display: none;height: 25px; margin-top: 10px;">Next Product</button>
+            <button id="finish-btn" onclick="finish()" style="display: none;height: 25px; margin-top: 10px;" >Finish</button>
+        </div>
+
+    </div>
+    <script>
+         var products = {{ rationProducts|safe }};
+        let currentIndex = 0;
+        let intervalId = null;
+        const resultData = [];
+
+        function initSetup() {
+            console.log(products);
+            products = products.filter(item => item.distribute_quantity !== 0);
+            console.log(products);
+            fetch('/init_setup/', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    startWeighing();
+                });
+        }
+
+        function startWeighing() {
+            updateProductUI();
+            intervalId = setInterval(readWeight, 1000);
+        }
+
+        function updateProductUI() {
+            const p = products[currentIndex];
+            document.getElementById('product-info').innerHTML =
+                `<h3>${p.product.product_name}</h3>
+                 <p>Expected: ${p.distribute_quantity} ${p.product.unit} ± ${p.product.tolerance}</p>`;
+        }
+
+        function readWeight() {
+            fetch('/read_weight/')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.weight) return;
+                    let weight = data.weight;
+                    weight=weight/100000;
+                    document.getElementById('weight-display').innerText = `Weight: ${weight} ${products[currentIndex].product.unit}`;
+                    
+                    const p = products[currentIndex];
+                    const min = (p.distribute_quantity - p.product.tolerance);
+                    const max = (p.distribute_quantity + p.product.tolerance);
+                    var percentage=0;
+                    percentage = Math.min((weight / ((p.distribute_quantity))) * 100, 100);
+                    if(weight<0){
+                     percentage=0;   
+                    }
+                    document.getElementById('progress-bar').style.width = `${percentage}%`;
+
+                    console.log(percentage);
+
+                    console.log(weight,min,max);
+                    if (weight >= min && weight <= max) {
+                        document.getElementById('next-btn').style.display = 'block';
+                        // Store the result
+                        resultData[currentIndex] = {
+                            product_id: p.product_id,
+                            weight: weight
+                        };
+                    } else {
+                        document.getElementById('next-btn').style.display = 'none';
+                    }
+                }).catch(error=>{console.log(error)});
+        }
+
+        function nextProduct() {
+            clearInterval(intervalId);
+            fetch('/submit_weight/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(resultData[currentIndex])
+            });
+            products[currentIndex]['issued_quantity']=resultData[currentIndex]['weight'];
+            console.log(products);
+            currentIndex++;
+            if (currentIndex < products.length) {
+                startWeighing();
+                document.getElementById('next-btn').style.display = 'none';
+            } else {
+                document.getElementById('next-btn').style.display = 'none';
+                document.getElementById('finish-btn').style.display = 'block';
+            }
+        }
+
+        function finish() {
+            let family_id = document.getElementById("family_id").value;
+            fetch('/finish/'+family_id, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(products)
+            })
+            .then(res => res.json())
+            .then(data => {
+                clearInterval(intervalId);
+                console.log('All done! Collected weights: ' + JSON.stringify(data.data));
+                window.location.href = "{% url 'list_ration_families' %}";
+            });
+        }
+    </script>
 {% endblock %}

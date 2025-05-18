@@ -1,0 +1,60 @@
+{% block title %}Register{% endblock %}
+{% block content %}
+
+{% load static %}
+<div id="product-description">Select a product to weigh</div>
+<div id="weight-display">Loading...</div>
+<div id="progress-wrapper" style="display:none;">
+  <div id="progress-bar" style="width: 0%;"></div>
+  <div id="progress-bar-message">0g of 500g</div>
+</div>
+<button id="next-button" style="display:none;" onclick="nextProduct()">Next Product</button>
+
+<script>
+  let currentProductIndex = 0;
+  const products = [
+    { name: "Rice", targetWeight: 500 },
+    { name: "Wheat", targetWeight: 1000 },
+    { name: "Sugar", targetWeight: 200 },
+    { name: "Salt", targetWeight: 100 },
+    { name: "Oil", targetWeight: 250 }
+  ];
+
+  function fetchWeight() {
+    fetch('/get_weight/')
+      .then(response => response.json())
+      .then(data => {
+        const weight = parseFloat(data.weight);
+        document.getElementById('weight-display').innerText = `${weight}g`;
+        updateProgressBar(weight);
+      })
+      .catch(error => {
+        document.getElementById('weight-display').innerText = 'Error fetching data';
+      });
+  }
+
+  function updateProgressBar(weight) {
+    const targetWeight = products[currentProductIndex].targetWeight;
+    const progress = Math.min((weight / targetWeight) * 100, 100);
+    document.getElementById('progress-bar').style.width = `${progress}%`;
+    document.getElementById('progress-bar-message').innerText = `${weight}g of ${targetWeight}g`;
+    if (progress >= 100) {
+      document.getElementById('next-button').style.display = 'inline-block';
+    }
+  }
+
+  function nextProduct() {
+    currentProductIndex++;
+    if (currentProductIndex < products.length) {
+      document.getElementById('product-description').innerText = `Weighing ${products[currentProductIndex].name}`;
+      document.getElementById('progress-wrapper').style.display = 'block';
+      document.getElementById('next-button').style.display = 'none';
+    } else {
+      alert('All products weighed!');
+    }
+  }
+
+  setInterval(fetchWeight, 1000);  // Update every second
+</script>
+
+{% endblock %}

@@ -214,7 +214,7 @@ def distribute_family_product(request,family_id):
                 rationFamily.set_issued_quantity(distribute_quantity)
                 rationFamily.set_ration_id(rationProductObj.get_ration_id())
                 addProductsToFamily(rationFamily)
-                html_table_rows += f"<tr><td>{rationProduct['product']['product_name']}</td><td>{rationProduct['product']['unit']}</td><td>{rationProduct['product']['price']}</td><td>{distribute_quantity}</td></tr>"
+                html_table_rows += f"<tr><td>{rationProduct['product']['product_name']}</td><td>{rationProduct['product']['unit']}</td><td>{rationProduct['product']['price']}</td><td>{distribute_quantity}</td><td>{distribute_quantity}</td></tr>"
         html_table = form_html_table(html_table_rows)
         body = rationDetail+"<h1>Family received product details</h1>"+html_table
         html_code = form_html_code(body)
@@ -234,7 +234,7 @@ def distribute_family_product(request,family_id):
             product = rationProducts[i]
             distribute_quantity = distributeProduct[str(product["product_id"])]
             product["distribute_quantity"] = distribute_quantity
-        # print(rationProducts)
+        print(rationProducts)
         return render(request,"ration_family_distribute.html",{"rationProducts":rationProducts,"family":family})
     
 def check_ration_stock(rationProducts,distributeProduct):
@@ -337,7 +337,8 @@ def form_html_table(html_table_rows):
             <th>Product</th>
             <th>Unit</th>
             <th>Price</th>
-            <th>Quantity</th>
+            <th>Actual Quantity</th>
+            <th>Issued Quantity</th>
         </thead>
     """
     table_html+=html_table_rows

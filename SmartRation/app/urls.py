@@ -3,6 +3,8 @@ from .views import UserDetailsView,RationView
 from .views import Family
 from .views import InventoryView
 from .views import LoadView
+from .views import productWeightView
+from .views import WeightLoad
 urlpatterns = [
      path('register/',UserDetailsView.register_user,name='register'),
      path('login/',UserDetailsView.login_user,name='login'),
@@ -37,6 +39,16 @@ urlpatterns = [
      path('product/load/edit/<ration_transport_product_id>',LoadView.edit_load,name='edit_load'),
      path('product/load/delete/<ration_transport_product_id>',LoadView.delete_load,name='delete_load'),
 
+     path('get_weight/', productWeightView.get_weight, name='get_weight'),
+     path('display_weight/', productWeightView.display_html, name='display_weight'),
+     # path('init_setup/', productWeightView.initial_setup, name='initial_setup'),
+     # path('display_weight/', productWeightView.display_html1, name='display_weight'),
+     # path('get_weight/', productWeightView.get_weight, name='get_weight'),
+     path('weight_page/',WeightLoad.weight_page),
+     path('init_setup/', WeightLoad.init_setup),
+    path('read_weight/', WeightLoad.read_weight),
+    path('submit_weight/', WeightLoad.submit_weight),
+    path('finish/<family_id>', WeightLoad.finish),
     
      path('staffDashboard',UserDetailsView.staff_dashboard,name='staff'),
      path('',UserDetailsView.home,name='home'),
