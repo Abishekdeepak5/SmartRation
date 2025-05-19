@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <link rel="stylesheet" href="{% static 'css/mockdata.css' %}">
 </head>
+<style>
+
+</style>
 <body>
 
     <!-- Message Area -->
@@ -38,9 +41,9 @@
     </div>
 
     <!-- Main Content -->
-    <div class="d-flex">
+    <div class="myContainer">
         {% include 'sidebar.html' %}
-        <div class="container-fluid mt-4" style="margin-left: 250px; margin-top: 10vh;">
+        <div class="myContent container-fluid mt-4" style="margin-left: 250px; margin-top: 10vh;">
             {% block content %}{% endblock %}
         </div>
     </div>
