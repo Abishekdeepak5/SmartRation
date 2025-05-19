@@ -8,6 +8,7 @@
     padding: 40px;
     margin-top: 10vh;
     border-radius: 25px;
+    flex-wrap: wrap;
 }
 
 .login-left, .login-right {
@@ -23,7 +24,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
 }
 
 .login-left h2 {
@@ -106,4 +106,71 @@
 
 .toggle-password:hover {
     color: #000;
+}
+
+/* ======================= Responsive Media Queries ======================= */
+
+/* Tablets and below */
+@media (max-width: 991px) {
+    .login-container {
+        width: 90vw;
+        flex-direction: column;
+        padding: 30px 20px;
+    }
+
+    .login-left, .login-right {
+        width: 100%;
+        padding: 20px 10px;
+    }
+
+    .login-left h2 {
+        font-size: 30px;
+    }
+
+    .login-left p {
+        font-size: 16px;
+    }
+
+    .login-card {
+        max-width: 100%;
+    }
+}
+
+/* Small devices */
+@media (max-width: 767px) {
+    .login-container {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .login-left h2 {
+        font-size: 26px;
+    }
+
+    .login-left p {
+        font-size: 14px;
+    }
+
+    .login-card {
+        padding: 25px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 575px) {
+    .login-left h2 {
+        font-size: 22px;
+    }
+
+    .login-left p {
+        font-size: 13px;
+    }
+
+    .login-card {
+        padding: 20px;
+    }
+
+    .toggle-password {
+        font-size: 16px;
+    }
 }

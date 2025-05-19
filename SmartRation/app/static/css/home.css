@@ -6,6 +6,54 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
-th,td{
+
+th, td {
     padding: 0 5px;
+    text-align: left;
+    word-break: break-word;
+    font-size: 16px;
+}
+
+/* ========== Responsive Table Styling ========== */
+
+/* Medium devices (tablets, 768px - 991px) */
+@media (max-width: 991px) {
+    th, td {
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+}
+
+/* Small devices (landscape phones, 576px - 767px) */
+@media (max-width: 767px) {
+    th, td {
+        font-size: 13px;
+        padding: 3px;
+    }
+
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575px) {
+    th, td {
+        font-size: 12px;
+        padding: 2px;
+    }
+
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
 }

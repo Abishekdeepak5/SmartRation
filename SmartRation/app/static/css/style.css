@@ -1,13 +1,11 @@
-
-/* :root {
+:root {
     --bg-color: #ffffff;
     --text-color: #000000;
     --navbar-bg: #f8f9fa;
     --footer-bg: #f8f9fa;
-    --my-theme:red;
-    --button-color:white;
+    --my-theme: red;
+    --button-color: white;
 }
-
 
 .dark-mode {
     --bg-color: #121212;
@@ -15,25 +13,30 @@
     --navbar-bg: #1c1c1c;
     --footer-bg: #1c1c1c;
 }
-.blue-theme{
-    --my-theme:blue;
+
+.blue-theme {
+    --my-theme: blue;
 }
-.yellow-theme{
-    --my-theme:yellow;
-    --button-color:black;
+
+.yellow-theme {
+    --my-theme: yellow;
+    --button-color: black;
 }
-.orange-theme{
-    --my-theme:orange;
+
+.orange-theme {
+    --my-theme: orange;
 }
-/* Apply Variables to Elements */
+
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
 }
-button{
+
+button {
     background-color: var(--my-theme);
     color: var(--button-color);
 }
+
 .navbar {
     background-color: var(--navbar-bg) !important;
 }
@@ -41,16 +44,10 @@ button{
 footer {
     background-color: var(--footer-bg) !important;
 }
-.text-style{
+
+.text-style {
     color: var(--text-color);
-} */
-
-
-
-/*tamilarasan styles added*/
-
-
-
+}
 
 /* === dashboard-styles.css === */
 .dashboard-container {
@@ -63,6 +60,8 @@ footer {
     flex-direction: row;
     gap: 15px;
     justify-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .card-1 {
@@ -96,26 +95,13 @@ footer {
 
 .dashboard-option i {
     font-size: 2.5rem;
-    color: #1976d2; /* Material Blue */
+    color: #1976d2;
     transition: color 0.3s ease;
 }
 
 .card-1:hover .dashboard-option i {
-    color: #0d47a1; /* Darker on hover */
+    color: #0d47a1;
 }
-
-
-
-/*from login*/
-
-/* .body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-    font-family: Arial, sans-serif;
-    padding: 0 15px;
-} */
 
 h1 {
     margin-bottom: 20px;
@@ -177,35 +163,7 @@ input[type="text"], select {
     text-decoration: underline;
 }
 
-/* @media (max-width: 768px) {
-    .card {
-        padding: 20px;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.8rem;
-    }
-
-    .submit-btn {
-        font-size: 1rem;
-        padding: 8px;
-    }
-
-    input[type="text"], select {
-        padding: 6px;
-    }
-} */
-
-
-
-/*add ration_list page style*/
-
+/* === Ration List Styles === */
 .ration-list {
     width: 60vw;
     margin: 30px auto;
@@ -228,7 +186,6 @@ input[type="text"], select {
     transition: background-color 0.3s ease;
     flex-wrap: wrap;
     width: 50vw;
-    /* min-width: 600px; */
 }
 
 .ration-card:hover {
@@ -249,7 +206,6 @@ input[type="text"], select {
     margin-bottom: 5px;
 }
 
-/* Optional: Tooltip style */
 .ration-info[data-tooltip] {
     position: relative;
     cursor: pointer;
@@ -292,4 +248,92 @@ input[type="text"], select {
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* ==================== Media Queries ==================== */
 
+/* Tablets */
+@media (max-width: 992px) {
+    .ration-card, .ration-list {
+        width: 90vw;
+    }
+
+    .ration-info {
+        flex: 1 1 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .ration-actions {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+    }
+
+    .dashboard-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .card {
+        padding: 25px;
+    }
+}
+
+/* Mobile landscape */
+@media (max-width: 768px) {
+    .ration-card, .ration-list {
+        width: 95vw;
+    }
+
+    .dashboard-option {
+        font-size: 1rem;
+    }
+
+    .dashboard-option i {
+        font-size: 2rem;
+    }
+
+    .submit-btn {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    input[type="text"], select {
+        font-size: 0.95rem;
+    }
+}
+
+/* Mobile portrait */
+@media (max-width: 576px) {
+    .ration-card, .ration-list {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .dashboard-option {
+        font-size: 0.9rem;
+    }
+
+    .dashboard-option i {
+        font-size: 1.8rem;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .submit-btn {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    input[type="text"], select {
+        font-size: 0.9rem;
+    }
+}
