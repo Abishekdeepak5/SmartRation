@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weighing System</title>
+</head>
+<body>
+    <h1>Product Weighing</h1>
+    <button onclick="initSetup()">Start Weighing</button>
+    <div id="product-info"></div>
+    <div id="weight-display">Weight: --</div>
+    <button id="next-btn" onclick="nextProduct()" style="display: none;">Next Product</button>
+    <button id="finish-btn" onclick="finish()" style="display: none;">Finish</button>
+
+    <script>
+        const products = {{ products|safe }};
+        let currentIndex = 0;
+        let intervalId = null;
+        const resultData = [];
+
+        function initSetup() {
+            fetch('/init_setup/', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    startWeighing();
+                });
+        }
+
+        function startWeighing() {
+            updateProductUI();
+            intervalId = setInterval(readWeight, 1000);
+        }
+
+        function updateProductUI() {
+            const p = products[currentIndex];
+            document.getElementById('product-info').innerHTML =
+                `<h3>${p.product.product_name}</h3>
+                 <p>Expected: ${p.distribute_quantity} ${p.product.unit} ± ${p.product.tolerance}</p>`;
+        }
+
+        function readWeight() {
+            fetch('/read_weight/')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.weight) return;
+                    let weight = data.weight;
+                    weight=weight/100000;
+                    document.getElementById('weight-display').innerText = `Weight: ${weight} ${products[currentIndex].product.unit}`;
+                    
+                    const p = products[currentIndex];
+                    const min = (p.distribute_quantity - p.product.tolerance);
+                    const max = (p.distribute_quantity + p.product.tolerance);
+                    console.log(weight,min,max);
+                    if (weight >= min && weight <= max) {
+                        document.getElementById('next-btn').style.display = 'block';
+                        // Store the result
+                        resultData[currentIndex] = {
+                            product_id: p.product_id,
+                            weight: weight
+                        };
+                    } else {
+                        document.getElementById('next-btn').style.display = 'none';
+                    }
+                }).catch(error=>{console.log(error)});
+        }
+
+        function nextProduct() {
+            clearInterval(intervalId);
+            fetch('/submit_weight/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(resultData[currentIndex])
+            });
+
+            currentIndex++;
+            if (currentIndex < products.length) {
+                startWeighing();
+                document.getElementById('next-btn').style.display = 'none';
+            } else {
+                document.getElementById('next-btn').style.display = 'none';
+                document.getElementById('finish-btn').style.display = 'block';
+            }
+        }
+
+        function finish() {
+            fetch('/finish/', {
+                method: 'POST'
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert('All done! Collected weights: ' + JSON.stringify(data.data));
+            });
+        }
+    </script>
+</body>
+</html>

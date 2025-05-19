@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino Weight Monitoring</title>
+    <script>
+        // Function to start weight monitoring
+        function startWeight() {
+            fetch('/start/')
+        }
+
+        // Function to get the weight from Arduino
+        function getWeight() {
+            fetch('/get_weight/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.weight) {
+                        document.getElementById("weight").innerText = `Weight: ${data.weight} kg`;
+                    } else {
+                        alert(data.error);
+                    }
+                });
+        }
+
+        // Function to close the Arduino connection
+        function closeConnection() {
+            fetch('/close/')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.status || data.error);
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Arduino Weight Monitoring</h1>
+
+    <div>
+        <p id="weight">Weight: Not available</p>
+    </div>
+
+    <div>
+        <button onclick="startWeight()">Start Weight Monitoring</button>
+        <button onclick="getWeight()">Get Weight</button>
+        <button onclick="closeConnection()">Close Connection</button>
+    </div>
+
+</body>
+</html>

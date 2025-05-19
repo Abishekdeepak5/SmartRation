@@ -1,0 +1,39 @@
+#include "HX711.h"
+
+const int LOADCELL_DOUT_PIN = 2;
+const int LOADCELL_SCK_PIN = 3;
+
+HX711 scale;
+
+void setup() {
+  Serial.begin(9600);
+  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+  delay(500);
+  scale.set_scale();
+  delay(500);
+  scale.tare();
+}
+
+void loop() {
+  delay(1000);
+  float weight = getWeight();
+  if(weight<-500){
+    calibrateWeight();
+    weight=getWeight();
+  }
+  Serial.println(weight,1);
+}
+void calibrateWeight(){
+   delay(500);
+  scale.set_scale();
+  delay(500);
+  scale.tare();
+  delay(500);
+}
+float getWeight(){
+ if (scale.is_ready()) {
+    return scale.get_units(1);
+  } else {
+    return -1;
+  }
+}
