@@ -12,6 +12,7 @@ com_port = None
 collected_data = []
 
 def find_arduino_in_com_ports():
+    '''
     for i in range(1, 11):
         port = f'COM{i}'
         try:
@@ -21,6 +22,8 @@ def find_arduino_in_com_ports():
         except (serial.SerialException, OSError):
             pass
     return None
+    '''
+    return "COM8"
 
 @csrf_exempt
 def init_setup(request):
@@ -37,8 +40,6 @@ def init_setup(request):
 
 def read_weight(request):
     global arduino, com_port
-
-    # Try to connect if arduino is not initialized
     if arduino is None:
         if com_port is None:
             return JsonResponse({'error': 'COM port not available'}, status=400)
@@ -52,10 +53,12 @@ def read_weight(request):
         arduino.reset_input_buffer()  # Clear previous buffer
         weight_str = arduino.readline().decode().strip()
         print(weight_str)
-        weight = weight_str
-        return JsonResponse({'weight': weight})
+        if weight_str == "":
+            return JsonResponse({'WEIGHT':0})
+        return JsonResponse({'weight':weight_str})
     except Exception as ex:
         print("Error reading weight:", ex)
+        com_port = find_arduino_in_com_ports()
         try:
             arduino.close()
         except Exception as close_ex:
@@ -111,11 +114,16 @@ def finish(request,family_id):
             rationFamily.set_ration_id(rationProductObj.get_ration_id())
             addProductsToFamily(rationFamily)
             
-            html_table_rows += f"<tr><td>{rationProduct['product']['product_name']}</td><td>{rationProduct['product']['unit']}</td><td>{rationProduct['product']['price']}</td><td>{distribute_quantity}</td><td>{rationProduct["issued_quantity"]}</td></tr>"
+            html_table_rows += f"<tr><td>{rationProduct['product']['product_name']}</td><td>{rationProduct['product']['unit']}</td><td>{rationProduct['product']['price']}</td><td>{distribute_quantity}</td><td>{rationProduct['issued_quantity']}</td></tr>"
     html_table = RationView.form_html_table(html_table_rows)
-    body = rationDetail+"<h1>Family received product details</h1>"+html_table
+    body = rationDetail+"<h1>குடும்பம் பெற்ற பொருட்களின் விவரம் (Family received product details)</h1>"+html_table
+    body = body+"""
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfKduKNfD9RNJTgR7sL63K8LrV1ReHjDLtAQewqSda-qLHTsQ/viewform?usp=header" style="font-size:16px; font-family: Arial, sans-serif; padding:10px 20px; border:none; border-radius:5px; background-color:#007BFF; color:#fff; cursor:pointer;">
+             புகார் (Issue)
+        </a>
+        """
     html_code = RationView.form_html_code(body)
-    RationView.send_custom_html_email(subject="Today Ration Open!",html=html_code,to_emails=[family['email']])
+    RationView.send_custom_html_email(subject="இன்று ரேஷன் கடை திறந்திருக்கும்!",html=html_code,to_emails=[family['email']])
     if arduino:
         arduino.close()
         arduino = None

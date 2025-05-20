@@ -42,9 +42,11 @@
             fetch('/read_weight/')
                 .then(res => res.json())
                 .then(data => {
-                    if (!data.weight) return;
+                    console.log(data);
+                    if (!data.WEIGHT) return;
                     let weight = data.weight;
-                    weight=weight/100000;
+                    weight=weight;
+                    console.log(weight);
                     document.getElementById('weight-display').innerText = `Weight: ${weight} ${products[currentIndex].product.unit}`;
                     
                     const p = products[currentIndex];

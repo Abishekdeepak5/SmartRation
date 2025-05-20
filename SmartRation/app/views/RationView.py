@@ -144,7 +144,7 @@ def distribute_product(request):
             if isSentMail:
                 html_table_rows += f"<tr><td>{product['product']['product_name']}</td><td>{product['product']['unit']}</td><td>{product['product']['price']}</td><td>{distribute_quantity}</td></tr>"
         if isSentMail:
-            html_table ="<h1>Today distributing product</h1>"+form_html_table(html_table_rows)
+            html_table ="<h1>இன்று பொருட்கள் விநியோகம் நடைபெறுகிறது - TNPDS </h1>"+form_html_table(html_table_rows)
             rationInfo=get_ration_detail(request)
             html_code =form_html_code(rationInfo+html_table)
             rationFamilies=get_ration_families(request)
@@ -152,7 +152,7 @@ def distribute_product(request):
             for family in rationFamilies:
                 emails.append(family['email'])
             print(html_code)
-            send_custom_html_email(subject="Today Ration Open!",html=html_code,to_emails=emails)
+            send_custom_html_email(subject="இன்று ரேஷன் கடை திறந்திருக்கும்!",html=html_code,to_emails=emails)
         request.session["rationDistributeProduct"]=distributeProductDictionary
         return redirect("list_ration_families")
     distributeProduct=get_distribute_product(request)
@@ -216,9 +216,14 @@ def distribute_family_product(request,family_id):
                 addProductsToFamily(rationFamily)
                 html_table_rows += f"<tr><td>{rationProduct['product']['product_name']}</td><td>{rationProduct['product']['unit']}</td><td>{rationProduct['product']['price']}</td><td>{distribute_quantity}</td><td>{distribute_quantity}</td></tr>"
         html_table = form_html_table(html_table_rows)
-        body = rationDetail+"<h1>Family received product details</h1>"+html_table
+        body = rationDetail+"<h1>குடும்பம் பெற்ற பொருட்களின் விவரம் (Family received product details)</h1>"+html_table
+        body = body+"""
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfKduKNfD9RNJTgR7sL63K8LrV1ReHjDLtAQewqSda-qLHTsQ/viewform?usp=header" style="font-size:16px; font-family: Arial, sans-serif; padding:10px 20px; border:none; border-radius:5px; background-color:#007BFF; color:#fff; cursor:pointer;">
+             புகார் (Issue)
+        </a>
+        """
         html_code = form_html_code(body)
-        send_custom_html_email(subject="Today Ration Open!",html=html_code,to_emails=[family['email']])
+        send_custom_html_email(subject="இன்று ரேஷன் கடை திறந்திருக்கும்!",html=html_code,to_emails=[family['email']])
         return redirect("list_ration_families")
     if family==None:
         messages.warning(request,"Family not found")
@@ -293,35 +298,37 @@ def get_ration_detail(request):
         ration=get_staff_ration(request)
         print(ration)
         rationInfo=f"""
-            <h1>Ration Details</h1>
+            <h1>ரேஷன் விவரங்கள் (Ration Details)</h1>
                 <table border="1" cellspacing="0" cellpadding="5">
                     <tr>
-                        <td>Address</td>
+                        <td>முகவரி (Address)</td>
                         <td>{ration['address']}</td>
                     </tr>
                     <tr>
-                        <td>Pincode</td>
+                        <td>அஞ்சல் குறியீடு (Pincode)</td>
                         <td>{ration['pincode']}</td>
                     </tr>
                 </table>
+
                 <br>
         """
         ration_staff = get_user_by_id(ration['staff'])
         staffInfo = f"""
-                <h1>Staff Details</h1>
+                <h1>ஊழியர் விவரங்கள் (Staff Details)</h1>
                 <table border="1" cellspacing="0" cellpadding="5">
-                    <tr>
-                        <td>Staff</td>
-                        <td>{ration_staff['user_name']}</td>
-                    </tr>
-                    <tr>
-                        <td>Phone</td>
-                        <td>{ration_staff['phone_number']}</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>{ration_staff['email']}</td>
-                    </tr>
+                 <tr>
+                    <td>ஊழியர் (Staff)</td>
+                    <td>{ration_staff['user_name']}</td>
+                </tr>
+                <tr>
+                    <td>தொலைபேசி (Phone)</td>
+                    <td>{ration_staff['phone_number']}</td>
+                </tr>
+                <tr>
+                    <td>மின்னஞ்சல் (Email)</td>
+                    <td>{ration_staff['email']}</td>
+                </tr>
+
                 </table>
                 <br>
             """
@@ -334,11 +341,12 @@ def form_html_table(html_table_rows):
     table_html = """
     <table border="1" cellspacing="0" cellpadding="5">
         <thead>
-            <th>Product</th>
-            <th>Unit</th>
-            <th>Price</th>
-            <th>Actual Quantity</th>
-            <th>Issued Quantity</th>
+       <th>பொருள் (Product)</th>
+        <th>அலகு (Unit)</th>
+        <th>விலை (Price)</th>
+        <th>மூல அளவு (Actual Quantity)</th>
+        <th>வழங்கப்பட்ட அளவு (Issued Quantity)</th>
+
         </thead>
     """
     table_html+=html_table_rows
