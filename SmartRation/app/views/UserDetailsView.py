@@ -1,120 +1,152 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.contrib import messages
-from app.supabase_config import supabase
-from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.hashers import make_password, check_password
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
-from app.dao import UserDetailDao
-from app.models import UserDetails 
-from app.dao import RationDao
-from app.common.email_util import send_custom_email
-from django.utils.translation import gettext as _
-from django.utils.translation import activate
+from django.contrib.auth import logout
 from datetime import datetime, timedelta
 
+from app.supabase_config import supabase
+from app.dao import UserDetailDao, RationDao
+from app.models import UserDetails
+
+import io
+import base64
+import matplotlib
+matplotlib.use('Agg')  # Use non-GUI backend for matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Home page
 def home(request):
-    message = _("Welcome")
-    response = supabase.table("user_details").select("*").execute()
-    return render(request,'home.html',{"message": message})
+    message = "Welcome"
+    return render(request, 'home.html', {"message": message})
 
+# Staff dashboard page
 def staff_dashboard(request):
-    return render(request,"staffDashboard.html")
+    return render(request, "staffDashboard.html")
 
-from datetime import datetime
-
+# Combined Admin Dashboard view with all required stats
 def admin_dashboard(request):
-    # Fetching families data
-    families_data = supabase.table("families").select("*").execute().data
-    total_families = len(families_data) if families_data else 0
+    today = datetime.now().date()
 
-    # Fetching ration product data and calculating distribution data
-    ration_product_data = supabase.table("ration_product").select("product_id", "stock_quantity").execute().data
-    distribution_data = {}
-    total_stock_per_product = {}
-    out_of_stock_count = 0
+    # Fetch family data
+    family_data = supabase.table("families").select("family_id").execute().data or []
+    total_families = len(family_data)
 
-    for item in ration_product_data:
-        product = f"Product {item['product_id']}"
-        distribution_data[product] = distribution_data.get(product, 0) + item["stock_quantity"]
-        total_stock_per_product[product] = item["stock_quantity"]
-        if item["stock_quantity"] == 0:
-            out_of_stock_count += 1
-
-    distribution_sum = sum(distribution_data.values())
+    # Fetch product stock data
+    product_data = supabase.table("product").select("product_id", "stock_quantity").execute().data or []
+    distribution_labels = [f"Product {p['product_id']}" for p in product_data]
+    distribution_values = [p['stock_quantity'] for p in product_data]
+    total_stock_quantity = sum(distribution_values)
+    out_of_stock_count = sum(1 for p in product_data if p['stock_quantity'] == 0)
+    distribution_sum = total_stock_quantity
+    total_products = len(product_data)
+    average_distribution_per_product = round(distribution_sum / total_products, 2) if total_products > 0 else 0
 
     # Pending stock requests
-    pending_stock_requests = len(
-        supabase.table("stock_requests").select("status").eq("status", "pending").execute().data
-    )
+    pending_requests = supabase.table("stock_requests").select("status").eq("status", "pending").execute().data or []
+    pending_stock_requests = len(pending_requests)
 
-    # New registrations in the last week
+    # User registrations data (assume "date_of_birth" field)
+    users = supabase.table("user_details").select("date_of_birth").execute().data or []
+    new_regs_by_date = {}
     new_regs = 0
-    today = datetime.now().date()
-    users_data = supabase.table("user_details").select("date_of_birth").execute().data
-    for user in users_data:
+    for user in users:
         try:
             reg_date = datetime.strptime(user["date_of_birth"], "%Y-%m-%d").date()
             if (today - reg_date).days <= 7:
+                key = reg_date.strftime('%Y-%m-%d')
+                new_regs_by_date[key] = new_regs_by_date.get(key, 0) + 1
                 new_regs += 1
-        except:
-            pass
+        except Exception:
+            continue
 
-    # New KPIs
-    total_products = len(ration_product_data)
-    total_stock_quantity = sum(item["stock_quantity"] for item in ration_product_data)
-    average_distribution_per_product = round(distribution_sum / total_products, 2) if total_products else 0
+    date_labels = [(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(6, -1, -1)]
+    new_reg_counts = [new_regs_by_date.get(date, 0) for date in date_labels]
 
-    # New registrations over time (last 7 days)
-    new_regs_dates = {}
-    for user in users_data:
-        try:
-            reg_date = datetime.strptime(user["date_of_birth"], "%Y-%m-%d").date()
-            if (today - reg_date).days <= 7:
-                new_regs_dates[reg_date] = new_regs_dates.get(reg_date, 0) + 1
-        except:
-            pass
+    # Generate charts using matplotlib and seaborn
 
-    # Dates for the last 7 days
-    date_labels = [(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
-    new_reg_counts = [new_regs_dates.get(date, 0) for date in date_labels]
+    # 1. Total Stock per Product (Bar Chart)
+    plt.figure(figsize=(10, 5))
+    sns.barplot(x=distribution_labels, y=distribution_values, palette='Blues_d', hue=distribution_labels, legend=False)
+    plt.title('Total Stock per Product')
+    plt.ylabel('Stock Quantity')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    buf1 = io.BytesIO()
+    plt.savefig(buf1, format='png')
+    plt.close()
+    buf1.seek(0)
+    stock_per_product_chart = base64.b64encode(buf1.read()).decode('utf-8')
+
+    # 2. Out-of-Stock Product Breakdown (Pie Chart)
+    labels = ['In Stock', 'Out of Stock']
+    sizes = [total_products - out_of_stock_count, out_of_stock_count]
+    colors = ['#4bc0c0', '#ff6384']
+    plt.figure(figsize=(6,6))
+    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+    plt.title('Out-of-Stock Product Breakdown')
+    plt.tight_layout()
+    buf2 = io.BytesIO()
+    plt.savefig(buf2, format='png')
+    plt.close()
+    buf2.seek(0)
+    out_of_stock_chart = base64.b64encode(buf2.read()).decode('utf-8')
+
+    # 3. Distribution vs Pending Stock Requests (Bar Chart)
+    plt.figure(figsize=(6,4))
+    sns.barplot(x=['Distributed', 'Pending Requests'], y=[distribution_sum, pending_stock_requests], palette='Set2', hue=['Distributed', 'Pending Requests'], legend=False)
+    plt.title('Distribution vs Pending Stock Requests')
+    plt.ylabel('Stock (kg)')
+    plt.tight_layout()
+    buf3 = io.BytesIO()
+    plt.savefig(buf3, format='png')
+    plt.close()
+    buf3.seek(0)
+    distribution_vs_pending_chart = base64.b64encode(buf3.read()).decode('utf-8')
+
+    # 4. New Registrations Over Time (Line Chart)
+    plt.figure(figsize=(10, 5))
+    sns.lineplot(x=date_labels, y=new_reg_counts, marker='o')
+    plt.title('New Registrations Over Time (Last 7 days)')
+    plt.ylabel('New Registrations')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    buf4 = io.BytesIO()
+    plt.savefig(buf4, format='png')
+    plt.close()
+    buf4.seek(0)
+    new_registrations_chart = base64.b64encode(buf4.read()).decode('utf-8')
 
     return render(request, "adminDashboard.html", {
         "total_families": total_families,
-        "distribution_labels": list(distribution_data.keys()),
-        "distribution_values": list(distribution_data.values()),
         "distribution_sum": distribution_sum,
         "pending_stock_requests": pending_stock_requests,
         "new_registrations": new_regs,
-        
-        # New KPIs
         "total_products": total_products,
         "total_stock_quantity": total_stock_quantity,
         "out_of_stock_products": out_of_stock_count,
         "average_distribution_per_product": average_distribution_per_product,
-        
-        # New data for additional charts
-        "total_stock_per_product": total_stock_per_product,
-        "out_of_stock_count": out_of_stock_count,
-        "new_reg_dates": date_labels,
-        "new_reg_counts": new_reg_counts,
+        "stock_per_product_chart": stock_per_product_chart,
+        "out_of_stock_chart": out_of_stock_chart,
+        "distribution_vs_pending_chart": distribution_vs_pending_chart,
+        "new_registrations_chart": new_registrations_chart,
     })
 
-
+# User profile page
 def profile(request):
-    user=get_user(request)
+    user = get_user(request)
     try:
-        ration=RationDao.get_staff_ration(request)
-        return render(request,"profile.html",{"user":user,"ration":ration})
+        ration = RationDao.get_staff_ration(request)
+        return render(request, "profile.html", {"user": user, "ration": ration})
     except Exception as e:
         print(e)
-    return render(request,"profile.html",{"user":user})
+    return render(request, "profile.html", {"user": user})
 
-# Register User
+# Register user view
 def register_user(request):
     if request.method == "POST":
-        userObj=UserDetails.UserDetails()
+        userObj = UserDetails.UserDetails()
         userObj.set_user_name(request.POST["user_name"])
         userObj.set_password(make_password(request.POST["password"]))
         userObj.set_role(request.POST["role"])
@@ -124,151 +156,92 @@ def register_user(request):
         userObj.set_address(request.POST["address"])
         userObj.set_pincode(request.POST["pincode"])
         userObj.set_date_of_birth(request.POST["date_of_birth"])
-        # Save to Supabase
         try:
-            data,error = UserDetailDao.register_user(userObj)
+            data, error = UserDetailDao.register_user(userObj)
+            if error:
+                messages.error(request, error)
+                return redirect("register")
             messages.success(request, "User registered successfully!")
             return redirect("login")
         except Exception as e:
-            messages.error(request, e.details)
-            print(e)
-            print(e.details)
+            messages.error(request, str(e))
             return redirect("register")
-    return render(request, "register.html") 
+    return render(request, "register.html")
 
-# User Login
+# Login user view
 def login_user(request):
-    # send_custom_email(subject="Smart Ration",body="Hello from Django with Gmail App Password!",to_emails=["abishekdeepakff@gmail.com"])
-
     if request.method == "POST":
         email = request.POST["email"]
         password = request.POST["password"]
-        user = None
         try:
-            data,error=UserDetailDao.get_user_by_email(email)
-            user=data[1][0]
-        except Exception as e:
-            messages.error(request,"Invalid Email or Password!")
+            data, error = UserDetailDao.get_user_by_email(email)
+            user = data[1][0]
+        except Exception:
+            messages.error(request, "Invalid Email or Password!")
             return redirect("login")
         if not check_password(password, user["password"]):
             messages.error(request, "Invalid Email or Password!")
             return redirect("login")
-        # Login Django user session
+
+        # Save user session info
         request.session["user"] = user
         request.session["user_id"] = user["user_id"]
         request.session["user_name"] = user["user_name"]
         request.session["user_role"] = user["role"]
+
         messages.success(request, "Login successful!")
-        print(user)
-        if user['role']=="admin":
-            return redirect("admin")    
-        return redirect("staff")
+
+        if user['role'] == "admin":
+            return redirect("admin_dashboard")
+        else:
+            return redirect("staff_dashboard")
 
     return render(request, "login.html")
 
-# Logout User
+# Logout user view
 def logout_user(request):
     logout(request)
     messages.success(request, "Logged out successfully!")
     return redirect("login")
 
-# Fetch User List
+# Fetch user list (JSON API)
 def user_list(request):
     data, error = supabase.table("user_details").select("*").execute()
-    return JsonResponse({"users": data[1]} if not error else {"error": "Failed to fetch users"})
+    if error:
+        return JsonResponse({"error": "Failed to fetch users"})
+    return JsonResponse({"users": data})
 
-# Update User
+# Update user view
 def update_user(request, user_id):
     if request.method == "POST":
-        user_name = request.POST["user_name"]
-        role = request.POST["role"]
-        phone_number = request.POST["phone_number"]
-        gender = request.POST["gender"]
-        address = request.POST["address"]
-        pincode = request.POST["pincode"]
-        date_of_birth = request.POST["date_of_birth"]
-
-        data, error = supabase.table("user_details").update({
-            "user_name": user_name,
-            "role": role,
-            "phone_number": phone_number,
-            "gender": gender,
-            "address": address,
-            "pincode": pincode,
-            "date_of_birth": date_of_birth
-        }).eq("user_id", user_id).execute()
-
+        update_data = {
+            "user_name": request.POST.get("user_name"),
+            "role": request.POST.get("role"),
+            "phone_number": request.POST.get("phone_number"),
+            "gender": request.POST.get("gender"),
+            "address": request.POST.get("address"),
+            "pincode": request.POST.get("pincode"),
+            "date_of_birth": request.POST.get("date_of_birth"),
+        }
+        data, error = supabase.table("user_details").update(update_data).eq("user_id", user_id).execute()
         if error:
             messages.error(request, "Error updating user!")
         else:
             messages.success(request, "User updated successfully!")
-
         return redirect("user_list")
+    # For GET request, fetch user and render update form (not shown here)
+    return redirect("user_list")
 
-# Delete User
+# Delete user view
 def delete_user(request, user_id):
     data, error = supabase.table("user_details").delete().eq("user_id", user_id).execute()
     if error:
         messages.error(request, "Error deleting user!")
     else:
         messages.success(request, "User deleted successfully!")
-    
     return redirect("user_list")
 
-
+# Helper function to get logged-in user info
 def get_user(request):
-    try:
-        return request.session.get("user")
-    except Exception as e:
-        print(e)
-    return None
-
-
-
-
-"""
-
-def register_user(request):
-    UserDetailDao.register_user(UserDetails.UserDetails())
-    if request.method == "POST":
-        userObj=UserDetails.UserDetails()
-        user_name = request.POST["user_name"]
-        userObj.set_user_name(user_name)
-        password = make_password(request.POST["password"])  # Hash password
-        userObj.set_password(password)
-        role = request.POST["role"]
-        userObj.set_role(role)
-        phone_number = request.POST["phone_number"]
-        userObj.set_phone_number(phone_number)
-        gender = request.POST["gender"]
-        userObj.set_gender(gender)
-        email = request.POST["email"]
-        userObj.set_email(email)
-        address = request.POST["address"]
-        userObj.set_address(address)
-        pincode = request.POST["pincode"]
-        userObj.set_pincode(pincode)
-        date_of_birth = request.POST["date_of_birth"]
-        userObj.set_date_of_birth(date_of_birth)
-        UserDetailDao.register_user(userObj)
-        # Save to Supabase
-        try:
-            data, error = supabase.table("user_details").insert({
-                "user_name": user_name,
-                "password": password,
-                "role": role,
-                "phone_number": phone_number,
-                "gender": gender,
-                "email": email,
-                "address": address,
-                "pincode": pincode,
-                "date_of_birth": date_of_birth
-            }).execute()
-        except Exception as e:
-            messages.error(request, e.details)
-            return redirect("register")
-        messages.success(request, "User registered successfully!")
-        return redirect("login")
-    return render(request, "register.html")
-
-"""
+    user = request.session.get("user")
+    return user

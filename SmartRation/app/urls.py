@@ -5,12 +5,14 @@ from .views import InventoryView
 from .views import LoadView
 from .views import productWeightView
 from .views import WeightLoad
+# from .views.dashboard import dashboard_view
 urlpatterns = [
      path('register/',UserDetailsView.register_user,name='register'),
      path('login/',UserDetailsView.login_user,name='login'),
      path('profile/',UserDetailsView.profile,name='profile'),
      path('logout/',UserDetailsView.logout_user,name='logout'),
      path('adminDashboard',UserDetailsView.admin_dashboard,name='admin'),
+#    path('dashboard/', dashboard_view, name='dashboard'),
 
      path('ration/<rationId>/family',Family.list_family,name='listfamily'),
      
