@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# If you use local settings:
+local_settings.py
+
+# Django migrations
+**/migrations/
+!*/migrations/__init__.py
+
+# Environment
+.env
+*.env
+.env.*
+
+# Virtualenv
+venv/
+ENV/
+env/
+.venv/
+pip-wheel-metadata/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Coverage / testing
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+
+# MyPy, Pyre, Pyright
+.mypy_cache/
+.pyre/
+.pytype/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Docker
+*.pid
+*.seed
+
+# Build artifacts
+build/
+dist/
+*.egg-info/

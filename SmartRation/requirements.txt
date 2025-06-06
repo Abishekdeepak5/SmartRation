@@ -2,3 +2,5 @@ Django==4.2.20
 supabase==2.14.0
 dotenv==0.9.9
 pyserial
+matplotlib
+seaborn
