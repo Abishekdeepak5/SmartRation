@@ -1,155 +1,58 @@
 {% extends 'base.html' %}
-{% block title %}Ration Distributed history{% endblock %}
+{% block title %}Ration Distributed History{% endblock %}
+
 {% block content %}
-    {% load static %}
-    <style>
-        body {
-            background: #f8f9fa;
-            font-family: 'Roboto', sans-serif;
-            margin: 20px;
-        }
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  
+  <a href="{% url 'staff' %}" 
+     class="inline-block mb-6 px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow hover:bg-indigo-700 transition">
+    Dashboard
+  </a>
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  {% if ration %}
+    <h1 class="text-3xl font-bold text-indigo-600 mb-6">
+      Families in <span class="underline">{{ ration.address }}</span> Ration Shop
+    </h1>
 
-        a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: inline-block;
-        }
+    <a href="{% url 'distribute_product' %}" 
+       class="inline-block mb-8 px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow hover:bg-indigo-700 transition">
+      Set Distribute Product
+    </a>
+  {% endif %}
 
-        a:hover {
-            color: #0056b3;
-        }
-
-        h1 {
-            font-size: 2rem;
-            color: #007bff;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 30px;
-            border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #007bff;
-            color: white;
-            font-size: 1.1rem;
-        }
-
-        td {
-            font-size: 1rem;
-            color: #333;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            table {
-                font-size: 0.9rem;
-            }
-
-            th, td {
-                padding: 8px 10px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .container {
-                padding: 10px;
-            }
-
-            table {
-                font-size: 0.8rem;
-            }
-
-            th, td {
-                padding: 6px 8px;
-            }
-        }
-    </style>
-
-    <!-- Content of the page -->
-    <div class="container">
-        <a href="{% url 'staff' %}" class="btn">Dashboard</a>
-        <br>
-
-        {% if ration %}
-            <h1>Families in {{ ration.address }} Ration Shop</h1>
-            <a href="{% url 'distribute_product' %}" class="btn">Set Distribute Product</a>
-            <br>
-        {% endif %}
-
-        {% if rationFamilies %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Issued Date</th>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Card Type</th>
-                        <th>Card No.</th>
-                        <th>Head Of Family</th>
-                        <th>Distribued quantity</th>
-                        <th>Unit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for rationFamily in rationFamilies %}
-                        <tr>
-                            <td>{{ rationFamily.issued_date }}</td>
-                            <td>{{ rationFamily.product.product_name }}</td>
-                            <td>{{ rationFamily.product.price }}</td>
-                            <td>{{ rationFamily.families.card_type }}</td>
-                            <td>{{ rationFamily.families.card_number }}</td>
-                            <td>{{ rationFamily.families.head_of_family }}</td>
-                            <td>{{ rationFamily.issued_quantity }}</td>
-                            <td>{{ rationFamily.product.unit }}</td>
-                            
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <h1>No Families Available</h1>
-        {% endif %}
+  {% if rationFamilies %}
+    <div class="overflow-x-auto rounded-lg shadow border border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-indigo-600">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Issued Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Product</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Price</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Card Type</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Card No.</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Head Of Family</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Distributed Quantity</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Unit</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+          {% for rationFamily in rationFamilies %}
+            <tr class="hover:bg-indigo-50 dark:hover:bg-indigo-900 transition">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ rationFamily.issued_date }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ rationFamily.product.product_name }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ rationFamily.product.price }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ rationFamily.families.card_type }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ rationFamily.families.card_number }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ rationFamily.families.head_of_family }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ rationFamily.issued_quantity }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ rationFamily.product.unit }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-
+  {% else %}
+    <h1 class="text-2xl font-semibold text-gray-600 dark:text-gray-300 mt-10">No Families Available</h1>
+  {% endif %}
+</div>
 {% endblock %}

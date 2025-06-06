@@ -2,243 +2,183 @@
 {% block title %}Add Load{% endblock %}
 
 {% block content %}
-{% load static %}
-    <style>
-        body {
-            background-color: #f4f5f7;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #005F88;
-            font-size: 2rem;
-        }
-
-        .table, th, td {
-            border: 1px solid #ddd;
-            border-collapse: collapse;
-            padding: 10px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #005F88;
-            color: white;
-        }
-
-        td {
-            background-color: #fff;
-        }
-
-        .form-table {
-            width: 100%;
-            margin: 20px 0;
-        }
-
-        .form-table td {
-            padding: 10px;
-        }
-
-        .form-table input {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .form-table button {
-            background-color: #005F88;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .form-table button:hover {
-            background-color: #003e5c;
-        }
-
-        .form-table label {
-            font-size: 1rem;
-            color: #333;
-        }
-
-        a {
-            color: #005F88;
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .action-buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .action-buttons button {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            background-color: #005F88;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .action-buttons button:hover {
-            background-color: #003e5c;
-        }
-
-    </style>
-    <div class="container">
-        <div>
-            <a href="{% url 'list_product' %}">View Products</a>
-            <br>
-            {% if product and mode == 'add' %}
-            <p><a href="{% url 'list_load' %}">View Loads</a></p>
-            <br>
-            <h1>Add Load</h1>
-            <form method="POST">
-                {% csrf_token %}
-                <table class="form-table">
-                    <tr>
-                        <td><label for="product_name">Product Name</label></td>
-                        <td><input type="text" name="product_name" id="product_name" value="{{ product.product_name }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="unit">Unit</label></td>
-                        <td><input type="text" name="unit" id="unit" value="{{ product.unit }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="price">Price</label></td>
-                        <td><input type="text" name="price" id="price" value="{{ product.price }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="stock_quantity">Stock Quantity</label></td>
-                        <td><input type="text" name="stock_quantity" id="stock_quantity" value="{{ product.stock_quantity }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="tolerance">Tolerance</label></td>
-                        <td><input type="text" name="tolerance" id="tolerance" value="{{ product.tolerance }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="allocated_qty">Load Quantity</label></td>
-                        <td><input type="text" name="allocated_qty" id="allocated_qty" required></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><button type="submit">Add to Load</button></td>
-                    </tr>
-                </table>
-            </form>
-            {% elif mode == 'view' and loads %}
-            <br>
-            <h1>Loads</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Stock Quantity</th>
-                        <th>Unit</th>
-                        <th>Tolerance</th>
-                        <th>Last Update</th>
-                        <th>Load Quantity</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for load in loads %}
-                    <tr>
-                        <td>{{ load.product.product_name }}</td>
-                        <td>{{ load.product.price }}</td>
-                        <td>{{ load.product.stock_quantity }}</td>
-                        <td>{{ load.product.unit }}</td>
-                        <td>{{ load.product.tolerance }}</td>
-                        <td>{{ load.product.last_update }}</td>
-                        <td>{{ load.allocated_qty }}</td>
-                        <td><a href="{% url 'edit_load' load.ration_transport_product_id %}">Edit</a></td>
-                        <td><a href="{% url 'delete_load' load.ration_transport_product_id %}">Delete</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <br>
-            {% if rations %}
-            <form method="POST">
-                {% csrf_token %}
-                <div class="action-buttons">
-                    <span><select name="ration_id" required>
-                        <option value="" disabled selected>Select Ration</option>
-                        {% for ration in rations %}
-                            <option value="{{ ration.ration_id }}">{{ ration.address }} - {{ ration.pincode }}</option>
-                        {% endfor %}
-                    </select></span>
-                    <span><button type="submit">Send Load</button></span>
-                </div>
-            </form>
-            {% endif %}
-            {% elif mode == 'edit' and load %}
-            <a href="{% url 'list_load' %}">List Load</a>
-            <br>
-            <h1>Edit Load</h1>
-            <form method="POST">
-                {% csrf_token %}
-                <table class="form-table">
-                    <input type="hidden" name="product_id" value="{{ load.product.product_id }}" readonly>
-                    <input type="hidden" name="ration_transport_id" value="{{ load.ration_transport.ration_transport_id }}" readonly>
-                    <tr>
-                        <td><label for="product_name">Product Name</label></td>
-                        <td><input type="text" name="product_name" value="{{ load.product.product_name }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="unit">Unit</label></td>
-                        <td><input type="text" name="unit" value="{{ load.product.unit }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="price">Price</label></td>
-                        <td><input type="text" name="price" value="{{ load.product.price }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="stock_quantity">Stock Quantity</label></td>
-                        <td><input type="text" name="stock_quantity" value="{{ load.product.stock_quantity }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="tolerance">Tolerance</label></td>
-                        <td><input type="text" name="tolerance" value="{{ load.product.tolerance }}" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="allocated_qty">Load Quantity</label></td>
-                        <td><input type="text" name="allocated_qty" value="{{ load.allocated_qty }}" required></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><button type="submit">Edit Load</button></td>
-                    </tr>
-                </table>
-            </form>
-            {% else %}
-            <h1>No products available</h1>
-            {% endif %}
-        </div>
+<div class="max-w-7xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+  <div class="flex flex-col space-y-4">
+    <div>
+      <a href="{% url 'list_product' %}" class="text-indigo-600 hover:underline text-lg font-medium">View Products</a>
     </div>
+
+    {% if product and mode == 'add' %}
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h1 class="text-2xl font-semibold text-indigo-700 mb-6 text-center">Add Load</h1>
+      <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          <div>
+            <label for="product_name" class="block text-gray-700 font-medium mb-1">Product Name</label>
+            <input type="text" name="product_name" id="product_name" value="{{ product.product_name }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="unit" class="block text-gray-700 font-medium mb-1">Unit</label>
+            <input type="text" name="unit" id="unit" value="{{ product.unit }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="price" class="block text-gray-700 font-medium mb-1">Price</label>
+            <input type="text" name="price" id="price" value="{{ product.price }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="stock_quantity" class="block text-gray-700 font-medium mb-1">Stock Quantity</label>
+            <input type="text" name="stock_quantity" id="stock_quantity" value="{{ product.stock_quantity }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="tolerance" class="block text-gray-700 font-medium mb-1">Tolerance</label>
+            <input type="text" name="tolerance" id="tolerance" value="{{ product.tolerance }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="allocated_qty" class="block text-gray-700 font-medium mb-1">Load Quantity</label>
+            <input type="number" name="allocated_qty" id="allocated_qty" required min="1"
+              class="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+
+        </div>
+        <div class="text-center mt-6">
+          <button type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-md transition">
+            Add to Load
+          </button>
+        </div>
+      </form>
+    </div>
+
+    {% elif mode == 'view' and loads %}
+    <div class="overflow-x-auto bg-white shadow rounded-lg p-6">
+      <h1 class="text-2xl font-semibold text-indigo-700 mb-6 text-center">Loads</h1>
+      <table class="min-w-full divide-y divide-gray-200 text-center">
+        <thead class="bg-indigo-600 text-white">
+          <tr>
+            <th class="px-4 py-2">Product</th>
+            <th class="px-4 py-2">Price</th>
+            <th class="px-4 py-2">Stock Quantity</th>
+            <th class="px-4 py-2">Unit</th>
+            <th class="px-4 py-2">Tolerance</th>
+            <th class="px-4 py-2">Last Update</th>
+            <th class="px-4 py-2">Load Quantity</th>
+            <th class="px-4 py-2">Edit</th>
+            <th class="px-4 py-2">Delete</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          {% for load in loads %}
+          <tr class="hover:bg-gray-100">
+            <td class="px-4 py-2">{{ load.product.product_name }}</td>
+            <td class="px-4 py-2">{{ load.product.price }}</td>
+            <td class="px-4 py-2">{{ load.product.stock_quantity }}</td>
+            <td class="px-4 py-2">{{ load.product.unit }}</td>
+            <td class="px-4 py-2">{{ load.product.tolerance }}</td>
+            <td class="px-4 py-2">{{ load.product.last_update }}</td>
+            <td class="px-4 py-2">{{ load.allocated_qty }}</td>
+            <td class="px-4 py-2">
+              <a href="{% url 'edit_load' load.ration_transport_product_id %}"
+                class="text-indigo-600 hover:text-indigo-800 font-semibold">Edit</a>
+            </td>
+            <td class="px-4 py-2">
+              <a href="{% url 'delete_load' load.ration_transport_product_id %}"
+                class="text-red-600 hover:text-red-800 font-semibold">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% if rations %}
+      <form method="POST" class="mt-8">
+        {% csrf_token %}
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <select name="ration_id" required
+            class="rounded-md border border-gray-300 px-4 py-2 w-full max-w-xs focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="" disabled selected>Select Ration</option>
+            {% for ration in rations %}
+            <option value="{{ ration.ration_id }}">{{ ration.address }} - {{ ration.pincode }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-md transition w-full max-w-xs">
+            Send Load
+          </button>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+
+    {% elif mode == 'edit' and load %}
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+      <a href="{% url 'list_load' %}" class="text-indigo-600 hover:underline font-semibold mb-4 inline-block">List Load</a>
+      <h1 class="text-2xl font-semibold text-indigo-700 mb-6 text-center">Edit Load</h1>
+      <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ load.product.product_id }}" readonly>
+        <input type="hidden" name="ration_transport_id" value="{{ load.ration_transport.ration_transport_id }}" readonly>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label for="product_name" class="block text-gray-700 font-medium mb-1">Product Name</label>
+            <input type="text" name="product_name" value="{{ load.product.product_name }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="unit" class="block text-gray-700 font-medium mb-1">Unit</label>
+            <input type="text" name="unit" value="{{ load.product.unit }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="price" class="block text-gray-700 font-medium mb-1">Price</label>
+            <input type="text" name="price" value="{{ load.product.price }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="stock_quantity" class="block text-gray-700 font-medium mb-1">Stock Quantity</label>
+            <input type="text" name="stock_quantity" value="{{ load.product.stock_quantity }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="tolerance" class="block text-gray-700 font-medium mb-1">Tolerance</label>
+            <input type="text" name="tolerance" value="{{ load.product.tolerance }}" readonly
+              class="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed" />
+          </div>
+
+          <div>
+            <label for="allocated_qty" class="block text-gray-700 font-medium mb-1">Load Quantity</label>
+            <input type="number" name="allocated_qty" value="{{ load.allocated_qty }}" required min="1"
+              class="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+        </div>
+        <div class="text-center mt-6">
+          <button type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-md transition">
+            Edit Load
+          </button>
+        </div>
+      </form>
+    </div>
+
+    {% else %}
+    <h1 class="text-center text-gray-500 text-xl mt-12">No products available</h1>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}

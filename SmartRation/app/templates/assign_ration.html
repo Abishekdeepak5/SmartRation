@@ -5,49 +5,51 @@
 {% block content %}
 {% load static %}
 
-<div class="container mt-5 card-1" style="width: 50vw; padding: 10px; justify-content: baseline;">
-    <div class="form-container">
-        <h2 class="text-center mb-4">Assign Staff to Ration Shop</h2>
-        <form method="POST">
-            {% csrf_token %}
-            
-            <div class="mb-3" style="align-items: baseline;">
-                <p><strong>Ration ID:</strong> {{ rationShop.ration_id }}</p>
-                <p><strong>Ration Address:</strong> {{ rationShop.address }}</p>
-                <p><strong>Ration Pincode:</strong> {{ rationShop.pincode }}</p>
-            </div>
+<div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mt-10 mb-10">
+    <h2 class="text-2xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-6">Assign Staff to Ration Shop</h2>
 
-            {% for staff in staffList %}
-                {% if staff.ration and staff.ration.ration_id == rationShop.ration_id %}
-                    <div class="mb-3">
-                        <p><strong>Current staff:</strong> {{ staff.user_name }}</p>
-                        <p><strong>Phone No:</strong> {{ staff.phone_number }}</p>
-                    </div>
-                {% endif %}
-            {% endfor %}
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
 
-            <div class="mb-3">
-                <label for="staff" class="form-label">Assign Staff:</label>
-                <select name="staff" id="staff" class="form-select">
-                    <option value="None">Set No Staff</option>
-                    {% for staff in staffList %}
-                        <option value="{{ staff.user_id }}">
-                            {{ staff.user_name }} {{ staff.phone_number }} - Ration: 
-                            {% if staff.ration %}
-                                {{ staff.ration.address }} - {{ staff.ration.pincode }}
-                            {% else %}
-                                Not Assigned
-                            {% endif %}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md space-y-2">
+            <p><span class="font-semibold">Ration ID:</span> {{ rationShop.ration_id }}</p>
+            <p><span class="font-semibold">Address:</span> {{ rationShop.address }}</p>
+            <p><span class="font-semibold">Pincode:</span> {{ rationShop.pincode }}</p>
+        </div>
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Assign</button>
-            </div>
-        </form>
-    </div>
+        {% for staff in staffList %}
+            {% if staff.ration and staff.ration.ration_id == rationShop.ration_id %}
+                <div class="bg-indigo-50 dark:bg-indigo-900 p-4 rounded-md border border-indigo-300 dark:border-indigo-700">
+                    <p><span class="font-semibold text-indigo-600 dark:text-indigo-300">Current Staff:</span> {{ staff.user_name }}</p>
+                    <p><span class="font-semibold text-indigo-600 dark:text-indigo-300">Phone No:</span> {{ staff.phone_number }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <div>
+            <label for="staff" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Assign Staff</label>
+            <select id="staff" name="staff"
+                class="w-full p-2.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="None">Set No Staff</option>
+                {% for staff in staffList %}
+                    <option value="{{ staff.user_id }}">
+                        {{ staff.user_name }} ({{ staff.phone_number }}) —
+                        {% if staff.ration %}
+                            {{ staff.ration.address }} - {{ staff.ration.pincode }}
+                        {% else %}
+                            Not Assigned
+                        {% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="text-center">
+            <button type="submit"
+                class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-semibold transition-all duration-300">
+                Assign
+            </button>
+        </div>
+    </form>
 </div>
-
 {% endblock %}

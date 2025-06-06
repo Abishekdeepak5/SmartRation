@@ -1,98 +1,105 @@
 {% extends 'base.html' %}
 
 {% block title %}Add Product{% endblock %}
+
 {% block content %}
+<div class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
+  <a href="{% url 'list_product' %}" class="inline-block text-indigo-600 hover:underline mb-8">
+    &larr; Back to Products
+  </a>
 
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 sm:p-12">
+    {% if product %}
+      <h1 class="text-3xl font-extrabold text-indigo-600 mb-8 text-center">Edit Product</h1>
+    {% else %}
+      <h1 class="text-3xl font-extrabold text-indigo-600 mb-8 text-center">Add Product</h1>
+    {% endif %}
 
-<style>
-    body {
-        background: #f4f5f7;
-        font-family: 'Roboto', sans-serif;
-    }
+    <form method="POST" class="space-y-6">
+      {% csrf_token %}
 
-    .form-container {
-        max-width: 700px;
-        margin: 30px auto;
-        background: #fff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+      <div>
+        <label for="product_name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Product Name
+        </label>
+        <input
+          type="text"
+          name="product_name"
+          id="product_name"
+          placeholder="Product Name"
+          value="{{ product.product_name|default:'' }}"
+          required
+          class="w-full rounded-md border border-gray-300 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-900 transition"
+        />
+      </div>
 
-    .form-container h1 {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 25px;
-        color: #007bff;
-    }
+      <div>
+        <label for="unit" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Unit
+        </label>
+        <input
+          type="text"
+          name="unit"
+          id="unit"
+          placeholder="Unit"
+          value="{{ product.unit|default:'' }}"
+          required
+          class="w-full rounded-md border border-gray-300 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-900 transition"
+        />
+      </div>
 
-    .btn-primary {
-        width: 100%;
-        padding: 12px;
-        font-size: 1.2rem;
-        border-radius: 8px;
-    }
+      <div>
+        <label for="price" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Price
+        </label>
+        <input
+          type="text"
+          name="price"
+          id="price"
+          placeholder="Price"
+          value="{{ product.price|default:'' }}"
+          required
+          class="w-full rounded-md border border-gray-300 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-900 transition"
+        />
+      </div>
 
-    .back-link {
-        display: inline-block;
-        margin: 20px 0;
-        font-size: 1.1rem;
-        color: #007bff;
-        text-decoration: none;
-    }
+      <div>
+        <label for="stock_quantity" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Stock Quantity
+        </label>
+        <input
+          type="text"
+          name="stock_quantity"
+          id="stock_quantity"
+          placeholder="Stock Quantity"
+          value="{{ product.stock_quantity|default:'' }}"
+          required
+          class="w-full rounded-md border border-gray-300 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-900 transition"
+        />
+      </div>
 
-    .back-link:hover {
-        text-decoration: underline;
-    }
-</style>
+      <div>
+        <label for="tolerance" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Tolerance
+        </label>
+        <input
+          type="text"
+          name="tolerance"
+          id="tolerance"
+          placeholder="Tolerance"
+          value="{{ product.tolerance|default:'' }}"
+          required
+          class="w-full rounded-md border border-gray-300 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-900 transition"
+        />
+      </div>
 
-<div class="container" style="margin-left: 20vw;">
-    <a href="{% url 'list_product' %}" class="back-link">
-        &larr; Back to Products
-    </a>
-
-    <div class="form-container">
-        {% if product %}
-            <h1 class="text-center">Edit Product</h1>
-        {% else %}
-            <h1 class="text-center">Add Product</h1>
-        {% endif %}
-
-        <form method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="product_name" class="form-label">Product Name</label>
-                <input type="text" class="form-control" placeholder="Product Name" name="product_name" id="product_name" value="{{ product.product_name|default:'' }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="unit" class="form-label">Unit</label>
-                <input type="text" class="form-control" placeholder="Unit" name="unit" id="unit" value="{{ product.unit|default:'' }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input type="text" class="form-control" placeholder="Price" name="price" id="price" value="{{ product.price|default:'' }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="stock_quantity" class="form-label">Stock Quantity</label>
-                <input type="text" class="form-control" placeholder="Stock Quantity" name="stock_quantity" id="stock_quantity" value="{{ product.stock_quantity|default:'' }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="tolerance" class="form-label">Tolerance</label>
-                <input type="text" class="form-control" placeholder="Tolerance" name="tolerance" id="tolerance" value="{{ product.tolerance|default:'' }}" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">
-                {% if product %} Update Product {% else %} Add Product {% endif %}
-            </button>
-        </form>
-    </div>
+      <button
+        type="submit"
+        class="w-full bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-600 text-white font-semibold rounded-lg px-6 py-3 text-lg transition"
+      >
+        {% if product %} Update Product {% else %} Add Product {% endif %}
+      </button>
+    </form>
+  </div>
 </div>
-
 {% endblock %}

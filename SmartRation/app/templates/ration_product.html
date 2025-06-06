@@ -1,119 +1,49 @@
 {% extends 'base.html' %}
 
 {% block title %}Ration Product{% endblock %}
+
 {% block content %}
 
-{% load static %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <p class="mb-4">
+    <a href="{% url 'staff' %}" class="text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+  </p>
 
-<!-- Bootstrap 5 CDN (if not already loaded in base.html) -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  {% if rationProducts %}
+    <h1 class="text-3xl font-semibold text-gray-800 dark:text-gray-100 text-center mb-8">Ration Products</h1>
 
-<style>
-    body {
-        background: #f8f9fa;
-        font-family: 'Roboto', sans-serif;
-    }
+    <div class="overflow-x-auto rounded-lg shadow-md bg-white dark:bg-gray-800">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-indigo-600">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Product</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Price</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Stock Quantity</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Unit</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Tolerance</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Last Update</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-700 divide-y divide-gray-200 dark:divide-gray-600">
+          {% for rationProduct in rationProducts %}
+            <tr class="hover:bg-indigo-50 dark:hover:bg-indigo-900">
+              <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{{ rationProduct.product.product_name }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700 dark:text-gray-300">{{ rationProduct.product.price }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700 dark:text-gray-300">{{ rationProduct.stock_quantity }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700 dark:text-gray-300">{{ rationProduct.product.unit }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700 dark:text-gray-300">{{ rationProduct.product.tolerance }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700 dark:text-gray-300">{{ rationProduct.product.last_update }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-    .table-container {
-        max-width: 1200px;
-        margin: 30px auto;
-        padding: 20px;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th, td {
-        border: 1px solid #dee2e6;
-        padding: 12px;
-        text-align: center;
-    }
-
-    th {
-        background-color: #007bff;
-        color: #fff;
-        font-weight: bold;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    a {
-        color: #007bff;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-        font-size: 2rem;
-        color: #343a40;
-    }
-
-    /* Make only the table horizontally scrollable */
-    .table-responsive-custom {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
-    }
-
-    /* Optional: Hide scrollbar (for better look) */
-    .table-responsive-custom::-webkit-scrollbar {
-        height: 8px;
-    }
-    .table-responsive-custom::-webkit-scrollbar-thumb {
-        background: #cccccc;
-        border-radius: 4px;
-    }
-    .table-responsive-custom::-webkit-scrollbar-track {
-        background: #f8f9fa;
-    }
-</style>
-
-<div class="container table-container">
-    <p><a href="{% url 'staff' %}">&larr; Back to Dashboard</a></p>
-
-    {% if rationProducts %}
-        <h1>Ration Products</h1>
-        <div class="table-responsive-custom">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Stock Quantity</th>
-                        <th>Unit</th>
-                        <th>Tolerance</th>
-                        <th>Last Update</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for rationProduct in rationProducts %}
-                        <tr>
-                            <td>{{ rationProduct.product.product_name }}</td>
-                            <td>{{ rationProduct.product.price }}</td>
-                            <td>{{ rationProduct.stock_quantity }}</td>
-                            <td>{{ rationProduct.product.unit }}</td>
-                            <td>{{ rationProduct.product.tolerance }}</td>
-                            <td>{{ rationProduct.product.last_update }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <h1>No Products</h1>
-    {% endif %}
+  {% else %}
+    <h1 class="text-3xl font-semibold text-gray-800 dark:text-gray-100 text-center mt-12">No Products</h1>
+  {% endif %}
 </div>
 
 {% endblock %}

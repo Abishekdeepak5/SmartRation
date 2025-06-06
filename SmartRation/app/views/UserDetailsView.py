@@ -192,7 +192,7 @@ def login_user(request):
         messages.success(request, "Login successful!")
 
         if user['role'] == "admin":
-            return redirect("admin_dashboard")
+            return redirect("admin")
         else:
             return redirect("staff_dashboard")
 

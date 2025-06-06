@@ -1,50 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arduino Weight Monitoring</title>
-    <script>
-        // Function to start weight monitoring
-        function startWeight() {
-            fetch('/start/')
+{% extends "base.html" %}
+
+{% block title %}Weight Monitoring{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 mt-10 space-y-6">
+  <h1 class="text-2xl md:text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400">Arduino Weight Monitoring</h1>
+
+  <div class="text-center">
+    <p id="weight" class="text-xl font-semibold text-gray-700 dark:text-gray-200">Weight: Not available</p>
+  </div>
+
+  <div class="flex flex-col md:flex-row justify-center gap-4 mt-4">
+    <button onclick="startWeight()"
+      class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md transition duration-200 shadow">
+      Start Monitoring
+    </button>
+    <button onclick="getWeight()"
+      class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 shadow">
+      Get Weight
+    </button>
+    <button onclick="closeConnection()"
+      class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition duration-200 shadow">
+      Close Connection
+    </button>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  function startWeight() {
+    fetch('/start/');
+  }
+
+  function getWeight() {
+    fetch('/get_weight/')
+      .then(response => response.json())
+      .then(data => {
+        if (data.weight) {
+          document.getElementById("weight").innerText = `Weight: ${data.weight} kg`;
+        } else {
+          alert(data.error);
         }
+      });
+  }
 
-        // Function to get the weight from Arduino
-        function getWeight() {
-            fetch('/get_weight/')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.weight) {
-                        document.getElementById("weight").innerText = `Weight: ${data.weight} kg`;
-                    } else {
-                        alert(data.error);
-                    }
-                });
-        }
-
-        // Function to close the Arduino connection
-        function closeConnection() {
-            fetch('/close/')
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.status || data.error);
-                });
-        }
-    </script>
-</head>
-<body>
-    <h1>Arduino Weight Monitoring</h1>
-
-    <div>
-        <p id="weight">Weight: Not available</p>
-    </div>
-
-    <div>
-        <button onclick="startWeight()">Start Weight Monitoring</button>
-        <button onclick="getWeight()">Get Weight</button>
-        <button onclick="closeConnection()">Close Connection</button>
-    </div>
-
-</body>
-</html>
+  function closeConnection() {
+    fetch('/close/')
+      .then(response => response.json())
+      .then(data => {
+        alert(data.status || data.error);
+      });
+  }
+</script>
+{% endblock %}

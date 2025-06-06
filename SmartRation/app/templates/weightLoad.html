@@ -1,14 +1,29 @@
+{% extends 'base.html' %}
 {% block title %}Register{% endblock %}
 {% block content %}
-
 {% load static %}
-<div id="product-description">Select a product to weigh</div>
-<div id="weight-display">Loading...</div>
-<div id="progress-wrapper" style="display:none;">
-  <div id="progress-bar" style="width: 0%;"></div>
-  <div id="progress-bar-message">0g of 500g</div>
+
+<div class="max-w-xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold mb-4 text-center text-indigo-600 dark:text-indigo-400">Product Weighing</h2>
+
+  <div class="text-center mb-6">
+    <div id="product-description" class="text-lg font-medium mb-2">Select a product to weigh</div>
+    <div id="weight-display" class="text-2xl font-bold text-green-600 dark:text-green-400">Loading...</div>
+  </div>
+
+  <div id="progress-wrapper" class="relative h-6 bg-gray-200 rounded-full overflow-hidden mb-4 hidden">
+    <div id="progress-bar" class="absolute left-0 top-0 h-full bg-indigo-500 transition-all duration-500 ease-in-out" style="width: 0%;"></div>
+    <div id="progress-bar-message" class="absolute inset-0 flex items-center justify-center text-sm text-white font-semibold">
+      0g of 500g
+    </div>
+  </div>
+
+  <div class="text-center">
+    <button id="next-button"
+      class="mt-4 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded shadow hidden"
+      onclick="nextProduct()">Next Product</button>
+  </div>
 </div>
-<button id="next-button" style="display:none;" onclick="nextProduct()">Next Product</button>
 
 <script>
   let currentProductIndex = 0;
@@ -36,10 +51,15 @@
   function updateProgressBar(weight) {
     const targetWeight = products[currentProductIndex].targetWeight;
     const progress = Math.min((weight / targetWeight) * 100, 100);
-    document.getElementById('progress-bar').style.width = `${progress}%`;
-    document.getElementById('progress-bar-message').innerText = `${weight}g of ${targetWeight}g`;
+    const bar = document.getElementById('progress-bar');
+    const message = document.getElementById('progress-bar-message');
+    bar.style.width = `${progress}%`;
+    message.innerText = `${weight}g of ${targetWeight}g`;
+
     if (progress >= 100) {
       document.getElementById('next-button').style.display = 'inline-block';
+    } else {
+      document.getElementById('next-button').style.display = 'none';
     }
   }
 
@@ -48,13 +68,19 @@
     if (currentProductIndex < products.length) {
       document.getElementById('product-description').innerText = `Weighing ${products[currentProductIndex].name}`;
       document.getElementById('progress-wrapper').style.display = 'block';
+      document.getElementById('progress-bar').style.width = '0%';
+      document.getElementById('progress-bar-message').innerText = `0g of ${products[currentProductIndex].targetWeight}g`;
       document.getElementById('next-button').style.display = 'none';
     } else {
-      alert('All products weighed!');
+      alert('✅ All products weighed!');
     }
   }
 
-  setInterval(fetchWeight, 1000);  // Update every second
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('product-description').innerText = `Weighing ${products[currentProductIndex].name}`;
+    document.getElementById('progress-wrapper').style.display = 'block';
+    setInterval(fetchWeight, 1000);
+  });
 </script>
 
 {% endblock %}

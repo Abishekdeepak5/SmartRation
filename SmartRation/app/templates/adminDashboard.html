@@ -2,185 +2,114 @@
 {% load static %}
 
 {% block sidebar_menu %}
-    <a href="{% url 'register' %}" class="nav-link">
-        <i class="fas fa-user-plus"></i> Register Admin/Staff
-    </a>
-    <a href="{% url 'list_ration' %}" class="nav-link">
-        <i class="fas fa-boxes"></i> Manage Ration
-    </a>
-    <a href="{% url 'addfamily' %}" class="nav-link">
-        <i class="fas fa-users"></i> Add Family
-    </a>
-    <a href="{% url 'list_product' %}" class="nav-link">
-        <i class="fas fa-cubes"></i> Manage Product
-    </a>
+
+<a href="{% url 'adminDashboard' %}" class="flex items-center p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200">
+  <i class="fas fa-boxes mr-3 text-lg"></i> Dashboard
+</a>
+
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<style>
-    /* Your existing styles */
-    .dashboard-container {
-        padding: 20px;
-    }
-    .dashboard-grid {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-    .card-1 {
-        background: #f4f4f4;
-        padding: 20px;
-        border-radius: 8px;
-        flex: 1 1 200px;
-        text-align: center;
-    }
-    .dashboard-option {
-        text-decoration: none;
-        font-size: 1.2rem;
-        color: #333;
-    }
-    .insight-cards {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-top: 30px;
-    }
-    .insight-card {
-        background: #e2e8f0;
-        padding: 15px;
-        border-radius: 6px;
-        flex: 1 1 200px;
-        text-align: center;
-        position: relative;
-    }
-    .insight-title {
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-    .insight-value {
-        font-size: 1.5rem;
-        color: #111;
-    }
-    .under-development-badge {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: #f39c12;
-        color: white;
-        padding: 2px 6px;
-        font-size: 0.75rem;
-        border-radius: 3px;
-    }
-    .chart-container {
-        margin-top: 40px;
-        text-align: center;
-    }
-    .chart-container img {
-        max-width: 100%;
-        height: auto;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-    }
-    .spreadsheet-container {
-        width: 100%;
-        height: 500px;
-        border: none;
-        margin-top: 50px;
-        border-radius: 8px;
-    }
-</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-<div class="dashboard-container">
-    <h1>Admin Dashboard</h1>
+<button id="sidebarToggle" aria-label="Toggle Sidebar"
+  class="fixed top-4 left-4 z-50 md:hidden p-2 rounded-md bg-indigo-600 text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+</button>
 
-    <!-- Dashboard Cards -->
-    <div class="dashboard-grid">
-        <div class="card-1">
-            <a href="{% url 'register' %}" class="dashboard-option">
-                <i class="fas fa-user-plus"></i> Register Admin/Staff
-            </a>
-        </div>
-        <div class="card-1">
-            <a href="{% url 'list_ration' %}" class="dashboard-option">
-                <i class="fas fa-boxes"></i> Manage Ration
-            </a>
-        </div>
-        <div class="card-1">
-            <a href="{% url 'addfamily' %}" class="dashboard-option">
-                <i class="fas fa-users"></i> Add Family
-            </a>
-        </div>
-        <div class="card-1">
-            <a href="{% url 'list_product' %}" class="dashboard-option">
-                <i class="fas fa-cubes"></i> Manage Product
-            </a>
-        </div>
+<div id="mainContent" class="md:ml-64 px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 py-6 transition-all duration-300">
+  <h1 class="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">Admin Dashboard</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <a href="{% url 'register' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
+      <i class="fas fa-user-plus text-indigo-600 text-4xl mb-3"></i>
+      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Register Admin/Staff</span>
+    </a>
+    <a href="{% url 'list_ration' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
+      <i class="fas fa-boxes text-indigo-600 text-4xl mb-3"></i>
+      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Manage Ration</span>
+    </a>
+    <a href="{% url 'addfamily' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
+      <i class="fas fa-users text-indigo-600 text-4xl mb-3"></i>
+      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Add Family</span>
+    </a>
+    <a href="{% url 'list_product' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
+      <i class="fas fa-cubes text-indigo-600 text-4xl mb-3"></i>
+      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Manage Product</span>
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+    <div class="bg-blue-100 dark:bg-blue-900 relative p-5 rounded-lg shadow">
+      <div class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-1">Total Families</div>
+      <div class="text-3xl font-bold text-blue-900 dark:text-blue-300">{{ total_families }}</div>
+      <span class="absolute top-2 right-2 bg-yellow-400 text-white px-2 py-0.5 rounded text-xs font-semibold">Under Dev</span>
     </div>
-
-    <!-- Insight Cards -->
-    <div class="insight-cards">
-        <div class="insight-card">
-            <div class="insight-title">Total Families</div>
-            <div class="insight-value">{{ total_families }}</div>
-            <div class="under-development-badge">Under Development</div>
-        </div>
-        <div class="insight-card">
-            <div class="insight-title">Products Distributed</div>
-            <div class="insight-value">{{ distribution_sum }} kg</div>
-        </div>
-        <div class="insight-card">
-            <div class="insight-title">Pending Stock Requests</div>
-            <div class="insight-value">{{ pending_stock_requests }}</div>
-        </div>
-        <div class="insight-card">
-            <div class="insight-title">New Registrations</div>
-            <div class="insight-value">{{ new_registrations }}</div>
-        </div>
-        <div class="insight-card">
-            <div class="insight-title">Total Products in Inventory</div>
-            <div class="insight-value">{{ total_products }}</div>
-        </div>
-        <div class="insight-card">
-            <div class="insight-title">Total Stock Quantity</div>
-            <div class="insight-value">{{ total_stock_quantity }} kg</div>
-        </div>
-        <div class="insight-card">
-            <div class="insight-title">Out-of-Stock Products</div>
-            <div class="insight-value">{{ out_of_stock_products }}</div>
-        </div>
-        <div class="insight-card">
-            <div class="insight-title">Average Distribution/Product</div>
-            <div class="insight-value">{{ average_distribution_per_product }} kg</div>
-        </div>
+    <div class="bg-green-100 dark:bg-green-900 p-5 rounded-lg shadow">
+      <div class="text-sm font-semibold text-green-900 dark:text-green-200 mb-1">Products Distributed</div>
+      <div class="text-3xl font-bold text-green-900 dark:text-green-300">{{ distribution_sum }} kg</div>
     </div>
-
-    <!-- Python Generated Charts -->
-    <div class="chart-container">
-        <h2>Total Stock per Product</h2>
-        <img src="data:image/png;base64,{{ stock_per_product_chart }}" alt="Total Stock per Product Chart" />
+    <div class="bg-yellow-100 dark:bg-yellow-900 p-5 rounded-lg shadow">
+      <div class="text-sm font-semibold text-yellow-900 dark:text-yellow-200 mb-1">Pending Stock Requests</div>
+      <div class="text-3xl font-bold text-yellow-900 dark:text-yellow-300">{{ pending_stock_requests }}</div>
     </div>
-
-    <div class="chart-container">
-        <h2>Out-of-Stock Product Breakdown</h2>
-        <img src="data:image/png;base64,{{ out_of_stock_chart }}" alt="Out-of-Stock Product Breakdown Chart" />
+    <div class="bg-pink-100 dark:bg-pink-900 p-5 rounded-lg shadow">
+      <div class="text-sm font-semibold text-pink-900 dark:text-pink-200 mb-1">New Registrations</div>
+      <div class="text-3xl font-bold text-pink-900 dark:text-pink-300">{{ new_registrations }}</div>
     </div>
-
-    <div class="chart-container">
-        <h2>Distribution vs Pending Stock Requests</h2>
-        <img src="data:image/png;base64,{{ distribution_vs_pending_chart }}" alt="Distribution vs Pending Stock Requests Chart" />
+    <div class="bg-violet-100 dark:bg-violet-900 p-5 rounded-lg shadow">
+      <div class="text-sm font-semibold text-violet-900 dark:text-violet-200 mb-1">Total Products in Inventory</div>
+      <div class="text-3xl font-bold text-violet-900 dark:text-violet-300">{{ total_products }}</div>
     </div>
-
-    <div class="chart-container">
-        <h2>New Registrations Over Time</h2>
-        <img src="data:image/png;base64,{{ new_registrations_chart }}" alt="New Registrations Over Time Chart" />
+    <div class="bg-cyan-100 dark:bg-cyan-900 p-5 rounded-lg shadow">
+      <div class="text-sm font-semibold text-cyan-900 dark:text-cyan-200 mb-1">Total Stock Quantity</div>
+      <div class="text-3xl font-bold text-cyan-900 dark:text-cyan-300">{{ total_stock_quantity }} kg</div>
     </div>
+    <div class="bg-red-100 dark:bg-red-900 p-5 rounded-lg shadow">
+      <div class="text-sm font-semibold text-red-900 dark:text-red-200 mb-1">Out-of-Stock Products</div>
+      <div class="text-3xl font-bold text-red-900 dark:text-red-300">{{ out_of_stock_products }}</div>
+    </div>
+    <div class="bg-orange-100 dark:bg-orange-900 p-5 rounded-lg shadow">
+      <div class="text-sm font-semibold text-orange-900 dark:text-orange-200 mb-1">Average Distribution/Product</div>
+      <div class="text-3xl font-bold text-orange-900 dark:text-orange-300">{{ average_distribution_per_product }} kg</div>
+    </div>
+  </div>
+
+  <div class="mt-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+    <div class="text-center">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Total Stock per Product</h2>
+      <img src="data:image/png;base64,{{ stock_per_product_chart }}" alt="Total Stock per Product Chart" class="mx-auto rounded shadow-md max-w-full" />
+    </div>
+    <div class="text-center">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Out-of-Stock Product Breakdown</h2>
+      <img src="data:image/png;base64,{{ out_of_stock_chart }}" alt="Out-of-Stock Product Breakdown Chart" class="mx-auto rounded shadow-md max-w-full" />
+    </div>
+    <div class="text-center">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Distribution vs Pending Stock Requests</h2>
+      <img src="data:image/png;base64,{{ distribution_vs_pending_chart }}" alt="Distribution vs Pending Stock Requests Chart" class="mx-auto rounded shadow-md max-w-full" />
+    </div>
+    <div class="text-center">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">New Registrations Over Time</h2>
+      <img src="data:image/png;base64,{{ new_registrations_chart }}" alt="New Registrations Over Time Chart" class="mx-auto rounded shadow-md max-w-full" />
+    </div>
+  </div>
+
+  <div class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+    <iframe
+      src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTi_dZV8pF_GccoQ8MiQdfQcujSdDnXbQP7KG7r_LU2SvBAw4nfZnMYC1PhuBaoHXekpKevM-WAcH1U/pubhtml?gid=1161769748&single=true&widget=true&headers=false"
+      class="w-full h-96 rounded shadow-md border-0"
+      loading="lazy"
+      title="Google Spreadsheet Data">
+    </iframe>
+  </div>
 </div>
 
-<!-- Google Sheet Embed -->
-<iframe class="spreadsheet-container"
-    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTi_dZV8pF_GccoQ8MiQdfQcujSdDnXbQP7KG7r_LU2SvBAw4nfZnMYC1PhuBaoHXekpKevM-WAcH1U/pubhtml?gid=1161769748&single=true&widget=true&headers=false">
-</iframe>
-
+<script>
+//   const toggle = document.getElementById('sidebarToggle');?
+//   });
+</script>
 {% endblock %}

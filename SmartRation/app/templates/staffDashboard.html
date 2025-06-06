@@ -2,128 +2,36 @@
 
 {% block title %}Staff{% endblock %}
 {% block content %}
-
-{% load static %}
-
-<!-- Bootstrap 5 CDN -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<style>
-    body {
-        background: #f4f5f7;
-        font-family: 'Roboto', sans-serif;
-    }
-
-    .dashboard-container {
-        max-width: 1200px;
-        margin: 30px auto;
-        padding: 20px;
-    }
-
-    .dashboard-card {
-        background: #fff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-    }
-
-    .dashboard-card h1 {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #007bff;
-        margin-bottom: 30px;
-    }
-
-    .btn-custom {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 80%;
-        max-width: 400px;
-        padding: 15px 20px;
-        margin: 10px 0;
-        border-radius: 8px;
-        font-size: 1.3rem;
-        color: #fff;
-        background-color: #007bff;
-        transition: background-color 0.3s ease;
-        text-align: center;
-        text-decoration: none;
-    }
-
-    .btn-custom:hover {
-        background-color: #0056b3;
-        text-decoration: none;
-        color: #fff;
-    }
-
-    .btn-custom i {
-        margin-right: 10px;
-    }
-
-    /* Media Queries for responsiveness */
-    @media (max-width: 992px) {
-        .dashboard-card h1 {
-            font-size: 2rem;
-        }
-        .btn-custom {
-            width: 90%;
-            font-size: 1.1rem;
-            padding: 12px 15px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .dashboard-container {
-            padding: 10px;
-        }
-        .dashboard-card {
-            padding: 20px;
-        }
-        .dashboard-card h1 {
-            font-size: 1.8rem;
-        }
-        .btn-custom {
-            width: 100%;
-            font-size: 1rem;
-            padding: 10px 12px;
-        }
-    }
-    .myContainer{
-        width: 400px;
-        margin: 0 auto;
-    }
-</style>
-
-<div class="container dashboard-container">
-    <div class="dashboard-card text-center">
-        <h1>Staff Dashboard</h1>
-        <div class="d-flex flex-column align-items-center">
-            <!-- Link to List Load with Icon -->
-            <a href="{% url 'list_ration_load' %}" class="btn-custom">
-                <i class="fas fa-list"></i> List Load
-            </a>
-
-            <!-- Link to List Ration Products with Icon -->
-            <a href="{% url 'ration_products' %}" class="btn-custom">
-                <i class="fas fa-cogs"></i> List Ration Products
-            </a>
-
-            <!-- Link to List Families with Icon -->
-            <a href="{% url 'list_ration_families' %}" class="btn-custom">
-                <i class="fas fa-users"></i> List Families
-            </a>
-
-            <a href="{% url 'ration_distribute_histroy' %}" class="btn-custom">
-                <i class="fas fa-users"></i> Distributed Product History
-            </a>
-
-        </div>
+<div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+    <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600 mb-8">Staff Dashboard</h1>
+    <div class="flex flex-col items-center space-y-4">
+      
+      <!-- List Load -->
+      <a href="{% url 'list_ration_load' %}" 
+         class="w-full sm:w-3/4 md:w-1/2 px-4 py-3 bg-indigo-600 text-white text-lg rounded-lg hover:bg-indigo-700 transition flex items-center justify-center">
+        <i class="fas fa-list mr-2"></i> List Load
+      </a>
+      
+      <!-- List Ration Products -->
+      <a href="{% url 'ration_products' %}" 
+         class="w-full sm:w-3/4 md:w-1/2 px-4 py-3 bg-indigo-600 text-white text-lg rounded-lg hover:bg-indigo-700 transition flex items-center justify-center">
+        <i class="fas fa-cogs mr-2"></i> List Ration Products
+      </a>
+      
+      <!-- List Families -->
+      <a href="{% url 'list_ration_families' %}" 
+         class="w-full sm:w-3/4 md:w-1/2 px-4 py-3 bg-indigo-600 text-white text-lg rounded-lg hover:bg-indigo-700 transition flex items-center justify-center">
+        <i class="fas fa-users mr-2"></i> List Families
+      </a>
+      
+      <!-- Distribution History -->
+      <a href="{% url 'ration_distribute_histroy' %}" 
+         class="w-full sm:w-3/4 md:w-1/2 px-4 py-3 bg-indigo-600 text-white text-lg rounded-lg hover:bg-indigo-700 transition flex items-center justify-center">
+        <i class="fas fa-history mr-2"></i> Distributed Product History
+      </a>
     </div>
+  </div>
 </div>
-
-<!-- Font Awesome Icons CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 
 {% endblock %}

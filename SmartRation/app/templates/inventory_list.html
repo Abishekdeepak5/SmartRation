@@ -1,65 +1,78 @@
 {% extends 'base.html' %}
 
 {% block title %}Inventory{% endblock %}
+
 {% block content %}
-    {% load static %}
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        th,td{
-            padding: 0 5px;
-        }
-        .mybtn{
-            background-color:#007bff;
-            border: none;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-        }
-    </style>
-    <br>
-    <br>    
-    <a class="btn primary mybtn" href="{% url 'admin' %}">Back to Dashboard</a>
-    <br>
-    <a class="btn primary mybtn" href="{% url 'add_product' %}">Add Products</a>
-    <br>
-    <a class="btn primary mybtn" href="{% url 'list_load' %}">View Loads</a>
-    <br>
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+  <div class="flex flex-col space-y-4">
+    <div class="flex flex-wrap gap-4 justify-center md:justify-start mb-4">
+      <a href="{% url 'admin' %}" 
+         class="inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md shadow-md transition">
+         Back to Dashboard
+      </a>
+      <a href="{% url 'add_product' %}" 
+         class="inline-block px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow-md transition">
+         Add Products
+      </a>
+      <a href="{% url 'list_load' %}" 
+         class="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-md transition">
+         View Loads
+      </a>
+    </div>
 
     {% if products %}
-        <h1 style="text-align: center;">Products</h1>
-        <table border="1">
-            <thead>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Stock Quantity</th>
-                <th>Unit</th>
-                <th>Tolerance</th>
-                <th>Last Update</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Add Load</th>
-            </thead>
-            {% for product in products %}
-                <tr>
-                    <td>{{product.product_name}}</td>
-                    <td>{{product.price}}</td>
-                    <td>{{product.stock_quantity}}</td>
-                    <td>{{product.unit}}</td>
-                    <td>{{product.tolerance}}</td>
-                    <td>{{product.last_update}}</td>
-                    <td><a class="btn primary mybtn" href="{% url 'edit_product' product.product_id %}">Edit</a></td>
-                    <td><a class="btn primary mybtn" href="{% url 'delete_product' product.product_id %}">Delete</a></td>
-                    <td><a class="btn primary mybtn" href="{% url 'load_product' product.product_id %}">Add Load</a></td>
+    <h1 class="text-2xl font-bold text-center mb-6 text-indigo-700 dark:text-indigo-400">Products</h1>
 
-                    
-                </tr>
-            {% endfor %}
-        </table>
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-300 dark:border-gray-700 rounded-lg">
+        <thead class="bg-indigo-100 dark:bg-indigo-900">
+          <tr>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Product</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Price</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Stock Quantity</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Unit</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Tolerance</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Last Update</th>
+            <th class="px-4 py-2 text-center text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Edit</th>
+            <th class="px-4 py-2 text-center text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Delete</th>
+            <th class="px-4 py-2 text-center text-sm font-semibold text-indigo-700 dark:text-indigo-300 border-b border-gray-300 dark:border-gray-700">Add Load</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-800">
+          {% for product in products %}
+          <tr class="hover:bg-indigo-50 dark:hover:bg-gray-700">
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700">{{ product.product_name }}</td>
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700">{{ product.price }}</td>
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700">{{ product.stock_quantity }}</td>
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700">{{ product.unit }}</td>
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700">{{ product.tolerance }}</td>
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700">{{ product.last_update }}</td>
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700 text-center">
+              <a href="{% url 'edit_product' product.product_id %}" 
+                 class="inline-block px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-sm font-medium transition">
+                 Edit
+              </a>
+            </td>
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700 text-center">
+              <a href="{% url 'delete_product' product.product_id %}" 
+                 class="inline-block px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition">
+                 Delete
+              </a>
+            </td>
+            <td class="px-4 py-2 border-t border-gray-300 dark:border-gray-700 text-center">
+              <a href="{% url 'load_product' product.product_id %}" 
+                 class="inline-block px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition">
+                 Add Load
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-center text-gray-500 dark:text-gray-400">No products found.</p>
     {% endif %}
-    <br>
+  </div>
+</div>
 {% endblock %}

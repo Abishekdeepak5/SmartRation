@@ -12,6 +12,8 @@ urlpatterns = [
      path('profile/',UserDetailsView.profile,name='profile'),
      path('logout/',UserDetailsView.logout_user,name='logout'),
      path('adminDashboard',UserDetailsView.admin_dashboard,name='admin'),
+     path('adminDashboard', UserDetailsView.admin_dashboard, name='adminDashboard'),
+
 #    path('dashboard/', dashboard_view, name='dashboard'),
 
      path('ration/<rationId>/family',Family.list_family,name='listfamily'),

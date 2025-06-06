@@ -1,42 +1,45 @@
 {% extends 'base.html' %}
-
-{% block title %}Family{% endblock %}
-{% block content %}
-
 {% load static %}
 
+{% block title %}Family{% endblock %}
 
-<!-- Content Section -->
-<div class="container mt-5" style="min-width: 50vw;">
-    <h1 class="text-center mb-4">Family Information</h1>
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-8">
+    Family Information
+  </h1>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover align-middle text-center">
-            <thead class="table-dark">
-                <tr>
-                    <th>Card Type</th>
-                    <th>Card Number</th>
-                    <th>Head Of Family</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for family in families %}
-                    {% if family %}
-                        <tr>
-                            <td>{{ family.card_type }}</td>
-                            <td>{{ family.card_number }}</td>
-                            <td>{{ family.head_of_family }}</td>
-                            <td>{{ family.email }}</td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+  <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+      <thead class="bg-indigo-600 text-white dark:bg-indigo-500">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left font-medium tracking-wider uppercase">
+            Card Type
+          </th>
+          <th scope="col" class="px-6 py-3 text-left font-medium tracking-wider uppercase">
+            Card Number
+          </th>
+          <th scope="col" class="px-6 py-3 text-left font-medium tracking-wider uppercase">
+            Head Of Family
+          </th>
+          <th scope="col" class="px-6 py-3 text-left font-medium tracking-wider uppercase">
+            Email
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+        {% for family in families %}
+          {% if family %}
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150">
+              <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ family.card_type }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ family.card_number }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ family.head_of_family }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ family.email }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
-
-
-
-
 {% endblock %}

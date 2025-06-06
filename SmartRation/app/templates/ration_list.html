@@ -1,158 +1,50 @@
 {% extends 'base.html' %}
 
 {% block title %}Register{% endblock %}
-{% block content %}
 
+{% block content %}
 {% load static %}
 
-<div class="dashboard-grid" style="margin-top: 10vh;">
-    <div class="card-1">
-        <a href="{% url 'admin' %}" class="dashboard-option">
-            <i class="fas fa-tachometer-alt"></i> 
-            <span>Dashboard</span>
-        </a>
-    </div>
-    <!-- Add New Ration Link -->
-    <div class="card-1">
-        <a href="{% url 'add_ration' %}" class="dashboard-option">
-            <i class="fa fa-plus""></i> 
-            <span>Add New Ration</span>
-        </a>
-    </div>
-</div>
+<div class="mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Dashboard Links Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+    <a href="{% url 'admin' %}" 
+       class="flex items-center justify-center gap-3 p-6 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition">
+      <i class="fas fa-tachometer-alt text-xl"></i>
+      <span class="text-lg font-semibold">Dashboard</span>
+    </a>
+    <a href="{% url 'add_ration' %}" 
+       class="flex items-center justify-center gap-3 p-6 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
+      <i class="fa fa-plus text-xl"></i>
+      <span class="text-lg font-semibold">Add New Ration</span>
+    </a>
+  </div>
 
-
-
-<!-- Loop through Rations and display them -->
-<div class="ration-list">
+  <!-- Ration Cards List -->
+  <div class="space-y-6">
     {% for ration in rations %}
-
-        <div class="ration-card">
-            <div class="ration-info">
-                {% if ration.staff_name %}
-                    <strong>Staff: </strong>{{ ration.staff_name }} -
-                {% endif %}
-                <strong>Address:</strong> {{ ration.address }} -
-                <strong>Pincode:</strong> {{ ration.pincode }}
-            </div>
-            <div class="ration-actions">
-                <a href="{% url 'edit_ration' ration.ration_id %}" class="btn btn-secondary btn-edit">Edit</a>
-                <a href="{% url 'delete_ration' ration.ration_id %}" class="btn btn-danger btn-delete">Delete</a>
-                <a href="{% url 'listfamily' ration.ration_id %}" class="btn btn-info btn-view">View Families</a>
-                <a href="{% url 'staff_assign' ration.ration_id %}" class="btn btn-info btn-view">Change Staff</a>
-            </div>
-        </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+      <div class="text-gray-800 dark:text-gray-200 text-sm sm:text-base">
+        {% if ration.staff_name %}
+          <strong>Staff:</strong> {{ ration.staff_name }} &mdash;
+        {% endif %}
+        <strong>Address:</strong> {{ ration.address }} &mdash;
+        <strong>Pincode:</strong> {{ ration.pincode }}
+      </div>
+      <div class="mt-4 sm:mt-0 flex flex-wrap gap-3">
+        <a href="{% url 'edit_ration' ration.ration_id %}" 
+           class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition text-sm">Edit</a>
+        <a href="{% url 'delete_ration' ration.ration_id %}" 
+           class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition text-sm">Delete</a>
+        <a href="{% url 'listfamily' ration.ration_id %}" 
+           class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">View Families</a>
+        <a href="{% url 'staff_assign' ration.ration_id %}" 
+           class="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 transition text-sm">Change Staff</a>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-gray-500 dark:text-gray-400">No rations found.</p>
     {% endfor %}
+  </div>
 </div>
-
 {% endblock %}
-
-<style>
-    /* General styling */
-    /* body {
-        background-color: #f9f9f9;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        font-size: 14px;
-        text-decoration: none;
-        border-radius: 5px;
-        display: inline-block;
-        margin: 5px;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-    }
-
-    .btn-secondary:hover {
-        background-color: #5a6268;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background-color: #c82333;
-    }
-
-    .btn-info {
-        background-color: #17a2b8;
-        color: white;
-    }
-
-    .btn-info:hover {
-        background-color: #138496;
-    }
-
-    .ration-list {
-        display: flex;
-        flex-direction: column;
-        margin: 20px;
-        margin-top: 20vh;
-    }
-
-    .ration-card {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
-        padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .ration-info {
-        font-size: 16px;
-        line-height: 1.5;
-    }
-
-    .ration-actions {
-        display: flex;
-        gap: 10px;
-    }
-
-    .ration-actions .btn {
-        font-size: 12px;
-        padding: 8px 12px;
-    }
-
-    .btn-add {
-        background-color: #28a745;
-        color: white;
-        font-size: 16px;
-    }
-
-    .btn-add:hover {
-        background-color: #218838;
-    }
-
-  
-    @media (max-width: 768px) {
-        .ration-card {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .ration-actions {
-            margin-top: 10px;
-        }
-    } */
-</style>
