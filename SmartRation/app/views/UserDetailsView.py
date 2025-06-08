@@ -194,7 +194,7 @@ def login_user(request):
         if user['role'] == "admin":
             return redirect("admin")
         else:
-            return redirect("staff_dashboard")
+            return redirect("staff")
 
     return render(request, "login.html")
 

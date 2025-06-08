@@ -104,6 +104,21 @@ CREATE TABLE RATION_PRODUCT(
     stock_quantity INTEGER NOT NULL,
     last_update DATE not null
 )
+CREATE TABLE grievanceform (
+    id SERIAL PRIMARY KEY,
+    family_id INTEGER NOT NULL,
+    issue TEXT NOT NULL,
+    date_of_issue DATE NOT NULL,
+    last_update_date DATE,
+    staff_id INTEGER,
+    description TEXT,
+    status TEXT,
+    CONSTRAINT fk_family
+        FOREIGN KEY (family_id)
+        REFERENCES families(family_id)
+        ON DELETE CASCADE
+);
+
 
 
 

@@ -55,7 +55,14 @@ urlpatterns = [
     path('finish/<family_id>', WeightLoad.finish),
     
      path('staffDashboard',UserDetailsView.staff_dashboard,name='staff'),
+     # Family form
+     path('family/form/<family_id>',Family.grievance_form,name='family_form'),
+     path('family/issues',Family.get_issues_list,name='family_issues'),
+     path('family/issue/<issue_id>',Family.update_issue_status,name='family_issues_update'),
+
+
      path('',UserDetailsView.home,name='home'),
+
 ]
 
      # path('ration/distribute/add/<ration_product_id>',RationView.add_distribute,name='add_distribute_product'),
