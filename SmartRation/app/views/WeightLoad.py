@@ -117,8 +117,13 @@ def finish(request,family_id):
             html_table_rows += f"<tr><td>{rationProduct['product']['product_name']}</td><td>{rationProduct['product']['unit']}</td><td>{rationProduct['product']['price']}</td><td>{distribute_quantity}</td><td>{rationProduct['issued_quantity']}</td></tr>"
     html_table = RationView.form_html_table(html_table_rows)
     body = rationDetail+"<h1>குடும்பம் பெற்ற பொருட்களின் விவரம் (Family received product details)</h1>"+html_table
-    body = body+"""
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfKduKNfD9RNJTgR7sL63K8LrV1ReHjDLtAQewqSda-qLHTsQ/viewform?usp=header" style="font-size:16px; font-family: Arial, sans-serif; padding:10px 20px; border:none; border-radius:5px; background-color:#007BFF; color:#fff; cursor:pointer;">
+    # <a href="https://docs.google.com/forms/d/e/1FAIpQLSfKduKNfD9RNJTgR7sL63K8LrV1ReHjDLtAQewqSda-qLHTsQ/viewform?usp=header" style="font-size:16px; font-family: Arial, sans-serif; padding:10px 20px; border:none; border-radius:5px; background-color:#007BFF; color:#fff; cursor:pointer;">
+    #          புகார் (Issue)
+    #     </a>
+    # host_link = "https://tn-ration.onrender.com"
+    host_link = "http://localhost:8000"
+    body = body+f"""
+         <a href="{host_link}/family/form/{family_id}" style="font-size:16px; font-family: Arial, sans-serif; padding:10px 20px; border:none; border-radius:5px; background-color:#007BFF; color:#fff; cursor:pointer;">
              புகார் (Issue)
         </a>
         """
