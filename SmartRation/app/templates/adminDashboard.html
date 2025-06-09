@@ -2,9 +2,45 @@
 {% load static %}
 
 {% block sidebar_menu %}
+<!-- Sidebar menu items -->
+<a href="{% url 'adminDashboard' %}"
+   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
+          {% if request.path == '/adminDashboard/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
+   title="Dashboard">
+  <i class="fas fa-boxes mr-3 text-lg"></i>
+  <span class="sidebar-label">Dashboard</span>
+</a>
 
-<a href="{% url 'adminDashboard' %}" class="flex items-center p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200">
-  <i class="fas fa-boxes mr-3 text-lg"></i> Dashboard
+<a href="{% url 'register' %}"
+   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
+          {% if request.path == '/register/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
+   title="Register Staff">
+  <i class="fas fa-user-plus mr-3 text-lg"></i>
+  <span class="sidebar-label">Register Staff</span>
+</a>
+
+<a href="{% url 'list_ration' %}"
+   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
+          {% if request.path == '/list_ration/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
+   title="Ration Stock">
+  <i class="fas fa-boxes-stacked mr-3 text-lg"></i>
+  <span class="sidebar-label">Ration Stock</span>
+</a>
+
+<a href="{% url 'list_product' %}"
+   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
+          {% if request.path == '/list_product/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
+   title="Product List">
+  <i class="fas fa-cubes mr-3 text-lg"></i>
+  <span class="sidebar-label">Product List</span>
+</a>
+
+<a href="{% url 'addfamily' %}"
+   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
+          {% if request.path == '/addfamily/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
+   title="Add Family">
+  <i class="fas fa-users mr-3 text-lg"></i>
+  <span class="sidebar-label">Add Family</span>
 </a>
 
 {% endblock %}

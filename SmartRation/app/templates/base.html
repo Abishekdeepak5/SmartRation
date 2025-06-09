@@ -13,55 +13,90 @@
   <!-- Font Awesome CDN -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
 
-  <!-- Custom CSS -->
-  <!-- <link rel="stylesheet" href="{% static 'css/custom.css' %}" />z -->
+  <style>
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes shrinkProgress {
+      from {
+        width: 100%;
+      }
+      to {
+        width: 0%;
+      }
+    }
+
+    .toast-enter {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .toast-progress {
+      animation: shrinkProgress 5s linear forwards;
+    }
+
+    /* Sidebar collapsed styles */
+    .sidebar-collapsed {
+      width: 4rem !important;
+    }
+
+    .sidebar-collapsed .menu-text {
+      display: none !important;
+    }
+
+    .sidebar-collapsed .sidebar-item {
+      position: relative;
+    }
+
+    .sidebar-collapsed .sidebar-item[data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 3.5rem;
+      top: 50%;
+      background-color: #111827; /* gray-900 */
+      color: #fff;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      z-index: 500;
+      transform: translateY(-50%);
+    }
+
+    .sidebar-collapsed .sidebar-item[data-tooltip]:hover::before {
+      position: absolute;
+      left: 3.1rem;
+      top: 50%;
+      border: 6px solid transparent;
+      border-right-color: #111827;
+      z-index: 500;
+      transform: translateY(-50%);
+    }
+  </style>
 
   {% block head_extra %}{% endblock %}
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
 
-  <!-- Sidebar (hidden by default everywhere) -->
-  <aside id="sidebar"
-    class="fixed top-0 left-0 h-full w-64 z-40 bg-white dark:bg-gray-900 shadow-lg
-           transform transition-transform duration-300 ease-in-out -translate-x-full">
-    <div class="p-5 text-center border-b border-gray-200 dark:border-gray-700">
-      <a href="{% url 'home' %}" class="text-xl font-bold text-indigo-600 dark:text-indigo-400 flex items-center justify-center gap-2">
-        <i class="fas fa-store"></i> Smart Ration
-      </a>
-    </div>
-    <nav class="flex flex-col gap-2 px-4 py-6">
-      {% block sidebar_menu %}
-      <a href="{% url 'admin' %}"
-        class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800
-               {% if request.path == '/adminDashboard/' %}bg-gray-200 dark:bg-gray-800{% endif %}">
-        <i class="fas fa-tachometer-alt text-indigo-500 w-5"></i> <span>Dashboard</span>
-      </a>
-      {% endblock %}
-      <a href="{% url 'logout' %}" class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800">
-        <i class="fas fa-sign-out-alt text-red-500 w-5"></i> <span>Logout</span>
-      </a>
-    </nav>
-  </aside>
-
-  <!-- Overlay (hidden by default) -->
-  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-30"></div>
-
-  <!-- Hamburger toggle button (always visible) -->
-  <button id="menuBtn"
-    class="fixed top-4 left-4 z-50 bg-white dark:bg-gray-800 p-2 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-indigo-500">
-    <i id="menuIcon" class="fas fa-bars text-gray-800 dark:text-gray-100"></i>
-  </button>
-
-  <!-- Header fixed on top -->
+  <!-- Header -->
   <header
-    class="w-full fixed top-0 z-20 bg-white dark:bg-gray-900 shadow-md h-16 flex items-center justify-between px-6">
-    <div class="text-xl font-semibold text-indigo-600 dark:text-indigo-400">Smart Ration System</div>
+    class="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-900 shadow flex items-center px-4 z-50 justify-between">
+    <div class="flex items-center gap-4">
+      <span class="text-xl font-semibold text-indigo-600 dark:text-indigo-400">Smart Ration System</span>
+    </div>
     <div class="flex items-center gap-4">
       <a href="{% url 'profile' %}" class="flex items-center gap-2 hover:text-indigo-600">
         <i class="far fa-user-circle text-xl"></i> <span>Profile</span>
       </a>
-      <form action="{% url 'logout' %}" method="POST" class="inline">
+      <form action="{% url 'logout' %}" method="POST">
         {% csrf_token %}
         <button type="submit" class="flex items-center gap-2 text-red-500 hover:text-red-700">
           <i class="fas fa-sign-out-alt"></i> Logout
@@ -70,45 +105,116 @@
     </div>
   </header>
 
-  <!-- Main content with top padding for header, no left padding -->
-  <main id="mainContent" class="pt-20 px-4 flex-grow transition-all duration-300 ease-in-out">
-    {% block content %}
-    {% endblock %}
-  </main>
+  <div class="flex mt-16 relative">
 
+    <!-- Sidebar START -->
+    <aside
+      id="sidebar"
+      class="sidebar-expanded fixed top-16 left-0 bg-blue-950 text-white shadow h-[calc(100vh-4rem)] w-64 z-40 flex flex-col transition-all duration-300"
+      aria-label="Sidebar Navigation"
+    >
+      <!-- Logo -->
+      <div class="p-4 border-b border-blue-800 flex items-center justify-center">
+        <a href="{% url 'home' %}" class="flex items-center gap-2">
+          <i class="fas fa-store text-lg text-indigo-400"></i>
+          <span class="menu-text font-bold text-lg select-none">Smart Ration</span>
+        </a>
+      </div>
+
+      <!-- Menu -->
+      <nav class="flex-1 flex flex-col gap-2 p-4 relative overflow-auto">
+        {% block sidebar_menu %}
+        <a href="{% url 'admin' %}"
+          class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900 {% if request.path == '/adminDashboard/' %}bg-blue-900{% endif %}"
+          data-tooltip="Dashboard">
+          <i class="fas fa-tachometer-alt text-indigo-400 w-5 text-center"></i>
+          <span class="menu-text select-none">Dashboard</span>
+        </a>
+        {% endblock %}
+
+        <a href="{% url 'logout' %}" class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900"
+          data-tooltip="Logout">
+          <i class="fas fa-sign-out-alt text-red-400 w-5 text-center"></i>
+          <span class="menu-text select-none">Logout</span>
+        </a>
+      </nav>
+
+      <!-- Toggle Button -->
+      <button
+        id="toggleSidebar"
+        aria-expanded="true"
+        aria-label="Toggle sidebar"
+        class="absolute -right-3 top-1/2 transform -translate-y-1/2 bg-indigo-500 text-white p-1.5 rounded-full shadow hover:bg-indigo-600 focus:outline-none transition-all duration-300"
+      >
+        <i class="fas fa-angle-left transition-transform duration-300" id="toggleIcon"></i>
+      </button>
+    </aside>
+    <!-- Sidebar END -->
+
+    <main id="mainContent" class="flex-1 px-4 py-6 transition-all duration-300 ml-64 min-h-screen">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <!-- Toast Messages -->
+  <div id="toast-container" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-sm space-y-3 px-4">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="toast-enter relative bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white rounded-lg shadow-md px-4 py-3 flex justify-between items-center border-l-4
+        {% if message.tags == 'success' %}border-green-500{% elif message.tags == 'error' %}border-red-500{% elif message.tags == 'warning' %}border-yellow-500{% else %}border-blue-500{% endif %}">
+        <span>{{ message }}</span>
+        <button class="ml-4 text-xl text-gray-500 hover:text-gray-800 dark:hover:text-white" onclick="this.parentElement.remove()">&times;</button>
+        <div class="toast-progress absolute bottom-0 left-0 h-1 bg-indigo-500 w-full"></div>
+      </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- Auto-remove after 5s -->
   <script>
-    const sidebar = document.getElementById('sidebar');
-    const menuBtn = document.getElementById('menuBtn');
-    const overlay = document.getElementById('overlay');
-
-    function openSidebar() {
-      sidebar.classList.remove('-translate-x-full');
-      overlay.classList.remove('hidden');
-    }
-
-    function closeSidebar() {
-      sidebar.classList.add('-translate-x-full');
-      overlay.classList.add('hidden');
-    }
-
-    menuBtn.addEventListener('click', () => {
-      if (sidebar.classList.contains('-translate-x-full')) {
-        openSidebar();
-      } else {
-        closeSidebar();
-      }
+    document.addEventListener("DOMContentLoaded", function () {
+      const toasts = document.querySelectorAll("#toast-container .toast-enter");
+      toasts.forEach(toast => {
+        setTimeout(() => {
+          toast.classList.add("opacity-0", "translate-y-2");
+          setTimeout(() => toast.remove(), 300);
+        }, 5000);
+      });
     });
-
-    overlay.addEventListener('click', () => {
-      closeSidebar();
-    });
-
-    // Initialize sidebar as hidden on page load (redundant as it's already -translate-x-full)
-    // No need to add left padding to content because sidebar is overlay mode
-
   </script>
 
-  {% block extra_scripts %}{% endblock %}
+  <!-- Sidebar toggle script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const sidebar = document.getElementById("sidebar");
+      const mainContent = document.getElementById("mainContent");
+      const toggleSidebar = document.getElementById("toggleSidebar");
+      const toggleIcon = document.getElementById("toggleIcon");
+
+      let isCollapsed = false;
+
+      toggleSidebar.addEventListener("click", () => {
+        isCollapsed = !isCollapsed;
+
+        // Toggle sidebar state
+        sidebar.classList.toggle("sidebar-expanded", !isCollapsed);
+        sidebar.classList.toggle("sidebar-collapsed", isCollapsed);
+
+        // Toggle main content margin if element exists
+        if (mainContent) {
+          mainContent.classList.toggle("ml-64", !isCollapsed);
+          mainContent.classList.toggle("ml-16", isCollapsed);
+        }
+
+        // Change the icon direction
+        toggleIcon.classList.toggle("fa-angle-left", !isCollapsed);
+        toggleIcon.classList.toggle("fa-angle-right", isCollapsed);
+
+        // Update aria attribute
+        toggleSidebar.setAttribute("aria-expanded", !isCollapsed);
+      });
+    });
+  </script>
 
 </body>
 
