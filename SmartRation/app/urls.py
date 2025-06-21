@@ -59,7 +59,7 @@ urlpatterns = [
      path('family/form/<family_id>',Family.grievance_form,name='family_form'),
      path('family/issues',Family.get_issues_list,name='family_issues'),
      path('family/issue/<issue_id>',Family.update_issue_status,name='family_issues_update'),
-
+     path('family/issuelogs/<issue_id>',Family.get_issues_log_list,name='family_issues_logs'),
 
      path('',UserDetailsView.home,name='home'),
 
