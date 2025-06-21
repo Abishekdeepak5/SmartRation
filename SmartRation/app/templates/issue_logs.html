@@ -100,30 +100,4 @@
 </div>
 
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-     
-
-  <h1 class="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-8">
-    Issues Logs
-  </h1>
-
-  <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
-    
-    <h2>Issue Timeline</h2>
-    <div class="timeline">
-        {% for log in logs %}
-        <div class="timeline-entry">
-            <!-- |date:"d M Y, H:i:s" -->
-            <div class="timeline-text description">{{ log.description }}</div>
-            <div class="timeline-text timestamp">{{ log.last_update_date|date:"d M Y, H:i:s" }}</div>
-            <div class="timeline-text status">Status: {{ log.status }}</div>
-        </div>
-        {% empty %}
-        <p>No logs found.</p>
-        {% endfor %}
-    </div>
-
-  </div>
-</div>
-
 {% endblock %}
