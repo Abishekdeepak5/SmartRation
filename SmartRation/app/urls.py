@@ -1,3 +1,4 @@
+from django import views
 from django.urls import path,include
 from .views import UserDetailsView,RationView
 from .views import Family
@@ -5,6 +6,7 @@ from .views import InventoryView
 from .views import LoadView
 from .views import productWeightView
 from .views import WeightLoad
+
 # from .views.dashboard import dashboard_view
 urlpatterns = [
      path('register/',UserDetailsView.register_user,name='register'),
@@ -13,7 +15,10 @@ urlpatterns = [
      path('logout/',UserDetailsView.logout_user,name='logout'),
      path('adminDashboard',UserDetailsView.admin_dashboard,name='admin'),
      path('adminDashboard', UserDetailsView.admin_dashboard, name='adminDashboard'),
-
+      path('adminDashboard/', UserDetailsView.summarize_dashboard, name='summarize_dashboard'),
+     # path('summarize_dashboard/', views.summarize_dashboard, name='summarize_dashboard'),
+ path("issues/", Family.get_issues_list, name="issues"),
+    path("issues/generate-summary/", Family.generate_issue_summary_view, name="generate_issue_summary"),
 #    path('dashboard/', dashboard_view, name='dashboard'),
 
      path('ration/<rationId>/family',Family.list_family,name='listfamily'),

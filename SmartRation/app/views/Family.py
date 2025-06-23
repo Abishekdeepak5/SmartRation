@@ -12,6 +12,8 @@ from app.models import GrievanceForm,FamilyIssue,FamilyIssueLog
 from app.views.UserDetailsView import get_user
 from datetime import datetime
 from django.utils import timezone
+
+from app.views.summary import generate_overall_issues_summary, generate_dual_issue_summary
 import pytz
 
 def add_family(request): 
@@ -82,31 +84,83 @@ def grievance_form(request,family_id):
         print(e)
         return redirect("home")
     
-def get_issues_list(request):
-    try:
-        # grievance_list = get_all_issue()
-        grievance_list = get_all_family_issue()
-        return render(request,"issues.html",{"issues":grievance_list})
-    except:
-        return redirect("home")
-    
-def get_issues_log_list(request,issue_id):
-    try:
-        isssue_log = get_family_issue_log(issue_id)
-        
-        issueInfo = get_family_issue_by_id(issue_id)
-        issueDict = get_family_info_dict(issueInfo["family_id"])
 
-        logs_sorted = sorted(isssue_log, key=lambda x: x['last_update_date'])
+
+def get_issues_list(request):
+    issues = get_all_family_issue()  # Your method to fetch all issues
+    for issue in issues:
+        issue["ai_summary"] = request.session.pop(f"summary_{issue['id']}", None)
+        issue["error_msg"] = request.session.pop(f"error_{issue['id']}", None)
+    total_summary = request.session.pop("total_summary", None)
+    total_error = request.session.pop("total_error", None)
+    selected_model = request.session.get("model_choice", "cohere")
+
+    return render(request, "issues.html", {
+        "issues": issues,
+        "total_summary": total_summary,
+        "total_error": total_error,
+        "selected_model": selected_model,
+    })
+
+
+def generate_issue_summary_view(request):
+    if request.method == "POST":
+        issue_id = request.POST.get("issue_id")
+        model_choice = request.POST.get("model_choice", "cohere").strip()
+        request.session["model_choice"] = model_choice
+
+        try:
+            if issue_id == "all":
+                total_summary = generate_overall_issues_summary(model_choice=model_choice)
+                request.session["total_summary"] = total_summary
+            else:
+                summary = generate_dual_issue_summary(issue_id=issue_id, model_choice=model_choice)
+                request.session[f"summary_{issue_id}"] = summary
+        except Exception as e:
+            if issue_id == "all":
+                request.session["total_error"] = str(e)
+            else:
+                request.session[f"error_{issue_id}"] = str(e)
+
+    return redirect("issues")
+
+from django.http import JsonResponse
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def get_issues_log_list(request, issue_id):
+    issue_dict = {}
+    try:
+        issue_log = get_family_issue_log(issue_id)
+        issue_info = get_family_issue_by_id(issue_id)
+        issue_dict = get_family_info_dict(issue_info["family_id"])
+
+        logs_sorted = sorted(issue_log, key=lambda x: x['last_update_date'])
         for log in logs_sorted:
             log['last_update_date'] = datetime.fromisoformat(log['last_update_date'])
-        issueDict["issueInfo"] = issueInfo
-        issueDict["issue_id"] = issue_id
-        issueDict["logs"] = logs_sorted
-        return render(request,"issue_logs.html",issueDict)
-    except:
-        return redirect("home")
-    
+
+        issue_dict["issueInfo"] = issue_info
+        issue_dict["issue_id"] = issue_id
+        issue_dict["logs"] = logs_sorted
+
+        if request.method == "POST":
+            model = request.POST.get("model_choice")
+            try:
+                summary = generate_dual_issue_summary(issue_id, model_choice=model)
+                issue_dict["ai_summary"] = summary
+                issue_dict["model_selected"] = model
+                issue_dict["success_msg"] = "✅ AI Summary successfully generated using " + model.capitalize()
+            except Exception as summary_err:
+                issue_dict["error_msg"] = "❌ Failed to generate summary: " + str(summary_err)
+
+        if request.GET.get("format") == "json":
+            return JsonResponse(issue_dict, safe=False, json_dumps_params={'indent': 2, 'default': str})
+
+        return render(request, "issue_logs.html", issue_dict)
+
+    except Exception as e:
+        return render(request, "issue_logs.html", {"error_msg": "❌ An unexpected error occurred: " + str(e)})    
 def update_issue_status(request,issue_id):
     try:
         if request.method == "POST":

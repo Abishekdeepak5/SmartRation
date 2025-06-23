@@ -1,39 +1,122 @@
+import io
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import logout
 from datetime import datetime, timedelta
-
+from io import BytesIO
+import base64
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+import cohere
+from googleapiclient.discovery import build
 from app.supabase_config import supabase
 from app.dao import UserDetailDao, RationDao
 from app.models import UserDetails
-
-import io
-import base64
-import matplotlib
-matplotlib.use('Agg')  # Use non-GUI backend for matplotlib
-import matplotlib.pyplot as plt
-import seaborn as sns
-
+from django.views.decorators.csrf import csrf_exempt
+COHERE_API_KEY = "N6YmtTbVW7iqKnIJgFFcIIWDSW8yK7GruKeWBn2N"
+GEMINI_API_KEY = "AIzaSyDbLI6N8BcfYwN30uamRjKa2tQ1E525jOQ"
 # Home page
 def home(request):
-    message = "Welcome"
-    return render(request, 'home.html', {"message": message})
+    return render(request, 'home.html', {"message": "Welcome"})
 
-# Staff dashboard page
 def staff_dashboard(request):
     return render(request, "staffDashboard.html")
 
-# Combined Admin Dashboard view with all required stats
+
+def generate_ai_summary(text, model_choice):
+    if model_choice == "cohere":
+        if len(text) < 250:
+            text += " " * (250 - len(text))
+        client = cohere.Client(COHERE_API_KEY)
+        response = client.summarize(
+            text=text,
+            model="summarize-xlarge",
+            length="long",
+            format="paragraph",
+            temperature=0.7
+        )
+        return response.summary
+    else:
+        service = build('generativelanguage', 'v1beta', developerKey=GEMINI_API_KEY)
+        response = service.models().generateContent(
+            model="models/text-bison-001",
+            body={
+                "prompt": {
+                    "text": f"""
+As a government audit assistant AI, generate a professional audit summary across all the listed complaints.
+I want detailed insights into the issues raised by families regarding ration distribution and related grievances.
+No short para info summary but a detailed audit report. the report should be comprehensive and cover all aspects of the issues raised.
+there must be atleast 8-10 sentences in the summary.
+Recommendations for improvements, escalations, and government review are essential also on what action should be taken on the authorities be mentioned along with suggestions for non repeating of the same issue too be given.
+Summarize recurring issues, delayed timelines, department failures, and recommend accountability measures.
+
+{text}
+"""
+                },
+                "temperature": 0.7,
+            }
+        ).execute()
+        return response["candidates"][0]["output"]
+# def create_pdf(summary_text):
+#     buffer = BytesIO()
+#     p = canvas.Canvas(buffer, pagesize=letter)
+#     width, height = letter
+#     y = height - 50
+#     for line in summary_text.split("\n"):
+#         p.drawString(50, y, line)
+#         y -= 15
+#         if y < 50:
+#             p.showPage()
+#             y = height - 50
+#     p.save()
+#     buffer.seek(0)
+#     return buffer
+
+
+@csrf_exempt
+def summarize_dashboard(request):
+    if request.method == "POST":
+        model_choice = request.POST.get("model_choice")
+
+        try:
+            families = supabase.table("families").select("*").execute().data
+            products = supabase.table("product").select("*").execute().data
+            stock_data = supabase.table("ration_product").select("*").execute().data
+            requests_data = supabase.table("stock_requests").select("*").execute().data
+
+            summary_input = f"""
+Weekly Ration Distribution Dashboard Data:
+
+- Total families registered: {len(families)}
+- Product types available: {len(products)}
+- Current stock quantity (kg): {sum([int(x['quantity']) for x in stock_data if x.get('quantity')])}
+- Stock distribution requests this week: {len(requests_data)}
+
+Observations:
+Check stock exhaustion, refill schedules, request load. Include suggestions for suppliers and stock forecasting.
+"""
+
+            summary = generate_ai_summary(summary_input, model_choice)
+            request.session["ai_dashboard_summary"] = summary
+            print(f"AI Summary Generated: {summary}")
+
+        except Exception as e:
+            print(f"Error generating AI summary: {e}")
+            request.session["ai_summary_error"] = str(e)
+
+    return redirect("adminDashboard")
 def admin_dashboard(request):
     today = datetime.now().date()
 
-    # Fetch family data
     family_data = supabase.table("families").select("family_id").execute().data or []
     total_families = len(family_data)
 
-    # Fetch product stock data
     product_data = supabase.table("product").select("product_id", "stock_quantity").execute().data or []
     distribution_labels = [f"Product {p['product_id']}" for p in product_data]
     distribution_values = [p['stock_quantity'] for p in product_data]
@@ -43,11 +126,9 @@ def admin_dashboard(request):
     total_products = len(product_data)
     average_distribution_per_product = round(distribution_sum / total_products, 2) if total_products > 0 else 0
 
-    # Pending stock requests
     pending_requests = supabase.table("stock_requests").select("status").eq("status", "pending").execute().data or []
     pending_stock_requests = len(pending_requests)
 
-    # User registrations data (assume "date_of_birth" field)
     users = supabase.table("user_details").select("date_of_birth").execute().data or []
     new_regs_by_date = {}
     new_regs = 0
@@ -64,59 +145,66 @@ def admin_dashboard(request):
     date_labels = [(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(6, -1, -1)]
     new_reg_counts = [new_regs_by_date.get(date, 0) for date in date_labels]
 
-    # Generate charts using matplotlib and seaborn
+    # Generate charts
+    sns.set_style("whitegrid")
 
-    # 1. Total Stock per Product (Bar Chart)
-    plt.figure(figsize=(10, 5))
-    sns.barplot(x=distribution_labels, y=distribution_values, palette='Blues_d', hue=distribution_labels, legend=False)
+
     plt.title('Total Stock per Product')
     plt.ylabel('Stock Quantity')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
+    plt.xticks(rotation=45)
     buf1 = io.BytesIO()
+    plt.tight_layout()
     plt.savefig(buf1, format='png')
     plt.close()
     buf1.seek(0)
     stock_per_product_chart = base64.b64encode(buf1.read()).decode('utf-8')
 
-    # 2. Out-of-Stock Product Breakdown (Pie Chart)
-    labels = ['In Stock', 'Out of Stock']
-    sizes = [total_products - out_of_stock_count, out_of_stock_count]
-    colors = ['#4bc0c0', '#ff6384']
     plt.figure(figsize=(6,6))
-    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+    plt.pie([total_products - out_of_stock_count, out_of_stock_count],
+            labels=['In Stock', 'Out of Stock'], colors=['#4bc0c0', '#ff6384'],
+            autopct='%1.1f%%', startangle=140)
     plt.title('Out-of-Stock Product Breakdown')
-    plt.tight_layout()
     buf2 = io.BytesIO()
+    plt.tight_layout()
     plt.savefig(buf2, format='png')
     plt.close()
     buf2.seek(0)
     out_of_stock_chart = base64.b64encode(buf2.read()).decode('utf-8')
 
-    # 3. Distribution vs Pending Stock Requests (Bar Chart)
     plt.figure(figsize=(6,4))
-    sns.barplot(x=['Distributed', 'Pending Requests'], y=[distribution_sum, pending_stock_requests], palette='Set2', hue=['Distributed', 'Pending Requests'], legend=False)
+    sns.barplot(x=distribution_labels, y=distribution_values, hue=distribution_labels, palette='Blues_d', legend=False)
+
+    sns.barplot(
+    x=['Distributed', 'Pending Requests'],
+    y=[distribution_sum, pending_stock_requests],
+    hue=['Distributed', 'Pending Requests'],
+    palette='Set2',
+    legend=False
+)
+
     plt.title('Distribution vs Pending Stock Requests')
     plt.ylabel('Stock (kg)')
-    plt.tight_layout()
     buf3 = io.BytesIO()
+    plt.tight_layout()
     plt.savefig(buf3, format='png')
     plt.close()
     buf3.seek(0)
     distribution_vs_pending_chart = base64.b64encode(buf3.read()).decode('utf-8')
 
-    # 4. New Registrations Over Time (Line Chart)
     plt.figure(figsize=(10, 5))
     sns.lineplot(x=date_labels, y=new_reg_counts, marker='o')
     plt.title('New Registrations Over Time (Last 7 days)')
     plt.ylabel('New Registrations')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
+    plt.xticks(rotation=45)
     buf4 = io.BytesIO()
+    plt.tight_layout()
     plt.savefig(buf4, format='png')
     plt.close()
     buf4.seek(0)
     new_registrations_chart = base64.b64encode(buf4.read()).decode('utf-8')
+
+    ai_summary = request.session.pop("ai_dashboard_summary", None)
+    ai_error = request.session.pop("ai_summary_error", None)
 
     return render(request, "adminDashboard.html", {
         "total_families": total_families,
@@ -131,8 +219,9 @@ def admin_dashboard(request):
         "out_of_stock_chart": out_of_stock_chart,
         "distribution_vs_pending_chart": distribution_vs_pending_chart,
         "new_registrations_chart": new_registrations_chart,
+        "ai_summary": ai_summary,
+        "ai_error": ai_error,
     })
-
 # User profile page
 def profile(request):
     user = get_user(request)

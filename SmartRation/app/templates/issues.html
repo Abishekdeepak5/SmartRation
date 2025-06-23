@@ -5,46 +5,80 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-     <a href="{% url 'admin' %}" class="inline-block mb-6 text-indigo-600 hover:underline">
-    ← Back to Dashboard
-  </a>
-  <h1 class="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-8">
-    Issues Details
-  </h1>
+  <a href="{% url 'admin' %}" class="inline-block mb-6 text-indigo-600 hover:underline">← Back to Dashboard</a>
+  <h1 class="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-8">Issues Details</h1>
 
   <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
       <thead class="bg-indigo-600 text-white dark:bg-indigo-500">
         <tr>
-          <th scope="col" class="px-6 py-3 text-left font-medium tracking-wider uppercase">
-            Issue
-          </th>
-          <th scope="col" class="px-6 py-3 text-left font-medium tracking-wider uppercase">
-            Issue Date
-          </th>
-          <th scope="col" class="px-6 py-3 text-left font-medium tracking-wider uppercase">
-            Status
-          </th>
-           <th scope="col" class="px-6 py-3 text-left font-medium tracking-wider uppercase">
-            Action
-          </th>
+          <th class="px-6 py-3 text-left">Issue</th>
+          <th class="px-6 py-3 text-left">Issue Date</th>
+          <th class="px-6 py-3 text-left">Status</th>
+          <th class="px-6 py-3 text-left">Action</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
         {% for issueData in issues %}
-          {% if issueData %}
-            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150">
-              <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ issueData.issue }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ issueData.date_of_issue }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ issueData.status }}</td>
-              <!-- <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ issueData.description }}</td> -->
-              <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200"> <a href="{% url 'family_issues_logs' issueData.id %}" 
-           class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition text-sm">View</a></td>
-            </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150">
+            <td class="px-6 py-4 text-gray-800 dark:text-gray-200">{{ issueData.issue }}</td>
+            <td class="px-6 py-4 text-gray-800 dark:text-gray-200">{{ issueData.date_of_issue }}</td>
+            <td class="px-6 py-4 text-gray-800 dark:text-gray-200">{{ issueData.status }}</td>
+            <td class="px-6 py-4 text-gray-800 dark:text-gray-200">
+              <a href="{% url 'family_issues_logs' issueData.id %}"
+                 class="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 text-xs">View</a>
+
+              <form method="post" action="{% url 'generate_issue_summary' %}" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="issue_id" value="{{ issueData.id }}">
+                <button type="submit"
+                        class="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs">
+                  Generate Summary
+                </button>
+              </form>
+            </td>
+          </tr>
+
+          {% if issueData.ai_summary %}
+          <tr><td colspan="4" class="px-6 py-4 text-sm italic text-gray-600 dark:text-gray-300">
+            <strong>AI Summary:</strong> {{ issueData.ai_summary }}
+          </td></tr>
           {% endif %}
+
+          {% if issueData.error_msg %}
+          <tr><td colspan="4" class="px-6 py-4 text-sm text-red-600">
+            <strong>Error:</strong> {{ issueData.error_msg }}
+          </td></tr>
+          {% endif %}
+
         {% endfor %}
       </tbody>
     </table>
   </div>
+  <form method="post" action="{% url 'generate_issue_summary' %}" class="mb-4">
+  {% csrf_token %}
+  <input type="hidden" name="issue_id" value="all">
+  <label for="model_choice" class="text-sm font-medium text-gray-700 dark:text-gray-300">Select AI Model:</label>
+  <select name="model_choice" id="model_choice" class="ml-2 px-2 py-1 border rounded">
+    <option value="cohere" {% if selected_model == 'cohere' %}selected{% endif %}>Cohere</option>
+<option value="gemini" {% if selected_model == 'gemini' %}selected{% endif %}>Gemini</option>
+
+  </select>
+  <button type="submit" class="ml-2 px-4 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm">
+    Generate Overall Summary
+  </button>
+</form>
+
+{% if total_summary %}
+  <div class="mb-4 p-4 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded">
+    <strong>AI Summary for All Issues:</strong>
+    <pre class="whitespace-pre-wrap">{{ total_summary }}</pre>
+  </div>
+{% elif total_error %}
+  <div class="mb-4 p-4 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded">
+    <strong>Error:</strong> {{ total_error }}
+  </div>
+{% endif %}
+
 </div>
 {% endblock %}

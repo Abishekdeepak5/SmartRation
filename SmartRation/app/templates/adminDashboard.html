@@ -149,6 +149,30 @@
       title="Google Spreadsheet Data">
     </iframe>
   </div>
+<form method="POST" action="{% url 'summarize_dashboard' %}">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="model_choice">Choose AI Model for Summary:</label>
+    <select name="model_choice" id="model_choice" class="form-control" required>
+      <option value="cohere">Cohere</option>
+      <option value="gemini">Gemini</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary mt-2">Generate AI Summary</button>
+</form>
+
+{% if ai_summary %}
+  <div class="card mt-4">
+    <div class="card-header bg-info text-white">
+      📊 AI Summary of Ration Distribution
+    </div>
+    <div class="card-body">
+      <p style="white-space: pre-line;">{{ ai_summary }}</p>
+    </div>
+  </div>
+{% elif ai_error %}
+  <div class="alert alert-danger mt-4">⚠️ Error: {{ ai_error }}</div>
+{% endif %}
 
 
 </div>
