@@ -2,183 +2,144 @@
 {% load static %}
 
 {% block sidebar_menu %}
-<!-- Sidebar menu items -->
-<a href="{% url 'adminDashboard' %}"
-   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
-          {% if request.path == '/adminDashboard/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
-   title="Dashboard">
+<a href="{% url 'adminDashboard' %}" class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900 {% if request.path == '/adminDashboard/' %}bg-gray-300 dark:bg-gray-700{% endif %}" title="Dashboard">
   <i class="fas fa-boxes mr-3 text-lg"></i>
   <span class="sidebar-label">Dashboard</span>
 </a>
-
-<a href="{% url 'register' %}"
-   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
-          {% if request.path == '/register/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
-   title="Register Staff">
+<a href="{% url 'register' %}" class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900 {% if request.path == '/register/' %}bg-gray-300 dark:bg-gray-700{% endif %}" title="Register Staff">
   <i class="fas fa-user-plus mr-3 text-lg"></i>
   <span class="sidebar-label">Register Staff</span>
 </a>
-
-<a href="{% url 'list_ration' %}"
-   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
-          {% if request.path == '/list_ration/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
-   title="Ration Stock">
+<a href="{% url 'list_ration' %}" class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900 {% if request.path == '/list_ration/' %}bg-gray-300 dark:bg-gray-700{% endif %}" title="Ration Stock">
   <i class="fas fa-boxes-stacked mr-3 text-lg"></i>
   <span class="sidebar-label">Ration Stock</span>
 </a>
-
-<a href="{% url 'list_product' %}"
-   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
-          {% if request.path == '/list_product/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
-   title="Product List">
+<a href="{% url 'list_product' %}" class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900 {% if request.path == '/list_product/' %}bg-gray-300 dark:bg-gray-700{% endif %}" title="Product List">
   <i class="fas fa-cubes mr-3 text-lg"></i>
   <span class="sidebar-label">Product List</span>
 </a>
-
-<a href="{% url 'addfamily' %}"
-   class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900
-          {% if request.path == '/addfamily/' %}bg-gray-300 dark:bg-gray-700{% endif %}"
-   title="Add Family">
+<a href="{% url 'addfamily' %}" class="sidebar-item group flex items-center gap-3 p-3 rounded-md hover:bg-blue-900 {% if request.path == '/addfamily/' %}bg-gray-300 dark:bg-gray-700{% endif %}" title="Add Family">
   <i class="fas fa-users mr-3 text-lg"></i>
   <span class="sidebar-label">Add Family</span>
 </a>
-
 {% endblock %}
 
 {% block content %}
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-<button id="sidebarToggle" aria-label="Toggle Sidebar"
-  class="fixed top-4 left-4 z-50 md:hidden p-2 rounded-md bg-indigo-600 text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+<button id="sidebarToggle" aria-label="Toggle Sidebar" class="fixed top-4 left-4 z-50 md:hidden p-2 rounded-md bg-indigo-600 text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
   </svg>
 </button>
 
 <div id="mainContent" class="px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 py-6 transition-all duration-300">
-  <h1 class="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">Admin Dashboard</h1>
+  <h1 class="text-3xl font-bold mb-10 text-center text-gray-900 dark:text-gray-100">Admin Dashboard</h1>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    <a href="{% url 'register' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
-      <i class="fas fa-user-plus text-indigo-600 text-4xl mb-3"></i>
-      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Register Admin/Staff</span>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <a href="{% url 'register' %}" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col items-center">
+      <i class="fas fa-user-plus text-indigo-600 text-5xl mb-4"></i>
+      <span class="font-semibold text-lg text-gray-700 dark:text-gray-300 text-center">Register Admin/Staff</span>
     </a>
-    <a href="{% url 'list_ration' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
-      <i class="fas fa-boxes text-indigo-600 text-4xl mb-3"></i>
-      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Manage Ration</span>
+    <a href="{% url 'list_ration' %}" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col items-center">
+      <i class="fas fa-boxes text-indigo-600 text-5xl mb-4"></i>
+      <span class="font-semibold text-lg text-gray-700 dark:text-gray-300 text-center">Manage Ration</span>
     </a>
-    <a href="{% url 'addfamily' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
-      <i class="fas fa-users text-indigo-600 text-4xl mb-3"></i>
-      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Add Family</span>
+    <a href="{% url 'addfamily' %}" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col items-center">
+      <i class="fas fa-users text-indigo-600 text-5xl mb-4"></i>
+      <span class="font-semibold text-lg text-gray-700 dark:text-gray-300 text-center">Add Family</span>
     </a>
-    <a href="{% url 'list_product' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
-      <i class="fas fa-cubes text-indigo-600 text-4xl mb-3"></i>
-      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Manage Product</span>
+    <a href="{% url 'list_product' %}" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col items-center">
+      <i class="fas fa-cubes text-indigo-600 text-5xl mb-4"></i>
+      <span class="font-semibold text-lg text-gray-700 dark:text-gray-300 text-center">Manage Product</span>
     </a>
-
-    <a href="{% url 'family_issues' %}" class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col items-center">
-      <i class="fas fa-users text-indigo-600 text-4xl mb-3"></i>
-      <span class="font-semibold text-gray-700 dark:text-gray-300 text-center">Issues Raised Family</span>
+    <a href="{% url 'family_issues' %}" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col items-center">
+      <i class="fas fa-users text-indigo-600 text-5xl mb-4"></i>
+      <span class="font-semibold text-lg text-gray-700 dark:text-gray-300 text-center">Issues Raised Family</span>
     </a>
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-    <div class="bg-blue-100 dark:bg-blue-900 relative p-5 rounded-lg shadow">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 mb-16 text-center text-base">
+    <div class="bg-blue-100 dark:bg-blue-900 relative p-6 rounded-lg shadow-lg">
       <div class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-1">Total Families</div>
       <div class="text-3xl font-bold text-blue-900 dark:text-blue-300">{{ total_families }}</div>
       <span class="absolute top-2 right-2 bg-yellow-400 text-white px-2 py-0.5 rounded text-xs font-semibold">Under Dev</span>
     </div>
-    <div class="bg-green-100 dark:bg-green-900 p-5 rounded-lg shadow">
+    <div class="bg-green-100 dark:bg-green-900 p-6 rounded-lg shadow-lg">
       <div class="text-sm font-semibold text-green-900 dark:text-green-200 mb-1">Products Distributed</div>
       <div class="text-3xl font-bold text-green-900 dark:text-green-300">{{ distribution_sum }} kg</div>
     </div>
-    <div class="bg-yellow-100 dark:bg-yellow-900 p-5 rounded-lg shadow">
+    <div class="bg-yellow-100 dark:bg-yellow-900 p-6 rounded-lg shadow-lg">
       <div class="text-sm font-semibold text-yellow-900 dark:text-yellow-200 mb-1">Pending Stock Requests</div>
       <div class="text-3xl font-bold text-yellow-900 dark:text-yellow-300">{{ pending_stock_requests }}</div>
     </div>
-    <div class="bg-pink-100 dark:bg-pink-900 p-5 rounded-lg shadow">
+    <div class="bg-pink-100 dark:bg-pink-900 p-6 rounded-lg shadow-lg">
       <div class="text-sm font-semibold text-pink-900 dark:text-pink-200 mb-1">New Registrations</div>
       <div class="text-3xl font-bold text-pink-900 dark:text-pink-300">{{ new_registrations }}</div>
     </div>
-    <div class="bg-violet-100 dark:bg-violet-900 p-5 rounded-lg shadow">
+    <div class="bg-violet-100 dark:bg-violet-900 p-6 rounded-lg shadow-lg">
       <div class="text-sm font-semibold text-violet-900 dark:text-violet-200 mb-1">Total Products in Inventory</div>
       <div class="text-3xl font-bold text-violet-900 dark:text-violet-300">{{ total_products }}</div>
     </div>
-    <div class="bg-cyan-100 dark:bg-cyan-900 p-5 rounded-lg shadow">
+    <div class="bg-cyan-100 dark:bg-cyan-900 p-6 rounded-lg shadow-lg">
       <div class="text-sm font-semibold text-cyan-900 dark:text-cyan-200 mb-1">Total Stock Quantity</div>
       <div class="text-3xl font-bold text-cyan-900 dark:text-cyan-300">{{ total_stock_quantity }} kg</div>
     </div>
-    <div class="bg-red-100 dark:bg-red-900 p-5 rounded-lg shadow">
+    <div class="bg-red-100 dark:bg-red-900 p-6 rounded-lg shadow-lg">
       <div class="text-sm font-semibold text-red-900 dark:text-red-200 mb-1">Out-of-Stock Products</div>
       <div class="text-3xl font-bold text-red-900 dark:text-red-300">{{ out_of_stock_products }}</div>
     </div>
-    <div class="bg-orange-100 dark:bg-orange-900 p-5 rounded-lg shadow">
-      <div class="text-sm font-semibold text-orange-900 dark:text-orange-200 mb-1">Average Distribution/Product</div>
+    <div class="bg-orange-100 dark:bg-orange-900 p-6 rounded-lg shadow-lg">
+      <div class="text-sm font-semibold text-orange-900 dark:text-orange-200 mb-1">Avg Distribution/Product</div>
       <div class="text-3xl font-bold text-orange-900 dark:text-orange-300">{{ average_distribution_per_product }} kg</div>
     </div>
   </div>
 
-   
-
-  <div class="mt-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
-    <div class="text-center">
-      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Total Stock per Product</h2>
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-12 mb-20">
+    <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Total Stock per Product</h2>
       <img src="data:image/png;base64,{{ stock_per_product_chart }}" alt="Total Stock per Product Chart" class="mx-auto rounded shadow-md max-w-full" />
     </div>
-    <div class="text-center">
-      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Out-of-Stock Product Breakdown</h2>
+    <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Out-of-Stock Product Breakdown</h2>
       <img src="data:image/png;base64,{{ out_of_stock_chart }}" alt="Out-of-Stock Product Breakdown Chart" class="mx-auto rounded shadow-md max-w-full" />
     </div>
-    <div class="text-center">
-      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Distribution vs Pending Stock Requests</h2>
+    <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Distribution vs Pending Requests</h2>
       <img src="data:image/png;base64,{{ distribution_vs_pending_chart }}" alt="Distribution vs Pending Stock Requests Chart" class="mx-auto rounded shadow-md max-w-full" />
     </div>
-    <div class="text-center">
-      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">New Registrations Over Time</h2>
+    <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">New Registrations Over Time</h2>
       <img src="data:image/png;base64,{{ new_registrations_chart }}" alt="New Registrations Over Time Chart" class="mx-auto rounded shadow-md max-w-full" />
     </div>
   </div>
 
-  <div class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
-    <iframe
-      src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTi_dZV8pF_GccoQ8MiQdfQcujSdDnXbQP7KG7r_LU2SvBAw4nfZnMYC1PhuBaoHXekpKevM-WAcH1U/pubhtml?gid=1161769748&single=true&widget=true&headers=false"
-      class="w-full h-96 rounded shadow-md border-0"
-      loading="lazy"
-      title="Google Spreadsheet Data">
-    </iframe>
+  <div class="mb-16 max-w-7xl mx-auto">
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTi_dZV8pF_GccoQ8MiQdfQcujSdDnXbQP7KG7r_LU2SvBAw4nfZnMYC1PhuBaoHXekpKevM-WAcH1U/pubhtml?gid=1161769748&single=true&widget=true&headers=false" class="w-full h-96 rounded shadow-md border-0" loading="lazy" title="Google Spreadsheet Data"></iframe>
   </div>
-<form method="POST" action="{% url 'summarize_dashboard' %}">
-  {% csrf_token %}
-  <div class="form-group">
-    <label for="model_choice">Choose AI Model for Summary:</label>
-    <select name="model_choice" id="model_choice" class="form-control" required>
-      <option value="cohere">Cohere</option>
-      <option value="gemini">Gemini</option>
-    </select>
-  </div>
-  <button type="submit" class="btn btn-primary mt-2">Generate AI Summary</button>
-</form>
 
-{% if ai_summary %}
-  <div class="card mt-4">
-    <div class="card-header bg-info text-white">
-      📊 AI Summary of Ration Distribution
+  <form method="POST" action="{% url 'summarize_dashboard' %}" class="max-w-xl mx-auto mb-16">
+    {% csrf_token %}
+    <div class="form-group mb-4">
+      <label for="model_choice" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Choose AI Model for Summary:</label>
+      <select name="model_choice" id="model_choice" class="form-select w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:text-white" required>
+        <option value="cohere">Cohere</option>
+        <option value="gemini">Gemini</option>
+      </select>
     </div>
-    <div class="card-body">
-      <p style="white-space: pre-line;">{{ ai_summary }}</p>
+    <button type="submit" class="btn btn-primary px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Generate AI Summary</button>
+  </form>
+
+  {% if ai_summary %}
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 max-w-4xl mx-auto">
+      <div class="font-semibold text-lg text-indigo-700 dark:text-indigo-300 mb-2">📊 AI Summary of Ration Distribution</div>
+      <div class="text-gray-800 dark:text-gray-200 whitespace-pre-line">{{ ai_summary }}</div>
     </div>
-  </div>
-{% elif ai_error %}
-  <div class="alert alert-danger mt-4">⚠️ Error: {{ ai_error }}</div>
-{% endif %}
-
-
+  {% elif ai_error %}
+    <div class="bg-red-100 text-red-700 px-4 py-3 rounded shadow-md max-w-2xl mx-auto mt-4">
+      ⚠️ Error: {{ ai_error }}
+    </div>
+  {% endif %}
 </div>
-
-<script>
-//   const toggle = document.getElementById('sidebarToggle');?
-//   });
-</script>
 {% endblock %}

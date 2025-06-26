@@ -23,7 +23,7 @@ def generate_dual_issue_summary(issue_id, model_choice="cohere"):
     if not issue_info:
         raise ValueError(f"No issue found with ID {issue_id}")
 
-    # user_info = supabase.table("user_details").select("*").eq("user_id", issue_id).single().execute().data
+    user_info = supabase.table("user_details").select("*").eq("user_id", issue_id).single().execute().data
     # print(user_info)
     # response = supabase.table("family_issue").select("*").eq("id", issue_id).execute()
     # rows = response.data
@@ -50,6 +50,7 @@ Issue Summary:
 
 - Family ID: {family_info.get("id")}
 - Issue Type: {issue_info.get("issue_type", "Unknown")}
+-User Info: {user_info.get("user_name", "N/A")} ({user_info.get("user_id", "N/A")})
 - Date Filed: {created_date}
 - Current Status: {issue_info.get("status", "Unknown")}
 - Village: {family_info.get("village", "N/A")}
